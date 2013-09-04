@@ -1,0 +1,49 @@
+﻿<Window x:Class="ManttoProductosAlternos.AgrAgregaTema"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Agregar Tema"
+        Width="512"
+        Height="452"
+        Loaded="Window_Loaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="35" />
+        </Grid.RowDefinitions>
+        <TextBlock Name="lblGuia"
+                   Height="23"
+                   Margin="12,12,0,0"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Text="Texto Tema :" />
+        <TextBox Name="txtTema"
+                 Width="465"
+                 Height="23"
+                 Margin="12,41,0,0"
+                 HorizontalAlignment="Left"
+                 VerticalAlignment="Top" />
+        <Button Name="btnCancelar"
+                Grid.Row="2"
+                Width="75"
+                Height="23"
+                Margin="0,4,11,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Click="btnCancelar_Click"
+                Content="Cancelar"
+                IsCancel="True" />
+        <Button Name="btnAgregar"
+                Grid.Row="2"
+                Width="75"
+                Height="23"
+                Margin="321,4,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="btnAgregar_Click"
+                Content="Agregar" />
+        <TreeView Grid.Row="1" Height="293" HorizontalAlignment="Left" Margin="17,7,0,0" Name="tvAgraria" VerticalAlignment="Top" Width="465" Visibility="Hidden" AllowDrop="True" SelectedItemChanged="tvAgraria_SelectedItemChanged" />
+        <CheckBox Content=" Cambiar Posición" Height="16" HorizontalAlignment="Right" Margin="0,12,13,0" Name="chkCambiarPosicion" VerticalAlignment="Top" Visibility="Hidden" Checked="chkCambiarPosicion_Checked" Unchecked="chkCambiarPosicion_Unchecked" Foreground="Black" />
+        <CheckBox Content="Cabeza de Estructura" Height="16" HorizontalAlignment="Left" Margin="232,12,0,0" Name="chkNodoPadre" VerticalAlignment="Top" Visibility="Hidden" IsChecked="True" Checked="chkNodoPadre_Checked" Unchecked="chkNodoPadre_Unchecked" Foreground="Black" />
+    </Grid>
+</Window>

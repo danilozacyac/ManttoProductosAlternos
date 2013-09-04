@@ -1,0 +1,25 @@
+﻿<Window x:Class="ManttoProductosAlternos.frmAcceso"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Title="Mantesis" Height="274" Width="484" Loaded="Window_Loaded">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="281*" />
+            <ColumnDefinition Width="181*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="99*" />
+            <RowDefinition Height="47*" />
+            <RowDefinition Height="68*" />
+        </Grid.RowDefinitions>
+        <TextBlock Height="32" HorizontalAlignment="Left" Margin="20,12,0,0" Name="textBlock1" Text="Mantenimiento a Consultas Especiales" VerticalAlignment="Top" FontSize="24" Width="426" Grid.ColumnSpan="2" />
+        <Button Content="Aceptar" Grid.Row="2" Height="38" HorizontalAlignment="Left" Margin="187,24,0,0" Name="btnAAceptar" VerticalAlignment="Top" Width="130" Grid.ColumnSpan="2" Click="btnAAceptar_Click" />
+        <Button Content="Cancelar" Grid.Row="2" Height="39" HorizontalAlignment="Left" Margin="70,22,0,0" Name="btnACancelar" VerticalAlignment="Top" Width="95" Grid.Column="1" Click="btnACancelar_Click" />
+        <TextBlock Height="23" HorizontalAlignment="Left" Margin="219,76,0,0" Name="textBlock2" Text="Usuario :" VerticalAlignment="Top" FontSize="16" />
+        <TextBlock Grid.Row="1" Height="23" HorizontalAlignment="Left" Margin="199,15,0,0" Name="textBlock3" Text="Contraseña :" VerticalAlignment="Top" FontSize="16" />
+        <TextBox Grid.Column="1" Height="27" HorizontalAlignment="Left" Margin="15,76,0,0" Name="txtUsuario" VerticalAlignment="Top" Width="150" Text="" FontSize="14" />
+        <PasswordBox Grid.Column="1" Grid.Row="1" Height="27" HorizontalAlignment="Left" Margin="15,16,0,0" Name="txtPwd" VerticalAlignment="Top" Width="150" KeyDown="txtPwd_KeyDown" />
+    </Grid>
+</Window>

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ManttoProductosAlternos.DTO.VotoDTO">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQqChAEIkABAGBUAgAAEAIBAEABBUBEEARCARAACAsQ=</HashCode>
+      <FileName>DTO\VotoDTO.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ManttoProductosAlternos.DTO.EjecutoriaDTO">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQqChAEIkABAGBUAgAAEAIBAEABBUBEEARCARAACAsQ=</HashCode>
+      <FileName>DTO\EjecutoriaDTO.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
