@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Controls;
 using ManttoProductosAlternos.DTO;
+using System.Collections.ObjectModel;
 
 namespace ManttoProductosAlternos.Model
 {
@@ -10,7 +11,7 @@ namespace ManttoProductosAlternos.Model
         public List<TreeViewItem> GeneraAgraria(int idPadre,int idProd)
         {
             List<TreeViewItem> temasSubT = new List<TreeViewItem>();
-            List<Temas> temas = new TemasModel(idProd).GetTemas(idPadre);
+            ObservableCollection<Temas> temas = new TemasModel(idProd).GetTemas(idPadre);
 
             foreach (Temas tema in temas)
             {
@@ -28,7 +29,7 @@ namespace ManttoProductosAlternos.Model
         private TreeViewItem GetHijos(int idPadre, TreeViewItem nodoPadre,int idProd)
         {
             TreeViewItem temasSubT = new TreeViewItem();
-            List<Temas> temas = new TemasModel(idProd).GetTemas(idPadre);
+            ObservableCollection<Temas> temas = new TemasModel(idProd).GetTemas(idPadre);
 
             foreach (Temas tema in temas)
             {

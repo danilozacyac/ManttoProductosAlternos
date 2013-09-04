@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using ManttoProductosAlternos.DTO;
+using System.Collections.ObjectModel;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Windows;
 using ManttoProductosAlternos.DBAccess;
+using ManttoProductosAlternos.DTO;
 using ManttoProductosAlternos.Utils;
 
 namespace ManttoProductosAlternos.Model
@@ -26,9 +27,56 @@ namespace ManttoProductosAlternos.Model
             this.idProducto = idProducto;
         }
 
-        public List<Temas> GetTemas(int idPadre)
+        //public List<Temas> GetTemas(int idPadre)
+        //{
+        //    List<Temas> temas = new List<Temas>();
+
+        //    SqlConnection sqlConne = (SqlConnection)Conexion.GetConecctionManttoCE();
+        //    SqlDataReader dataReader;
+        //    SqlCommand cmd;
+
+        //    cmd = sqlConne.CreateCommand();
+        //    cmd.Connection = sqlConne;
+
+        //    try
+        //    {
+        //        sqlConne.Open();
+
+        //        string miQry = "select * from Temas Where Padre = " + idPadre + " AND idProd = " + idProducto + "  ORDER BY TemaStr";
+        //        cmd = new SqlCommand(miQry, sqlConne);
+        //        dataReader = cmd.ExecuteReader();
+
+        //        while (dataReader.Read())
+        //        {
+        //            Temas tema = new Temas();
+        //            tema.IsChecked = false;
+        //            tema.Id = Convert.ToInt32(dataReader["Id"].ToString());
+        //            tema.Nivel = Convert.ToInt32(dataReader["Nivel"].ToString()); 
+        //            tema.Padre = Convert.ToInt32(dataReader["Padre"].ToString()); 
+        //            tema.Tema = dataReader["Tema"].ToString();
+        //            tema.Orden = Convert.ToInt32(dataReader["Orden"].ToString());
+        //            tema.TemaStr = dataReader["TemaSTR"].ToString();
+        //            tema.LInicial = Convert.ToChar(dataReader["LetraInicial"].ToString());
+
+        //            temas.Add(tema);
+        //        }
+        //        dataReader.Close();
+        //        temas = temas.Distinct().ToList();
+        //    }
+        //    catch (SqlException sql)
+        //    {
+        //        MessageBox.Show("Error ({0}) : {1}" + sql.Source + sql.Message, "Error Interno");
+        //    }
+        //    finally
+        //    {
+        //        sqlConne.Close();
+        //    }
+        //    return temas;
+        //}
+
+        public ObservableCollection<Temas> GetTemas(int idPadre)
         {
-            List<Temas> temas = new List<Temas>();
+            ObservableCollection<Temas> temas = new ObservableCollection<Temas>();
 
             SqlConnection sqlConne = (SqlConnection)Conexion.GetConecctionManttoCE();
             SqlDataReader dataReader;
@@ -50,8 +98,8 @@ namespace ManttoProductosAlternos.Model
                     Temas tema = new Temas();
                     tema.IsChecked = false;
                     tema.Id = Convert.ToInt32(dataReader["Id"].ToString());
-                    tema.Nivel = Convert.ToInt32(dataReader["Nivel"].ToString()); 
-                    tema.Padre = Convert.ToInt32(dataReader["Padre"].ToString()); 
+                    tema.Nivel = Convert.ToInt32(dataReader["Nivel"].ToString());
+                    tema.Padre = Convert.ToInt32(dataReader["Padre"].ToString());
                     tema.Tema = dataReader["Tema"].ToString();
                     tema.Orden = Convert.ToInt32(dataReader["Orden"].ToString());
                     tema.TemaStr = dataReader["TemaSTR"].ToString();
@@ -60,7 +108,7 @@ namespace ManttoProductosAlternos.Model
                     temas.Add(tema);
                 }
                 dataReader.Close();
-                temas = temas.Distinct().ToList();
+                //temas = temas.Distinct().ToList();
             }
             catch (SqlException sql)
             {

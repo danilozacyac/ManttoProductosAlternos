@@ -28,7 +28,7 @@ namespace ManttoProductosAlternos
         private int idProducto = 0;
         private bool expande = true;
         private int find = 0;
-        private List<string> Busqueda = new List<string>();
+        private List<string> busqueda = new List<string>();
         List<TesisDTO> tesisRelacionadas = null;
         TreeViewItem nodoSelect = null;
 
@@ -71,7 +71,7 @@ namespace ManttoProductosAlternos
             dgTesis.FieldSettings.EditorStyle = wrapstyle;
         }
 
-        private void tvAgraria_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void TvAgrariaSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             if (tvAgraria.SelectedItem != null)
             {
@@ -88,7 +88,7 @@ namespace ManttoProductosAlternos
             }
         }
 
-        private void btnAgregarTema_Click(object sender, RoutedEventArgs e)
+        private void BtnAgregarTemaClick(object sender, RoutedEventArgs e)
         {
             if (idProducto == 1)
             {
@@ -139,7 +139,7 @@ namespace ManttoProductosAlternos
             }
         }
 
-        private void btnActualizarTema_Click(object sender, RoutedEventArgs e)
+        private void BtnActualizarTemaClick(object sender, RoutedEventArgs e)
         {
             if (temaSeleccionado != null)
             {
@@ -152,7 +152,7 @@ namespace ManttoProductosAlternos
             }
         }
 
-        private void btnEliminarTema_Click(object sender, RoutedEventArgs e)
+        private void BtnEliminarTemaClick(object sender, RoutedEventArgs e)
         {
             if (temaSeleccionado != null)
             {
@@ -173,13 +173,13 @@ namespace ManttoProductosAlternos
 
 
 
-        private void btnEliminar_Click(object sender, RoutedEventArgs e)
+        private void BtnEliminarClick(object sender, RoutedEventArgs e)
         {
             if (tesisSeleccionada != null && temaSeleccionado != null)
             {
                 TesisModel tesisModel = new TesisModel(idProducto);
                 tesisModel.EliminaRelacion(tesisSeleccionada.Ius, temaSeleccionado.Id);
-                tvAgraria_SelectedItemChanged(sender, null);
+                TvAgrariaSelectedItemChanged(sender, null);
             }
             else
             {
@@ -187,7 +187,7 @@ namespace ManttoProductosAlternos
             }
         }
 
-        private void btnAgregar_Click(object sender, RoutedEventArgs e)
+        private void BtnAgregarClick(object sender, RoutedEventArgs e)
         {
             if (txtIUS.Text.Length < 6 || txtIUS.Text.Length > 7)
             {
@@ -211,7 +211,7 @@ namespace ManttoProductosAlternos
                 {
                     TesisModel tesisModel = new TesisModel(idProducto);
                     tesisModel.InsertaTesis(Convert.ToInt32(txtIUS.Text), temaSeleccionado.Id);
-                    tvAgraria_SelectedItemChanged(sender, null);
+                    TvAgrariaSelectedItemChanged(sender, null);
                 }
                 else
                 {
@@ -227,17 +227,17 @@ namespace ManttoProductosAlternos
                 txtIUS.Text = "";
         }
 
-        private void txtIUS_GotFocus(object sender, RoutedEventArgs e)
+        private void TxtIusGotFocus(object sender, RoutedEventArgs e)
         {
             btnAgregar.IsDefault = true;
         }
 
-        private void txtIUS_LostFocus(object sender, RoutedEventArgs e)
+        private void TxtIusLostFocus(object sender, RoutedEventArgs e)
         {
             btnAgregar.IsDefault = false;
         }
 
-        private void txtIUS_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        private void TxtIusPreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = !IsTextAllowed(e.Text);
         }
@@ -249,39 +249,39 @@ namespace ManttoProductosAlternos
             return !regex.IsMatch(text);
         }
 
-        private void btnOrdenar_Click(object sender, RoutedEventArgs e)
+        private void BtnOrdenarClick(object sender, RoutedEventArgs e)
         {
             TesisModel tesisModel = new TesisModel(idProducto);
             tesisModel.SetConsecIndx();
         }
 
-        private void btnGeneraArbol_Click(object sender, RoutedEventArgs e)
+        private void BtnGeneraArbolClick(object sender, RoutedEventArgs e)
         {
             agrRelacionesMes mes = new agrRelacionesMes(tvAgraria);
             mes.GeneraWord();
         }
 
-        private void btnBuscar_Click(object sender, RoutedEventArgs e)
+        private void BtnBuscarClick(object sender, RoutedEventArgs e)
         {
-            Busqueda.Clear();
+            busqueda.Clear();
 
             this.Cursor = Cursors.Wait;
             if (txtBuscar.Text.Length > 3)
             {
-                if (Busqueda.Count > 0)
+                if (busqueda.Count > 0)
                 {
-                    btnRestableceer_Click(sender, e);
-                    Busqueda.Clear();
+                    BtnRestableceerClick(sender, e);
+                    busqueda.Clear();
                 }
 
                 find = 0;
                 expande = true;
                 foreach (string cadena in txtBuscar.Text.TrimEnd(' ').TrimStart(' ').Split(' '))
                 {
-                    Busqueda.Add(cadena);
+                    busqueda.Add(cadena);
                 }
 
-                Buscador(tvAgraria, Busqueda, Color.FromRgb(255, 0, 0));
+                Buscador(tvAgraria, busqueda, Color.FromRgb(255, 0, 0));
             }
             ////////TematicoConst.miBusquedaPrin = busqueda;
             this.Cursor = Cursors.Arrow;
@@ -291,11 +291,11 @@ namespace ManttoProductosAlternos
                 MessageBox.Show("No existe el texto buscado");
         }
 
-        private void btnRestableceer_Click(object sender, RoutedEventArgs e)
+        private void BtnRestableceerClick(object sender, RoutedEventArgs e)
         {
             this.Cursor = Cursors.Wait;
             expande = false;
-            Buscador(tvAgraria, Busqueda, Color.FromRgb(0, 0, 0));
+            Buscador(tvAgraria, busqueda, Color.FromRgb(0, 0, 0));
             this.Cursor = Cursors.Arrow;
         }
 
@@ -398,12 +398,12 @@ namespace ManttoProductosAlternos
         }
 
 
-        private void btnSalir_Click(object sender, RoutedEventArgs e)
+        private void BtnSalirClick(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
 
-        private void dgTesis_RecordActivated_1(object sender, Infragistics.Windows.DataPresenter.Events.RecordActivatedEventArgs e)
+        private void DgTesisRecordActivated1(object sender, Infragistics.Windows.DataPresenter.Events.RecordActivatedEventArgs e)
         {
             if (e.Record is DataRecord)
             {

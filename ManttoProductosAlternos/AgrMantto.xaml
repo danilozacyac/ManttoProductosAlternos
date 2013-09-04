@@ -18,51 +18,198 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <TreeView Name="tvAgraria"
-                  Grid.Row="1"
-                  Width="368"
-                  Height="417"
-                  Margin="12,67,0,0"
-                  HorizontalAlignment="Left"
-                  VerticalAlignment="Top"
-                  SelectedItemChanged="tvAgraria_SelectedItemChanged" />
-        <TextBlock Name="textBlock1"
-                   Grid.Row="1"
-                   Grid.Column="1"
-                   Height="23"
-                   Margin="13,10,0,0"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Top"
-                   Text="Agregar registro IUS :" />
-        <TextBox Name="txtIUS"
-                 Grid.Row="1"
-                 Grid.Column="1"
-                 Width="148"
-                 Height="23"
-                 Margin="142,10,0,0"
-                 HorizontalAlignment="Left"
-                 VerticalAlignment="Top"
-                 GotFocus="txtIUS_GotFocus"
-                 LostFocus="txtIUS_LostFocus"
-                 PreviewTextInput="txtIUS_PreviewTextInput" />
-        <Button Name="btnAgregar"
-                Grid.Row="1"
-                Grid.Column="1"
-                Width="75"
-                Height="23"
-                Margin="304,10,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Click="btnAgregar_Click"
-                Content="Agregar" />
-        <TextBlock Name="textBlock2"
-                   Grid.Row="1"
-                   Grid.Column="1"
-                   Height="23"
-                   Margin="13,39,0,0"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Top"
-                   Text="Tesis Relacionadas : " />
+        <Grid Grid.Row="1" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="65" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <TextBox Name="txtBuscar"
+                     Grid.Row="0"
+                     Width="238"
+                     Height="23"
+                     Margin="12,36,0,0"
+                     HorizontalAlignment="Left"
+                     VerticalAlignment="Top" />
+            <Button Name="btnBuscar"
+                    Grid.Row="0"
+                    Width="43"
+                    Height="37"
+                    Margin="256,25,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Click="BtnBuscarClick">
+                <Image Width="38"
+                       Height="32"
+                       Source="Images/buscar.png"
+                       ToolTip="Buscar texto en el arbol" />
+            </Button>
+            <Button Name="btnRestableceer"
+                    Grid.Row="0"
+                    Width="43"
+                    Height="37"
+                    Margin="303,25,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Click="BtnRestableceerClick">
+                <Image Width="38"
+                       Height="32"
+                       Source="Images/back.png"
+                       ToolTip="Buscar texto en el arbol" />
+            </Button>
+            <ProgressBar Name="pbBusqueda"
+                         Grid.Row="0"
+                         Width="238"
+                         Height="12"
+                         Margin="12,21,0,0"
+                         HorizontalAlignment="Left"
+                         VerticalAlignment="Top"
+                         Visibility="Hidden" />
+
+            <TreeView Name="tvAgraria"
+                      Grid.Row="1"
+                      Width="375"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      SelectedItemChanged="TvAgrariaSelectedItemChanged" />
+
+
+        </Grid>
+
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="65" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Name="textBlock1"
+                       Grid.Row="0"
+                       Grid.Column="1"
+                       Height="23"
+                       Margin="13,10,0,0"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Top"
+                       Text="Agregar registro IUS :" />
+            <TextBox Name="txtIUS"
+                     Grid.Row="0"
+                     Grid.Column="1"
+                     Width="148"
+                     Height="23"
+                     Margin="142,10,0,0"
+                     HorizontalAlignment="Left"
+                     VerticalAlignment="Top"
+                     GotFocus="TxtIusGotFocus"
+                     LostFocus="TxtIusLostFocus"
+                     PreviewTextInput="TxtIusPreviewTextInput" />
+            <Button Name="btnAgregar"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Width="75"
+                    Height="23"
+                    Margin="304,10,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Click="BtnAgregarClick"
+                    Content="Agregar" />
+            <TextBlock Name="textBlock2"
+                       Grid.Row="0"
+                       Grid.Column="1"
+                       Height="23"
+                       Margin="13,39,0,0"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Top"
+                       Text="Tesis Relacionadas : " />
+
+            <TextBlock Name="textBlock3"
+                       Grid.Row="0"
+                       Height="21"
+                       Margin="412,10,0,0"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Top"
+                       Text="Buscar registro" />
+            <TextBox Name="txtNumIUSBuscr"
+                     Grid.Row="0"
+                     Width="120"
+                     Height="23"
+                     Margin="497,7,0,0"
+                     HorizontalAlignment="Left"
+                     VerticalAlignment="Top"
+                     PreviewTextInput="TxtIusPreviewTextInput" />
+            <Button Name="BtnIr"
+                    Grid.Row="0"
+                    Width="23"
+                    Height="23"
+                    Margin="623,7,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Click="BtnIr_Click"
+                    Content="Ir" />
+            <TextBlock Name="txtRegistros"
+                       Grid.Row="0"
+                       Height="23"
+                       Margin="153,39,0,0"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Top"
+                       Text="" />
+
+            <igDP:XamDataGrid Name="dgTesis"
+                              Grid.Row="1"
+                              Grid.Column="1"
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Stretch"
+                              DataSource="{Binding}"
+                              GroupByAreaLocation="None"
+                              RecordActivated="DgTesisRecordActivated1">
+                <igDP:XamDataGrid.FieldLayouts>
+
+                    <igDP:FieldLayout>
+                        <igDP:FieldLayout.Fields>
+                            <igDP:Field Name="Ius"
+                                        Width="60"
+                                        Label=" IUS " />
+                            <igDP:Field Name="Rubro"
+                                        Width="*"
+                                        Height="80"
+                                        Label="Rubro" />
+                            <igDP:Field Name="Texto"
+                                        Width="0"
+                                        Height="80"
+                                        Label="Texto"
+                                        Visibility="Collapsed" />
+                            <igDP:Field Name="Precedente"
+                                        Width="0"
+                                        Height="80"
+                                        Label="Precedente"
+                                        Visibility="Collapsed" />
+                            <igDP:Field Name="LocAbr"
+                                        Width="*"
+                                        Height="80"
+                                        Label="Local" />
+                            <igDP:Field Name="LocExpr"
+                                        Width="0"
+                                        Height="80"
+                                        Label="LocalExpr"
+                                        Visibility="Collapsed" />
+                            <igDP:Field Name="Volumen"
+                                        Width="0"
+                                        Height="80"
+                                        Label="Volumen"
+                                        Visibility="Collapsed" />
+                            <igDP:Field Name="Parte"
+                                        Width="0"
+                                        Height="80"
+                                        Label="Parte"
+                                        Visibility="Collapsed" />
+                        </igDP:FieldLayout.Fields>
+                    </igDP:FieldLayout>
+                </igDP:XamDataGrid.FieldLayouts>
+
+            </igDP:XamDataGrid>
+
+
+        </Grid>
+
+
         <Button Name="btnEliminar"
                 Grid.Row="2"
                 Grid.Column="1"
@@ -71,7 +218,7 @@
                 Margin="13,5,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Click="btnEliminar_Click"
+                Click="BtnEliminarClick"
                 Content="Eliminar Relación" />
         <Button Name="btnSalir"
                 Grid.Row="2"
@@ -81,17 +228,17 @@
                 Margin="0,5,12,0"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
-                Click="btnSalir_Click"
+                Click="BtnSalirClick"
                 Content="Salir" />
         <Button Name="btnOrdenar"
                 Grid.Row="2"
                 Grid.Column="1"
                 Width="75"
                 Height="23"
-                Margin="571,5,0,0"
-                HorizontalAlignment="Left"
+                Margin="0,5,93,0"
+                HorizontalAlignment="Right"
                 VerticalAlignment="Top"
-                Click="btnOrdenar_Click"
+                Click="BtnOrdenarClick"
                 Content="Ordenar"
                 Visibility="Visible" />
         <Button Name="btnAgregarTema"
@@ -101,7 +248,7 @@
                 Margin="12,5,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Click="btnAgregarTema_Click"
+                Click="BtnAgregarTemaClick"
                 Content="Agregar Tema" />
         <Button Name="btnActualizarTema"
                 Grid.Row="2"
@@ -110,7 +257,7 @@
                 Margin="116,5,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Click="btnActualizarTema_Click"
+                Click="BtnActualizarTemaClick"
                 Content="Actualizar Tema" />
         <Button Name="btnEliminarTema"
                 Grid.Row="2"
@@ -119,107 +266,12 @@
                 Margin="222,5,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Click="btnEliminarTema_Click"
+                Click="BtnEliminarTemaClick"
                 Content="Eliminar Tema" />
-        <TextBlock Name="txtRegistros"
-                   Grid.Row="1"
-                   Grid.Column="1"
-                   Height="23"
-                   Margin="153,39,0,0"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Top"
-                   Text="" />
-        <TextBox Name="txtBuscar"
-                 Grid.Row="1"
-                 Width="238"
-                 Height="23"
-                 Margin="12,36,0,0"
-                 HorizontalAlignment="Left"
-                 VerticalAlignment="Top" />
-        <Button Name="btnBuscar"
-                Grid.Row="1"
-                Width="43"
-                Height="37"
-                Margin="256,25,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Click="btnBuscar_Click">
-            <Image Width="38"
-                   Height="32"
-                   Source="Images/buscar.png"
-                   ToolTip="Buscar texto en el arbol" />
-        </Button>
-        <Button Name="btnRestableceer"
-                Grid.Row="1"
-                Width="43"
-                Height="37"
-                Margin="303,25,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Click="btnRestableceer_Click">
-            <Image Width="38"
-                   Height="32"
-                   Source="Images/back.png"
-                   ToolTip="Buscar texto en el arbol" />
-        </Button>
 
 
 
-        <igDP:XamDataGrid Name="dgTesis"
-                          Grid.Row="1"
-                          Grid.Column="1"
-                          Width="698"
-                          Margin="20,67,0,0"
-                          HorizontalAlignment="Left"
-                          VerticalAlignment="Top"
-                          DataSource="{Binding}"
-                          GroupByAreaLocation="None"
-                          RecordActivated="dgTesis_RecordActivated_1">
-            <igDP:XamDataGrid.FieldLayouts>
 
-                <igDP:FieldLayout>
-                    <igDP:FieldLayout.Fields>
-                        <igDP:Field Name="Ius"
-                                    Width="60"
-                                    Label=" IUS " />
-                        <igDP:Field Name="Rubro"
-                                    Width="*"
-                                    Height="80"
-                                    Label="Rubro" />
-                        <igDP:Field Name="Texto"
-                                    Width="0"
-                                    Height="80"
-                                    Label="Texto"
-                                    Visibility="Collapsed" />
-                        <igDP:Field Name="Precedente"
-                                    Width="0"
-                                    Height="80"
-                                    Label="Precedente"
-                                    Visibility="Collapsed" />
-                        <igDP:Field Name="LocAbr"
-                                    Width="*"
-                                    Height="80"
-                                    Label="Local" />
-                        <igDP:Field Name="LocExpr"
-                                    Width="0"
-                                    Height="80"
-                                    Label="LocalExpr"
-                                    Visibility="Collapsed" />
-                        <igDP:Field Name="Volumen"
-                                    Width="0"
-                                    Height="80"
-                                    Label="Volumen"
-                                    Visibility="Collapsed" />
-                        <igDP:Field Name="Parte"
-                                    Width="0"
-                                    Height="80"
-                                    Label="Parte"
-                                    Visibility="Collapsed" />
-                    </igDP:FieldLayout.Fields>
-                </igDP:FieldLayout>
-            </igDP:XamDataGrid.FieldLayouts>
-
-        </igDP:XamDataGrid>
         <Button Name="BtnListaTesis"
                 Grid.Row="2"
                 Grid.Column="1"
@@ -240,40 +292,7 @@
                    FontSize="15"
                    FontWeight="Bold"
                    Text="" />
-        <ProgressBar Name="pbBusqueda"
-                     Grid.Row="1"
-                     Width="238"
-                     Height="12"
-                     Margin="12,21,0,0"
-                     HorizontalAlignment="Left"
-                     VerticalAlignment="Top"
-                     Visibility="Hidden" />
-        <TextBlock Name="textBlock3"
-                   Grid.Row="1"
-                   Grid.Column="1"
-                   Height="21"
-                   Margin="412,10,0,0"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Top"
-                   Text="Buscar registro" />
-        <TextBox Name="txtNumIUSBuscr"
-                 Grid.Row="1"
-                 Grid.Column="1"
-                 Width="120"
-                 Height="23"
-                 Margin="497,7,0,0"
-                 HorizontalAlignment="Left"
-                 VerticalAlignment="Top"
-                 PreviewTextInput="txtIUS_PreviewTextInput" />
-        <Button Name="BtnIr"
-                Grid.Row="1"
-                Grid.Column="1"
-                Width="23"
-                Height="23"
-                Margin="623,7,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Click="BtnIr_Click"
-                Content="Ir" />
+
+
     </Grid>
 </Window>
