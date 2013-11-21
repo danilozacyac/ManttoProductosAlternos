@@ -26,8 +26,8 @@ namespace ManttoProductosAlternos.DBAccess
         public static DbConnection GetConecctionManttoCE()
         {
             String bdStringSql = ConfigurationManager.ConnectionStrings["BaseMantenimiento"].ConnectionString;
-            //bdStringSql = "Data Source=CT9BD2;Initial Catalog=ManttoCE;User Id=manttoce;Password=manttoce2012";
-            //bdStringSql = "Data Source=CT9BD2;Initial Catalog=ManttoCEDesa;User Id=manttoce;Password=manttoce2012";
+            //bdStringSql = "Data Source=CT9BD2;Initial Catalog=ManttoCE;User IdTema=manttoce;Password=manttoce2012";
+            //bdStringSql = "Data Source=CT9BD2;Initial Catalog=ManttoCEDesa;User IdTema=manttoce;Password=manttoce2012";
             DbConnection realConnection = new SqlConnection(bdStringSql);
             return realConnection;
         }
@@ -35,7 +35,7 @@ namespace ManttoProductosAlternos.DBAccess
         public static DbConnection GetConecctionDsql()
         {
             String bdStringSql = ConfigurationManager.ConnectionStrings["BaseIUS"].ConnectionString;
-            //bdStringSql = "Data Source=CGCSTDSQL;Initial Catalog=ius;User Id=4cc3s01nf0;Password=Pr0gr4m4d0r3s";
+            //bdStringSql = "Data Source=CGCSTDSQL;Initial Catalog=ius;User IdTema=4cc3s01nf0;Password=Pr0gr4m4d0r3s";
             DbConnection realConnection = new SqlConnection(bdStringSql);
             return realConnection;
         }

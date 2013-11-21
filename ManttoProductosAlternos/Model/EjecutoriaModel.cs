@@ -284,7 +284,7 @@ namespace ManttoProductosAlternos.Model
                 while (dataReader.Read())
                 {
                     EjecutoriaDTO ejecutoria = new EjecutoriaDTO();
-                    ejecutoria.Id = Convert.ToInt32(dataReader["Id"].ToString());
+                    ejecutoria.IdTema = Convert.ToInt32(dataReader["IdTema"].ToString());
                     ejecutoria.Rubro = dataReader["Rubro"].ToString();
                     ejecutoria.ConsecIndx = Convert.ToInt32(dataReader["ConsecIndx"].ToString());
                     ejecutoria.LocExp = dataReader["LocExp"].ToString();
@@ -343,7 +343,7 @@ namespace ManttoProductosAlternos.Model
                 while (dataReader.Read())
                 {
                     EjecutoriaDTO ejecutoria = new EjecutoriaDTO();
-                    ejecutoria.Id = Convert.ToInt32(dataReader["Id"].ToString());
+                    ejecutoria.IdTema = Convert.ToInt32(dataReader["IdTema"].ToString());
                     ejecutoria.Consec = Convert.ToInt32(dataReader["Consec"].ToString());
                     ejecutoria.TextoParte = dataReader["txtParte"].ToString();
                     ejecutoria.TextoIndx = dataReader["TI"].ToString();
@@ -385,7 +385,7 @@ namespace ManttoProductosAlternos.Model
                 connectionCT9BD2.Open();
                 foreach (EjecutoriaDTO ejecutoriaDTO in Ejecutorias)
                 {
-                    string miQry = "SELECT * FROM Ejecutoria Where Id = " + ejecutoriaDTO.Id;
+                    string miQry = "SELECT * FROM Ejecutoria Where IdTema = " + ejecutoriaDTO.IdTema;
                     cmd = new SqlCommand(miQry, connectionCT9BD2);
                     dataReader = cmd.ExecuteReader();
 
@@ -401,7 +401,7 @@ namespace ManttoProductosAlternos.Model
                         dataAdapter.Fill(dataSet, "Ejecutoria");
 
                         dr = dataSet.Tables["Ejecutoria"].NewRow();
-                        dr["Id"] = ejecutoriaDTO.Id;
+                        dr["IdTema"] = ejecutoriaDTO.IdTema;
                         dr["Rubro"] = ejecutoriaDTO.Rubro;
                         dr["ConsecIndx"] = ejecutoriaDTO.ConsecIndx;
                         dr["LocExp"] = ejecutoriaDTO.LocExp;
@@ -419,17 +419,17 @@ namespace ManttoProductosAlternos.Model
                         dr["Epoca"] = ejecutoriaDTO.Epoca;
                         dr["Fuente"] = ejecutoriaDTO.Fuente;
                         dr["Pagina"] = ejecutoriaDTO.Pagina;
-                        dr["IdProd"] = 2;
+                        dr["IdProducto"] = 2;
 
                         dataSet.Tables["Ejecutoria"].Rows.Add(dr);
 
                         dataAdapter.InsertCommand = connectionCT9BD2.CreateCommand();
-                        dataAdapter.InsertCommand.CommandText = "INSERT INTO Ejecutoria(Id,Rubro,ConsecIndx,LocExp,LocAbr,Parte,Asunto,Promovente,API,MI,LI," +
-                            "Volumen,Consec,Tesis,Sala,Epoca,Fuente,Pagina,IdProd)" +
-                            " VALUES(@Id,@Rubro,@ConsecIndx,@LocExp,@LocAbr,@Parte,@Asunto,@Promovente,@API,@MI,@LI," +
-                            "@Volumen,@Consec,@Tesis,@Sala,@Epoca,@Fuente,@Pagina,@IdProd)";
+                        dataAdapter.InsertCommand.CommandText = "INSERT INTO Ejecutoria(IdTema,Rubro,ConsecIndx,LocExp,LocAbr,Parte,Asunto,Promovente,API,MI,LI," +
+                            "Volumen,Consec,Tesis,Sala,Epoca,Fuente,Pagina,IdProducto)" +
+                            " VALUES(@IdTema,@Rubro,@ConsecIndx,@LocExp,@LocAbr,@Parte,@Asunto,@Promovente,@API,@MI,@LI," +
+                            "@Volumen,@Consec,@Tesis,@Sala,@Epoca,@Fuente,@Pagina,@IdProducto)";
 
-                        ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Id", SqlDbType.Int, 0, "Id");
+                        ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@IdTema", SqlDbType.Int, 0, "IdTema");
                         ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Rubro", SqlDbType.NText, 0, "Rubro");
                         ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@ConsecIndx", SqlDbType.Int, 0, "ConsecIndx");
                         ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@locExp", SqlDbType.NText, 0, "LocExp");
@@ -447,14 +447,14 @@ namespace ManttoProductosAlternos.Model
                         ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Epoca", SqlDbType.TinyInt, 0, "Epoca");
                         ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Fuente", SqlDbType.TinyInt, 0, "Fuente");
                         ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Pagina", SqlDbType.NVarChar, 0, "Pagina");
-                        ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@IdProd", SqlDbType.Int, 0, "IdProd");
+                        ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@IdProducto", SqlDbType.Int, 0, "IdProducto");
 
                         dataAdapter.Update(dataSet, "Ejecutoria");
 
                         dataSet.Dispose();
                         dataAdapter.Dispose();
 
-                        setPartesEjecutorias(getPartesEjecutoria(ejecutoriaDTO.Id));
+                        setPartesEjecutorias(getPartesEjecutoria(ejecutoriaDTO.IdTema));
 
                     }
                     dataReader.Close();
@@ -494,7 +494,7 @@ namespace ManttoProductosAlternos.Model
                     dataAdapter.Fill(dataSet, "Ejecutoria");
 
                     dr = dataSet.Tables["Ejecutoria"].NewRow();
-                    dr["Id"] = ejecutoriaDTO.Id;
+                    dr["IdTema"] = ejecutoriaDTO.IdTema;
                     dr["Consec"] = ejecutoriaDTO.Consec;
                     dr["txtParte"] = ejecutoriaDTO.TextoParte;
                     dr["TI"] = ejecutoriaDTO.TextoIndx;
@@ -505,10 +505,10 @@ namespace ManttoProductosAlternos.Model
                     dataSet.Tables["Ejecutoria"].Rows.Add(dr);
 
                     dataAdapter.InsertCommand = connectionEpsSQL.CreateCommand();
-                    dataAdapter.InsertCommand.CommandText = "INSERT INTO ParteEjecutoria(Id,Consec,txtParte,TI,TontaUnica,Parte,ConsecIndx)" +
-                        " VALUES(@Id,@Consec,@txtParte,@TI,@TontaUnica,@Parte,@ConsecIndx)";
+                    dataAdapter.InsertCommand.CommandText = "INSERT INTO ParteEjecutoria(IdTema,Consec,txtParte,TI,TontaUnica,Parte,ConsecIndx)" +
+                        " VALUES(@IdTema,@Consec,@txtParte,@TI,@TontaUnica,@Parte,@ConsecIndx)";
 
-                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Id", SqlDbType.Int, 0, "Id");
+                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@IdTema", SqlDbType.Int, 0, "IdTema");
                     ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Consec", SqlDbType.Int, 0, "Consec");
                     ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@txtParte", SqlDbType.NText, 0, "txtParte");
                     ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@TI", SqlDbType.NText, 0, "TI");

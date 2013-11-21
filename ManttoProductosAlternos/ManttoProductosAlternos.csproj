@@ -136,6 +136,7 @@
     <Compile Include="Model\AccesoModel.cs" />
     <Compile Include="Model\AccesoUsuarioModel.cs" />
     <Compile Include="Model\EjecutoriaModel.cs" />
+    <Compile Include="Model\TemasToViewModel.cs" />
     <Compile Include="Model\UsuariosModel.cs" />
     <Compile Include="Model\VotosModel.cs" />
     <Compile Include="Reportes\agrRelacionesMes.cs" />

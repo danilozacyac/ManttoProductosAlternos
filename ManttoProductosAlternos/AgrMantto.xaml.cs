@@ -78,7 +78,7 @@ namespace ManttoProductosAlternos
                 nodoSelect = (TreeViewItem)tvAgraria.SelectedItem;
                 temaSeleccionado = (Temas)nodoSelect.Tag;
 
-                tesisRelacionadas = new TesisModel(idProducto).GetTesisRelacionadas(temaSeleccionado.Id);
+                tesisRelacionadas = new TesisModel(idProducto).GetTesisRelacionadas(temaSeleccionado.IdTema);
                 tesisRelacionadas = tesisRelacionadas.Distinct().ToList();
                 dgTesis.DataContext = tesisRelacionadas;
 
@@ -95,7 +95,7 @@ namespace ManttoProductosAlternos
                 if (temaSeleccionado != null)
                 {
                     VarGlobales.temaNuevo = null;
-                    AgrAgregaTema agr = new AgrAgregaTema(temaSeleccionado.Id, temaSeleccionado.Nivel, idProducto);
+                    AgrAgregaTema agr = new AgrAgregaTema(temaSeleccionado.IdTema, temaSeleccionado.Nivel, idProducto);
                     agr.ShowDialog();
 
                     if (VarGlobales.temaNuevo != null)
@@ -161,7 +161,7 @@ namespace ManttoProductosAlternos
                 if (result == MessageBoxResult.Yes)
                 {
                     TemasModel temasModel = new TemasModel(idProducto);
-                    temasModel.EliminaTema(temaSeleccionado.Id);
+                    temasModel.EliminaTema(temaSeleccionado.IdTema);
                     tvAgraria.Items.Remove(nodoSelect);
                 }
             }
@@ -178,7 +178,7 @@ namespace ManttoProductosAlternos
             if (tesisSeleccionada != null && temaSeleccionado != null)
             {
                 TesisModel tesisModel = new TesisModel(idProducto);
-                tesisModel.EliminaRelacion(tesisSeleccionada.Ius, temaSeleccionado.Id);
+                tesisModel.EliminaRelacion(tesisSeleccionada.Ius, temaSeleccionado.IdTema);
                 TvAgrariaSelectedItemChanged(sender, null);
             }
             else
@@ -210,7 +210,7 @@ namespace ManttoProductosAlternos
                 if (!existeRelacion)
                 {
                     TesisModel tesisModel = new TesisModel(idProducto);
-                    tesisModel.InsertaTesis(Convert.ToInt32(txtIUS.Text), temaSeleccionado.Id);
+                    tesisModel.InsertaTesis(Convert.ToInt32(txtIUS.Text), temaSeleccionado.IdTema);
                     TvAgrariaSelectedItemChanged(sender, null);
                 }
                 else
@@ -320,7 +320,12 @@ namespace ManttoProductosAlternos
 
                         if (find == 0)
                         {
-                            nItem.IsSelected = true;
+                            try
+                            {
+                                nItem.IsSelected = true;
+                            }
+                            catch (NullReferenceException) { }
+
                             nItem.BringIntoView();
                         }
                     }

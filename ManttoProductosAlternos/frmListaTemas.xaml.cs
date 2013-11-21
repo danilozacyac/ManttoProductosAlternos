@@ -40,7 +40,7 @@ namespace ManttoProductosAlternos
         {
             
             if(tema != null)
-                new TesisModel(idProducto).EliminaRelacion(ius, tema.Id);
+                new TesisModel(idProducto).EliminaRelacion(ius, tema.IdTema);
 
             Window_Loaded(sender, e);
             /*

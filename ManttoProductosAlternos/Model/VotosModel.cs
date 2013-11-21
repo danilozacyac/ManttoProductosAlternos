@@ -275,7 +275,7 @@ namespace ManttoProductosAlternos.Model
                 while (dataReader.Read())
                 {
                     VotoDTO voto = new VotoDTO();
-                    voto.Id = Convert.ToInt32(dataReader["Id"].ToString());
+                    voto.IdTema = Convert.ToInt32(dataReader["IdTema"].ToString());
                     voto.Rubro = dataReader["Rubro"].ToString();
                     voto.ConsecIndx = Convert.ToInt32(dataReader["ConsecIndx"].ToString());
                     voto.LocExp = dataReader["LocExp"].ToString();
@@ -326,7 +326,7 @@ namespace ManttoProductosAlternos.Model
                 while (dataReader.Read())
                 {
                     VotoDTO ejecutoria = new VotoDTO();
-                    ejecutoria.Id = Convert.ToInt32(dataReader["Id"].ToString());
+                    ejecutoria.Id = Convert.ToInt32(dataReader["IdTema"].ToString());
                     ejecutoria.Consec = Convert.ToInt32(dataReader["Consec"].ToString());
                     ejecutoria.TextoParte = dataReader["txtParte"].ToString();
                     ejecutoria.TextoIndx = dataReader["TI"].ToString();
@@ -401,15 +401,15 @@ namespace ManttoProductosAlternos.Model
                         dr["Epoca"] = DBNull.Value;
                         dr["Fuente"] = DBNull.Value;
                         dr["Pagina"] = DBNull.Value;
-                        dr["IdProd"] = 2;
+                        dr["IdProducto"] = 2;
 
                         dataSet.Tables["Votos"].Rows.Add(dr);
 
                         dataAdapter.InsertCommand = connectionCT9BD2.CreateCommand();
                         dataAdapter.InsertCommand.CommandText = "INSERT INTO VotosParticulares(Id,Rubro,ConsecIndx,LocExp,LocAbr,Parte,Asunto,Promovente,API,MI,LI," +
-                            "Volumen,Consec,Tesis,Sala,Epoca,Fuente,Pagina,IdProd)" +
+                            "Volumen,Consec,Tesis,Sala,Epoca,Fuente,Pagina,IdProducto)" +
                             " VALUES(@Id,@Rubro,@ConsecIndx,@LocExp,@LocAbr,@Parte,@Asunto,@Promovente,@API,@MI,@LI," +
-                            "@Volumen,@Consec,@Tesis,@Sala,@Epoca,@Fuente,@Pagina,@IdProd)";
+                            "@Volumen,@Consec,@Tesis,@Sala,@Epoca,@Fuente,@Pagina,@IdProducto)";
 
                         ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Id", SqlDbType.Int, 0, "Id");
                         ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Rubro", SqlDbType.NText, 0, "Rubro");
@@ -429,7 +429,7 @@ namespace ManttoProductosAlternos.Model
                         ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Epoca", SqlDbType.TinyInt, 0, "Epoca");
                         ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Fuente", SqlDbType.TinyInt, 0, "Fuente");
                         ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Pagina", SqlDbType.NVarChar, 0, "Pagina");
-                        ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@IdProd", SqlDbType.Int, 0, "IdProd");
+                        ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@IdProducto", SqlDbType.Int, 0, "IdProducto");
 
                         dataAdapter.Update(dataSet, "Votos");
 

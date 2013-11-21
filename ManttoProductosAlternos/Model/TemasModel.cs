@@ -7,11 +7,14 @@ using System.Windows;
 using ManttoProductosAlternos.DBAccess;
 using ManttoProductosAlternos.DTO;
 using ManttoProductosAlternos.Utils;
+using System.Data;
 
 namespace ManttoProductosAlternos.Model
 {
     public class TemasModel
     {
+        private List<int> temasEnLista = new List<int>();
+
         /*
         En la bitacora de la base de datos el tipo de Modificación tiene la siguiente nomenclatura
         * 1. Tema Nuevo
@@ -22,14 +25,33 @@ namespace ManttoProductosAlternos.Model
         */
         private readonly int idProducto;
 
+        private String textoBuscado;
+
+        #region Constructores
+
+        public TemasModel() { }
+        
         public TemasModel(int idProducto)
         {
             this.idProducto = idProducto;
         }
 
-        //public List<Temas> GetTemas(int idPadre)
+        /// <summary>
+        /// Busqueda de un término concreto dentro de la estructura del árbol
+        /// </summary>
+        /// <param name="idProducto">Identificador del producto con el que se trabaja</param>
+        /// <param name="textoBuscado">Criterio que se esta solicitando</param>
+        public TemasModel(int idProducto, String textoBuscado)
+        {
+            this.idProducto = idProducto;
+            this.textoBuscado = textoBuscado;
+        }
+
+
+        #endregion
+        //public List<TemasArbol> GetTemas(int idPadre)
         //{
-        //    List<Temas> temas = new List<Temas>();
+        //    List<TemasArbol> temas = new List<TemasArbol>();
 
         //    SqlConnection sqlConne = (SqlConnection)Conexion.GetConecctionManttoCE();
         //    SqlDataReader dataReader;
@@ -42,15 +64,15 @@ namespace ManttoProductosAlternos.Model
         //    {
         //        sqlConne.Open();
 
-        //        string miQry = "select * from Temas Where Padre = " + idPadre + " AND idProd = " + idProducto + "  ORDER BY TemaStr";
+        //        string miQry = "select * from TemasArbol Where Padre = " + idPadre + " AND idProd = " + idProducto + "  ORDER BY TemaStr";
         //        cmd = new SqlCommand(miQry, sqlConne);
         //        dataReader = cmd.ExecuteReader();
 
         //        while (dataReader.Read())
         //        {
-        //            Temas tema = new Temas();
+        //            TemasArbol tema = new TemasArbol();
         //            tema.IsChecked = false;
-        //            tema.Id = Convert.ToInt32(dataReader["Id"].ToString());
+        //            tema.IdTema = Convert.ToInt32(dataReader["IdTema"].ToString());
         //            tema.Nivel = Convert.ToInt32(dataReader["Nivel"].ToString()); 
         //            tema.Padre = Convert.ToInt32(dataReader["Padre"].ToString()); 
         //            tema.Tema = dataReader["Tema"].ToString();
@@ -97,7 +119,7 @@ namespace ManttoProductosAlternos.Model
                 {
                     Temas tema = new Temas();
                     tema.IsChecked = false;
-                    tema.Id = Convert.ToInt32(dataReader["Id"].ToString());
+                    tema.IdTema = Convert.ToInt32(dataReader["Id"].ToString());
                     tema.Nivel = Convert.ToInt32(dataReader["Nivel"].ToString());
                     tema.Padre = Convert.ToInt32(dataReader["Padre"].ToString());
                     tema.Tema = dataReader["Tema"].ToString();
@@ -120,6 +142,96 @@ namespace ManttoProductosAlternos.Model
             }
             return temas;
         }
+
+
+        //public ObservableCollection<TemasArbol> GetTemasBusqueda()
+        //{
+        //    SqlConnection sqlConne = (SqlConnection)this.GetConnection();
+
+        //    ObservableCollection<TemasArbol> modulos = new ObservableCollection<TemasArbol>();
+
+        //        try
+        //        {
+        //            sqlConne.Open();
+
+        //            string sqlCadena = "SELECT *, (SELECT COUNT(idTEma) FROM TemasTesis T WHERE T.idTema = TemasArbol.Idtema and T.idMateria = TemasArbol.Materia ) Total " +
+        //                               "FROM TemasArbol WHERE (" + this.ArmaCadenaBusqueda(textoBuscado) + ")  AND Materia = @IdMateria  AND idtema >= 0 and idPadre <> -1 ORDER BY DescripcionStr ";
+        //            SqlCommand cmd = new SqlCommand(sqlCadena, sqlConne);
+        //            SqlParameter materia = cmd.Parameters.Add("@IdMateria", SqlDbType.Int, 0);
+        //            materia.Value = idMateria.IdTema;
+        //            SqlDataReader reader = cmd.ExecuteReader();
+
+        //            if (reader.HasRows)
+        //            {
+        //                while (reader.Read())
+        //                {
+        //                    TemasArbol tema = new TemasArbol();
+        //                    tema.IsChecked = false;
+        //                    tema.IdTema = Convert.ToInt32(reader["IdTema"].ToString());
+        //                    tema.Nivel = Convert.ToInt32(reader["Nivel"].ToString());
+        //                    tema.Padre = Convert.ToInt32(reader["Padre"].ToString());
+        //                    tema.Tema = reader["Tema"].ToString();
+        //                    tema.Orden = Convert.ToInt32(reader["Orden"].ToString());
+        //                    tema.TemaStr = reader["TemaSTR"].ToString();
+        //                    tema.LInicial = Convert.ToChar(reader["LetraInicial"].ToString());
+
+        //                    if (temasEnLista.Contains(tema.IdTema))
+        //                    {
+        //                    }
+        //                    else
+        //                    {
+        //                        if (tema.Padre == 0)
+        //                        {
+        //                            modulos.Add(tema);
+        //                            temasEnLista.Add(tema.IdTema);
+        //                        }
+        //                        else
+        //                        {
+        //                            if (temasEnLista.Contains(tema.Padre))
+        //                            {
+        //                                foreach (TemasArbol tematico in modulos)
+        //                                {
+        //                                    if (tematico.IdTema == tema.Padre)
+        //                                    {
+        //                                        if (tematico.SubTemas == null)
+        //                                            tema.SubTemas = new ObservableCollection<TemaTO>();
+        //                                        tema.Parent = tematico;
+
+        //                                        tematico.SubTemas.Add(tema);
+        //                                        temasEnLista.Add(tema.IDTema);
+        //                                    }
+        //                                    else
+        //                                    {
+        //                                        this.SearchParentNode(tema, tematico);
+        //                                    }
+        //                                }
+        //                            }
+        //                            else
+        //                            {
+        //                                this.GetSearchParents(tema, modulos);
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        catch (SqlException sql)
+        //        {
+        //            MessageBox.Show("Error ({0}) : {1}" + sql.Source + sql.Message, "Error Interno");
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, "Error Interno");
+        //        }
+        //        finally
+        //        {
+        //            sqlConne.Close();
+        //        }
+            
+        //    return SortSearch(this.SetParents(modulos));
+        //}
+
+
 
         public void InsertaTemaNuevo(Temas tema)
         {
@@ -150,10 +262,10 @@ namespace ManttoProductosAlternos.Model
                     dataReader.Close();
 
                     cmd.CommandText = "INSERT INTO TEMAS VALUES (" + idSiguiente + "," + tema.Nivel + "," + tema.Padre + ",'" + tema.Tema +
-                                      "'," + tema.Orden + ",'" + tema.TemaStr + "','" + tema.LInicial + "'," + tema.IdProd + ")";
+                                      "'," + tema.Orden + ",'" + tema.TemaStr + "','" + tema.LInicial + "'," + tema.IdProducto + ")";
                     cmd.ExecuteNonQuery();
                     cmd.CommandText = "insert into Bitacora(idTema,tipoModif,edoAnterior,usuario,idProd)" +
-                                      "values(" + idSiguiente + ",1,' ','" + Environment.MachineName + "'," + tema.IdProd + ")";
+                                      "values(" + idSiguiente + ",1,' ','" + Environment.MachineName + "'," + tema.IdProducto + ")";
                     cmd.ExecuteNonQuery();
 
                     VarGlobales.idSiguiente = idSiguiente;
@@ -191,11 +303,11 @@ namespace ManttoProductosAlternos.Model
                 sqlConne.Open();
 
                 cmd.CommandText = "UPDATE TEMAS  SET Nivel = " + tema.Nivel + ", Padre = " + tema.Padre + ",Tema = '" + tema.Tema +
-                                  "',TemaStr = '" + tema.TemaStr + "' WHERE id = " + tema.Id + " AND idProd = " + tema.IdProd;
+                                  "',TemaStr = '" + tema.TemaStr + "' WHERE id = " + tema.IdTema + " AND idProd = " + tema.IdProducto;
                 cmd.ExecuteNonQuery();
                 
                 cmd.CommandText = "insert into Bitacora(idTema,tipoModif,edoAnterior,usuario,idProd)" +
-                                  "values(" + tema.Id + ",2,' ','" + Environment.MachineName + "'," + tema.IdProd + ")";
+                                  "values(" + tema.IdTema + ",2,' ','" + Environment.MachineName + "'," + tema.IdProducto + ")";
                 cmd.ExecuteNonQuery();
             }
             catch (SqlException sql)
@@ -293,7 +405,7 @@ namespace ManttoProductosAlternos.Model
                 while (dataReader.Read())
                 {
                     Temas tema = new Temas();
-                    tema.Id = Convert.ToInt32(dataReader["Id"].ToString());
+                    tema.IdTema = Convert.ToInt32(dataReader["Id"].ToString());
                     tema.Tema = dataReader["Tema"].ToString();
 
                     temas.Add(tema);

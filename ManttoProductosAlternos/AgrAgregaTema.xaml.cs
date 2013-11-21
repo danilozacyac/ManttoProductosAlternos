@@ -77,7 +77,7 @@ namespace ManttoProductosAlternos
             tema.TemaStr = MiscFunciones.GetTemasStr(txtTema.Text); //MiscFunciones.ConvMay(MiscFunciones.QuitaCarCad(txtTema.Text)).ToUpper();
             tema.Orden = 0;
             tema.LInicial = Convert.ToChar(txtTema.Text.Substring(0, 1).ToUpper());
-            tema.IdProd = idProducto;
+            tema.IdProducto = idProducto;
 
             TemasModel temasModel = new TemasModel(idProducto);
 
@@ -97,7 +97,7 @@ namespace ManttoProductosAlternos
             }
             else 
             {
-                tema.Id = temaActualizar.Id;
+                tema.IdTema = temaActualizar.IdTema;
                 if (chkCambiarPosicion.IsChecked == true && chkNodoPadre.IsChecked == true)
                 {
                     tema.Nivel = 0;
@@ -123,7 +123,7 @@ namespace ManttoProductosAlternos
                 }
                 temasModel.ActualizaTema(tema);
             }
-            tema.Id = VarGlobales.idSiguiente;
+            tema.IdTema = VarGlobales.idSiguiente;
             VarGlobales.temaNuevo = tema;
 
             this.Close();
@@ -175,7 +175,7 @@ namespace ManttoProductosAlternos
         private void tvAgraria_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             TreeViewItem item = (TreeViewItem)tvAgraria.SelectedItem;
-            idActNuevoPadre = ((Temas)item.Tag).Id;
+            idActNuevoPadre = ((Temas)item.Tag).IdTema;
             nivelActNuevoPadre = ((Temas)item.Tag).Nivel;
         }
 

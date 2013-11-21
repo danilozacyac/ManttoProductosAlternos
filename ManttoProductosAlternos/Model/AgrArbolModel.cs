@@ -19,7 +19,7 @@ namespace ManttoProductosAlternos.Model
                 padres.Tag = tema;
                 padres.Header = tema.Tema;
                 if(idProd == 1)
-                    GetHijos(tema.Id, padres,idProd);
+                    GetHijos(tema.IdTema, padres,idProd);
                 temasSubT.Add(padres);
             }
 
@@ -36,7 +36,7 @@ namespace ManttoProductosAlternos.Model
                 TreeViewItem hijos = new TreeViewItem();
                 hijos.Tag = tema;
                 hijos.Header = tema.Tema;
-                GetHijos(tema.Id, hijos,idProd);
+                GetHijos(tema.IdTema, hijos,idProd);
                 nodoPadre.Items.Add(hijos);
             }
             return temasSubT;
