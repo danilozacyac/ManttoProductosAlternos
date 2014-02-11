@@ -1,12 +1,54 @@
 ﻿<Window x:Class="ManttoProductosAlternos.AlertDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="AlertDialog" Height="200" Width="450" Icon="/ManttoProductosAlternos;component/Images/AlertsHelp128.png" ResizeMode="NoResize" Loaded="Window_Loaded">
-    <Grid >
-        <Label Content="Label" Height="61" HorizontalAlignment="Left" Margin="112,12,0,0" Name="lblTexto" VerticalAlignment="Top" Width="275" Foreground="Black" />
-        <Button Content="Aceptar" Height="23" HorizontalAlignment="Left" Margin="260,126,0,0" Name="btAceptar" VerticalAlignment="Top" Width="75" IsDefault="True" Click="btAceptar_Click"  />
-        <Button Content="Cancelar" Height="23" HorizontalAlignment="Right" Margin="0,126,12,0" Name="btCancelar" VerticalAlignment="Top" Width="75" IsCancel="True" Click="btCancelar_Click" />
-        <Image Height="68" HorizontalAlignment="Left" Margin="30,20,0,0" Name="imCaution" Stretch="Fill" VerticalAlignment="Top" Width="76" Source="/ManttoProductosAlternos;component/Images/AlertsHelp128.png" />
-        <Button Content="Ver Temas" Height="23" HorizontalAlignment="Left" Margin="30,126,0,0" Name="BtnTemas" VerticalAlignment="Top" Width="75" Click="BtnTemas_Click" />
+        Title="AlertDialog"
+        Width="450"
+        Height="200"
+        Icon="/ManttoProductosAlternos;component/Images/AlertsHelp128.png"
+        Loaded="Window_Loaded"
+        ResizeMode="NoResize">
+    <Grid>
+        <Label Name="lblTexto"
+               Width="275"
+               Height="61"
+               Margin="112,12,0,0"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Top"
+               Content="Label"
+               Foreground="Black" />
+        <Button Name="btAceptar"
+                Width="75"
+                Height="23"
+                Margin="260,126,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="btAceptar_Click"
+                Content="Aceptar"
+                IsDefault="True" />
+        <Button Name="btCancelar"
+                Width="75"
+                Height="23"
+                Margin="0,126,12,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Click="btCancelar_Click"
+                Content="Cancelar"
+                IsCancel="True" />
+        <Image Name="imCaution"
+               Width="76"
+               Height="68"
+               Margin="30,20,0,0"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Top"
+               Source="/ManttoProductosAlternos;component/Images/AlertsHelp128.png"
+               Stretch="Fill" />
+        <Button Name="BtnTemas"
+                Width="75"
+                Height="23"
+                Margin="30,126,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="BtnTemas_Click"
+                Content="Ver Temas" />
     </Grid>
 </Window>

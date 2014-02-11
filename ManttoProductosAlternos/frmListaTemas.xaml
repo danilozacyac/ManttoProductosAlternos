@@ -1,14 +1,39 @@
 ﻿<Window x:Class="ManttoProductosAlternos.frmListaTemas"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Temas relacionados" Height="372" Width="470" ResizeMode="NoResize" Loaded="Window_Loaded">
+        Title="Temas relacionados"
+        Width="470"
+        Height="372"
+        Loaded="Window_Loaded"
+        ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="45"></RowDefinition>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="45" />
         </Grid.RowDefinitions>
-        <ListBox Height="288" HorizontalAlignment="Left" Name="lstTemas" VerticalAlignment="Top" Width="448" SelectionChanged="lstTemas_SelectionChanged" />
-        <Button Content="Salir" Grid.Row="1" Height="23" HorizontalAlignment="Right" Margin="0,10,12,0" Name="BtnSalir" VerticalAlignment="Top" Width="75" Click="BtnSalir_Click" />
-        <Button Content="Eliminar Relación" Grid.Row="1" Height="23" HorizontalAlignment="Left" Margin="12,10,0,0" Name="BtnElimRelacion" VerticalAlignment="Top" Width="111" Click="BtnElimRelacion_Click" />
+        <ListBox Name="lstTemas"
+                 Width="448"
+                 Height="288"
+                 HorizontalAlignment="Left"
+                 VerticalAlignment="Top"
+                 SelectionChanged="lstTemas_SelectionChanged" />
+        <Button Name="BtnSalir"
+                Grid.Row="1"
+                Width="75"
+                Height="23"
+                Margin="0,10,12,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Click="BtnSalir_Click"
+                Content="Salir" />
+        <Button Name="BtnElimRelacion"
+                Grid.Row="1"
+                Width="111"
+                Height="23"
+                Margin="12,10,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="BtnElimRelacion_Click"
+                Content="Eliminar Relación" />
     </Grid>
 </Window>

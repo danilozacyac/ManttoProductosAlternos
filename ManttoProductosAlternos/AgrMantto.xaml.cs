@@ -314,7 +314,7 @@ namespace ManttoProductosAlternos
                 int cont = 0;
                 foreach (string bus in llave)
                 {
-                    if (MiscFunciones.QuitaCarCad(nItem.Header.ToString().ToUpper()).Contains(MiscFunciones.QuitaCarCad(bus.ToUpper())))
+                    if (FlowDocumentHighlight.QuitaCarCad(nItem.Header.ToString().ToUpper()).Contains(FlowDocumentHighlight.QuitaCarCad(bus.ToUpper())))
                     {
                         cont++;
 
@@ -355,7 +355,7 @@ namespace ManttoProductosAlternos
                 int cont = 0;
                 foreach (string bus in llave)
                 {
-                    if (MiscFunciones.QuitaCarCad(child.Header.ToString().ToUpper()).Contains(MiscFunciones.QuitaCarCad(bus.ToUpper())))
+                    if (FlowDocumentHighlight.QuitaCarCad(child.Header.ToString().ToUpper()).Contains(FlowDocumentHighlight.QuitaCarCad(bus.ToUpper())))
                     {
                         cont++;
                         if (find == 0)

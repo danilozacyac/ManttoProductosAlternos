@@ -42,8 +42,36 @@
                 VerticalAlignment="Top"
                 Click="btnAgregar_Click"
                 Content="Agregar" />
-        <TreeView Grid.Row="1" Height="293" HorizontalAlignment="Left" Margin="17,7,0,0" Name="tvAgraria" VerticalAlignment="Top" Width="465" Visibility="Hidden" AllowDrop="True" SelectedItemChanged="tvAgraria_SelectedItemChanged" />
-        <CheckBox Content=" Cambiar Posición" Height="16" HorizontalAlignment="Right" Margin="0,12,13,0" Name="chkCambiarPosicion" VerticalAlignment="Top" Visibility="Hidden" Checked="chkCambiarPosicion_Checked" Unchecked="chkCambiarPosicion_Unchecked" Foreground="Black" />
-        <CheckBox Content="Cabeza de Estructura" Height="16" HorizontalAlignment="Left" Margin="232,12,0,0" Name="chkNodoPadre" VerticalAlignment="Top" Visibility="Hidden" IsChecked="True" Checked="chkNodoPadre_Checked" Unchecked="chkNodoPadre_Unchecked" Foreground="Black" />
+        <TreeView Name="tvAgraria"
+                  Grid.Row="1"
+                  Width="465"
+                  Height="293"
+                  Margin="17,7,0,0"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Top"
+                  AllowDrop="True"
+                  SelectedItemChanged="tvAgraria_SelectedItemChanged"
+                  Visibility="Hidden" />
+        <CheckBox Name="chkCambiarPosicion"
+                  Height="16"
+                  Margin="0,12,13,0"
+                  HorizontalAlignment="Right"
+                  VerticalAlignment="Top"
+                  Checked="chkCambiarPosicion_Checked"
+                  Content=" Cambiar Posición"
+                  Foreground="Black"
+                  Unchecked="chkCambiarPosicion_Unchecked"
+                  Visibility="Hidden" />
+        <CheckBox Name="chkNodoPadre"
+                  Height="16"
+                  Margin="232,12,0,0"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Top"
+                  Checked="chkNodoPadre_Checked"
+                  Content="Cabeza de Estructura"
+                  Foreground="Black"
+                  IsChecked="True"
+                  Unchecked="chkNodoPadre_Unchecked"
+                  Visibility="Hidden" />
     </Grid>
 </Window>

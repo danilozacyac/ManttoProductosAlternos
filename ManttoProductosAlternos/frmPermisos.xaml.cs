@@ -12,7 +12,7 @@ namespace ManttoProductosAlternos
     /// </summary>
     public partial class frmPermisos : Window
     {
-        Usuarios _Usuario = new Usuarios();
+        Usuarios usuario = new Usuarios();
 
         public frmPermisos()
         {
@@ -26,32 +26,31 @@ namespace ManttoProductosAlternos
             lstUsuarios.DisplayMemberPath = "Nombre";
         }
 
-        private void lstUsuarios_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void LstUsuarios_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _Usuario = (Usuarios)lstUsuarios.SelectedItem;
+            usuario = (Usuarios)lstUsuarios.SelectedItem;
 
-            String[] autorizado = _Usuario.Autorizados.Split(',');
+            String[] autorizado = usuario.Autorizados.Split(',');
 
-            chkAgraria.IsChecked = (autorizado.Contains("1") || _Usuario.Grupo == 0) ? true : false;
-            chkSuspension.IsChecked = (autorizado.Contains("2") || _Usuario.Grupo == 0) ? true : false;
-            chkImprocedencia.IsChecked = (autorizado.Contains("3") || _Usuario.Grupo == 0) ? true : false;
-            chkFacultades.IsChecked = (autorizado.Contains("4") || _Usuario.Grupo == 0) ? true : false;
-            chkElectoral.IsChecked = (autorizado.Contains("15") || _Usuario.Grupo == 0) ? true : false;
+            chkAgraria.IsChecked = (autorizado.Contains("1") || usuario.Grupo == 0) ? true : false;
+            chkSuspension.IsChecked = (autorizado.Contains("2") || usuario.Grupo == 0) ? true : false;
+            chkImprocedencia.IsChecked = (autorizado.Contains("3") || usuario.Grupo == 0) ? true : false;
+            chkFacultades.IsChecked = (autorizado.Contains("4") || usuario.Grupo == 0) ? true : false;
+            chkElectoral.IsChecked = (autorizado.Contains("15") || usuario.Grupo == 0) ? true : false;
 
-            txtNombre.Text = _Usuario.Nombre;
-            txtUsuario.Text = _Usuario.Usuario;
-            txtPass.Password = _Usuario.Contrasena;
+            txtNombre.Text = usuario.Nombre;
+            txtUsuario.Text = usuario.Usuario;
+            txtPass.Password = usuario.Contrasena;
 
-            if (_Usuario.Grupo < 3)
+            if (usuario.Grupo < 3)
                 radActivo.IsChecked = true;
             else
                 radInactivo.IsChecked = true;
 
-            groupBox1.IsEnabled = (_Usuario.Grupo == 0) ? false : true;
-
+            groupBox1.IsEnabled = (usuario.Grupo == 0) ? false : true;
         }
 
-        private void btnAgregarUsuario_Click(object sender, RoutedEventArgs e)
+        private void BtnAgregarUsuario_Click(object sender, RoutedEventArgs e)
         {
             lstUsuarios.IsEnabled = false;
 
@@ -61,7 +60,6 @@ namespace ManttoProductosAlternos
 
             txtNombre.IsEnabled = true;
             txtUsuario.IsEnabled = true;
-            
 
             chkAgraria.IsChecked = false;
             chkSuspension.IsChecked = false;
@@ -87,65 +85,61 @@ namespace ManttoProductosAlternos
 
             txtNombre.IsEnabled = false;
             txtUsuario.IsEnabled = false;
-            
         }
 
         private void btnActualizar_Click(object sender, RoutedEventArgs e)
         {
-            if (_Usuario.Grupo == 0)
+            if (usuario.Grupo == 0)
             {
-                _Usuario.Contrasena = txtPass.Password;
+                usuario.Contrasena = txtPass.Password;
             }
             else
             {
-                _Usuario.Contrasena = txtPass.Password;
-                _Usuario.Grupo = (radActivo.IsChecked == true) ? 1 : 9;
+                usuario.Contrasena = txtPass.Password;
+                usuario.Grupo = (radActivo.IsChecked == true) ? 1 : 9;
 
-                _Usuario.Autorizados = "";
+                usuario.Autorizados = "";
 
                 if (chkAgraria.IsChecked == true)
-                    _Usuario.Autorizados = "1,";
+                    usuario.Autorizados = "1,";
                 if (chkSuspension.IsChecked == true)
-                    _Usuario.Autorizados = "2,";
+                    usuario.Autorizados = "2,";
                 if (chkImprocedencia.IsChecked == true)
-                    _Usuario.Autorizados = "3,";
+                    usuario.Autorizados = "3,";
                 if (chkFacultades.IsChecked == true)
-                    _Usuario.Autorizados = "4,";
+                    usuario.Autorizados = "4,";
                 if (chkElectoral.IsChecked == true)
-                    _Usuario.Autorizados = "15,";
+                    usuario.Autorizados = "15,";
             }
 
             UsuariosModel model = new UsuariosModel();
-            model.UpdateUsuario(_Usuario);
+            model.UpdateUsuario(usuario);
 
-            lstUsuarios.SelectedItem = _Usuario;
-
+            lstUsuarios.SelectedItem = usuario;
         }
 
         private void btnAceptar_Click(object sender, RoutedEventArgs e)
         {
-            _Usuario.Nombre = txtNombre.Text;
-            _Usuario.Usuario = txtUsuario.Text;
-            _Usuario.Contrasena = txtPass.Password;
-            _Usuario.Grupo = (radActivo.IsChecked == true) ? 1 : 9;
+            usuario.Nombre = txtNombre.Text;
+            usuario.Usuario = txtUsuario.Text;
+            usuario.Contrasena = txtPass.Password;
+            usuario.Grupo = (radActivo.IsChecked == true) ? 1 : 9;
 
-            _Usuario.Autorizados = "";
+            usuario.Autorizados = "";
 
             if (chkAgraria.IsChecked == true)
-                _Usuario.Autorizados = "1,";
+                usuario.Autorizados = "1,";
             if (chkSuspension.IsChecked == true)
-                _Usuario.Autorizados = "2,";
+                usuario.Autorizados = "2,";
             if (chkImprocedencia.IsChecked == true)
-                _Usuario.Autorizados = "3,";
+                usuario.Autorizados = "3,";
             if (chkFacultades.IsChecked == true)
-                _Usuario.Autorizados = "4,";
+                usuario.Autorizados = "4,";
             if (chkElectoral.IsChecked == true)
-                _Usuario.Autorizados = "15,";
+                usuario.Autorizados = "15,";
 
             UsuariosModel model = new UsuariosModel();
-            model.SetNewUsuario(_Usuario);
-
-            
+            model.SetNewUsuario(usuario);
 
             lstUsuarios.IsEnabled = true;
 

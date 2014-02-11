@@ -7,7 +7,6 @@ using System.Windows;
 using ManttoProductosAlternos.DBAccess;
 using ManttoProductosAlternos.DTO;
 using ManttoProductosAlternos.Utils;
-using System.Data;
 
 namespace ManttoProductosAlternos.Model
 {
@@ -25,7 +24,7 @@ namespace ManttoProductosAlternos.Model
         */
         private readonly int idProducto;
 
-        private String textoBuscado;
+        private readonly String textoBuscado;
 
         #region Constructores
 
@@ -49,52 +48,6 @@ namespace ManttoProductosAlternos.Model
 
 
         #endregion
-        //public List<TemasArbol> GetTemas(int idPadre)
-        //{
-        //    List<TemasArbol> temas = new List<TemasArbol>();
-
-        //    SqlConnection sqlConne = (SqlConnection)Conexion.GetConecctionManttoCE();
-        //    SqlDataReader dataReader;
-        //    SqlCommand cmd;
-
-        //    cmd = sqlConne.CreateCommand();
-        //    cmd.Connection = sqlConne;
-
-        //    try
-        //    {
-        //        sqlConne.Open();
-
-        //        string miQry = "select * from TemasArbol Where Padre = " + idPadre + " AND idProd = " + idProducto + "  ORDER BY TemaStr";
-        //        cmd = new SqlCommand(miQry, sqlConne);
-        //        dataReader = cmd.ExecuteReader();
-
-        //        while (dataReader.Read())
-        //        {
-        //            TemasArbol tema = new TemasArbol();
-        //            tema.IsChecked = false;
-        //            tema.IdTema = Convert.ToInt32(dataReader["IdTema"].ToString());
-        //            tema.Nivel = Convert.ToInt32(dataReader["Nivel"].ToString()); 
-        //            tema.Padre = Convert.ToInt32(dataReader["Padre"].ToString()); 
-        //            tema.Tema = dataReader["Tema"].ToString();
-        //            tema.Orden = Convert.ToInt32(dataReader["Orden"].ToString());
-        //            tema.TemaStr = dataReader["TemaSTR"].ToString();
-        //            tema.LInicial = Convert.ToChar(dataReader["LetraInicial"].ToString());
-
-        //            temas.Add(tema);
-        //        }
-        //        dataReader.Close();
-        //        temas = temas.Distinct().ToList();
-        //    }
-        //    catch (SqlException sql)
-        //    {
-        //        MessageBox.Show("Error ({0}) : {1}" + sql.Source + sql.Message, "Error Interno");
-        //    }
-        //    finally
-        //    {
-        //        sqlConne.Close();
-        //    }
-        //    return temas;
-        //}
 
         public ObservableCollection<Temas> GetTemas(int idPadre)
         {
@@ -144,92 +97,6 @@ namespace ManttoProductosAlternos.Model
         }
 
 
-        //public ObservableCollection<TemasArbol> GetTemasBusqueda()
-        //{
-        //    SqlConnection sqlConne = (SqlConnection)this.GetConnection();
-
-        //    ObservableCollection<TemasArbol> modulos = new ObservableCollection<TemasArbol>();
-
-        //        try
-        //        {
-        //            sqlConne.Open();
-
-        //            string sqlCadena = "SELECT *, (SELECT COUNT(idTEma) FROM TemasTesis T WHERE T.idTema = TemasArbol.Idtema and T.idMateria = TemasArbol.Materia ) Total " +
-        //                               "FROM TemasArbol WHERE (" + this.ArmaCadenaBusqueda(textoBuscado) + ")  AND Materia = @IdMateria  AND idtema >= 0 and idPadre <> -1 ORDER BY DescripcionStr ";
-        //            SqlCommand cmd = new SqlCommand(sqlCadena, sqlConne);
-        //            SqlParameter materia = cmd.Parameters.Add("@IdMateria", SqlDbType.Int, 0);
-        //            materia.Value = idMateria.IdTema;
-        //            SqlDataReader reader = cmd.ExecuteReader();
-
-        //            if (reader.HasRows)
-        //            {
-        //                while (reader.Read())
-        //                {
-        //                    TemasArbol tema = new TemasArbol();
-        //                    tema.IsChecked = false;
-        //                    tema.IdTema = Convert.ToInt32(reader["IdTema"].ToString());
-        //                    tema.Nivel = Convert.ToInt32(reader["Nivel"].ToString());
-        //                    tema.Padre = Convert.ToInt32(reader["Padre"].ToString());
-        //                    tema.Tema = reader["Tema"].ToString();
-        //                    tema.Orden = Convert.ToInt32(reader["Orden"].ToString());
-        //                    tema.TemaStr = reader["TemaSTR"].ToString();
-        //                    tema.LInicial = Convert.ToChar(reader["LetraInicial"].ToString());
-
-        //                    if (temasEnLista.Contains(tema.IdTema))
-        //                    {
-        //                    }
-        //                    else
-        //                    {
-        //                        if (tema.Padre == 0)
-        //                        {
-        //                            modulos.Add(tema);
-        //                            temasEnLista.Add(tema.IdTema);
-        //                        }
-        //                        else
-        //                        {
-        //                            if (temasEnLista.Contains(tema.Padre))
-        //                            {
-        //                                foreach (TemasArbol tematico in modulos)
-        //                                {
-        //                                    if (tematico.IdTema == tema.Padre)
-        //                                    {
-        //                                        if (tematico.SubTemas == null)
-        //                                            tema.SubTemas = new ObservableCollection<TemaTO>();
-        //                                        tema.Parent = tematico;
-
-        //                                        tematico.SubTemas.Add(tema);
-        //                                        temasEnLista.Add(tema.IDTema);
-        //                                    }
-        //                                    else
-        //                                    {
-        //                                        this.SearchParentNode(tema, tematico);
-        //                                    }
-        //                                }
-        //                            }
-        //                            else
-        //                            {
-        //                                this.GetSearchParents(tema, modulos);
-        //                            }
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
-        //        catch (SqlException sql)
-        //        {
-        //            MessageBox.Show("Error ({0}) : {1}" + sql.Source + sql.Message, "Error Interno");
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, "Error Interno");
-        //        }
-        //        finally
-        //        {
-        //            sqlConne.Close();
-        //        }
-            
-        //    return SortSearch(this.SetParents(modulos));
-        //}
 
 
 

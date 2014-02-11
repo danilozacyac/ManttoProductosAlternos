@@ -25,7 +25,7 @@
                   Margin="12,67,0,0"
                   HorizontalAlignment="Left"
                   VerticalAlignment="Top"
-                  SelectedItemChanged="tvAgraria_SelectedItemChanged">
+                  SelectedItemChanged="TvAgrariaSelectedItemChanged">
             <TreeViewItem Header="Acciones de inconstitucionalidad"
                           IsExpanded="True"
                           Tag="0">
@@ -56,8 +56,7 @@
                 <TreeViewItem Header="Ejecutoria de fondo" Tag="1" />
                 <TreeViewItem Header="Ejecutoria de recursos" Tag="10" />
                 <TreeViewItem Header="Voto de fondo" Tag="100" />
-                <TreeViewItem Header="Voto de recursos"
-                              Tag="1000" />
+                <TreeViewItem Header="Voto de recursos" Tag="1000" />
             </TreeViewItem>
 
         </TreeView>
@@ -77,9 +76,9 @@
                  Margin="142,10,0,0"
                  HorizontalAlignment="Left"
                  VerticalAlignment="Top"
-                 GotFocus="txtIUS_GotFocus"
-                 LostFocus="txtIUS_LostFocus"
-                 PreviewTextInput="txtIUS_PreviewTextInput" />
+                 GotFocus="TxtIusGotFocus"
+                 LostFocus="TxtIusLostFocus"
+                 PreviewTextInput="TxtIusPreviewTextInput" />
         <Button Name="btnAgregar"
                 Grid.Row="1"
                 Grid.Column="1"
@@ -88,7 +87,7 @@
                 Margin="0,10,359,0"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
-                Click="btnAgregar_Click"
+                Click="BtnAgregarClick"
                 Content="Agregar" />
         <TextBlock Name="textBlock2"
                    Grid.Row="1"
@@ -106,7 +105,7 @@
                 Margin="13,5,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Click="btnEliminar_Click"
+                Click="BtnEliminarClick"
                 Content="Eliminar Relación" />
         <Button Name="btnSalir"
                 Grid.Row="2"
@@ -116,7 +115,7 @@
                 Margin="0,5,12,0"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
-                Click="btnSalir_Click"
+                Click="BtnSalirClick"
                 Content="Salir" />
         <TextBlock Name="txtRegistros"
                    Grid.Row="1"
@@ -135,7 +134,7 @@
                           VerticalAlignment="Top"
                           DataSource="{Binding}"
                           GroupByAreaLocation="None"
-                          RecordActivated="dgTesis_RecordActivated_1">
+                          RecordActivated="DgTesisRecordActivated1">
             <igDP:XamDataGrid.FieldLayouts>
 
                 <igDP:FieldLayout>

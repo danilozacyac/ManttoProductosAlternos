@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Data.Common;
-using System.Data.SqlClient;
-using System.Data.OleDb;
-using System.Data;
 using System.Configuration;
-using UtilsAlternos;
+using System.Data;
+using System.Data.Common;
+using System.Data.OleDb;
+using System.Data.SqlClient;
 
 namespace ManttoProductosAlternos.DBAccess
 {
@@ -12,35 +11,27 @@ namespace ManttoProductosAlternos.DBAccess
     {
         public static DbConnection GetConnectMant()
         {
-
-            String BD = ConfigurationManager.ConnectionStrings["BaseMantesis"].ConnectionString;
-                //ConnectionStringSettings settings = new ConnectionStringSettings("Bd", "Data Source=" + BD + "; Persist Security Info=False;Provider=Microsoft.Jet.OLEDB.4.0; Mode=ReadWrite|Share Deny None");
-                ConnectionStringSettings settings = new ConnectionStringSettings("Bd", "Data Source=" + BD + "; Provider=Microsoft.Jet.OLEDB.4.0; Mode=ReadWrite|Share Deny None");
-
-                //string connectionString = settings.ConnectionString;
-                DbConnection realConnection = new OleDbConnection(BD);
-                return realConnection;
-            
+            String bd = ConfigurationManager.ConnectionStrings["BaseMantesis"].ConnectionString;
+                
+            DbConnection realConnection = new OleDbConnection(bd);
+            return realConnection;
         }
 
         public static DbConnection GetConecctionManttoCE()
         {
             String bdStringSql = ConfigurationManager.ConnectionStrings["BaseMantenimiento"].ConnectionString;
-            //bdStringSql = "Data Source=CT9BD2;Initial Catalog=ManttoCE;User IdTema=manttoce;Password=manttoce2012";
-            //bdStringSql = "Data Source=CT9BD2;Initial Catalog=ManttoCEDesa;User IdTema=manttoce;Password=manttoce2012";
+
             DbConnection realConnection = new SqlConnection(bdStringSql);
             return realConnection;
         }
-
+        
         public static DbConnection GetConecctionDsql()
         {
             String bdStringSql = ConfigurationManager.ConnectionStrings["BaseIUS"].ConnectionString;
-            //bdStringSql = "Data Source=CGCSTDSQL;Initial Catalog=ius;User IdTema=4cc3s01nf0;Password=Pr0gr4m4d0r3s";
+            
             DbConnection realConnection = new SqlConnection(bdStringSql);
             return realConnection;
         }
-
-
 
         public static DataAdapter GetDataAdapter(String sql, DbConnection conexion)
         {
@@ -64,8 +55,5 @@ namespace ManttoProductosAlternos.DBAccess
 
             return reader;
         }
-
-
-
     }
 }

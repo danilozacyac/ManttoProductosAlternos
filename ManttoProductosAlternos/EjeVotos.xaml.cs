@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using ManttoProductosAlternos.Model;
-using ManttoProductosAlternos.DTO;
-using System.Text.RegularExpressions;
-using Infragistics.Windows.Editors;
 using Infragistics.Windows.DataPresenter;
+using Infragistics.Windows.Editors;
+using ManttoProductosAlternos.DTO;
 using ManttoProductosAlternos.Interface;
+using ManttoProductosAlternos.Model;
 
 namespace ManttoProductosAlternos
 {
@@ -19,6 +20,8 @@ namespace ManttoProductosAlternos
         private int selectedTag;
         private long docSeleccionado = 0;
         private IDocumentos documentos = new EjecutoriaModel();
+
+        private List<DocumentoTO> listaDocumentos;
 
         public EjeVotos()
         {
@@ -34,7 +37,7 @@ namespace ManttoProductosAlternos
             dgTesis.FieldSettings.EditorStyle = wrapstyle;
         }
 
-        private void tvAgraria_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void TvAgrariaSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             selectedTag = Convert.ToInt32(((TreeViewItem)tvAgraria.SelectedItem).Tag);
 
@@ -53,29 +56,48 @@ namespace ManttoProductosAlternos
                 documentos = new VotosModel();
             }
 
-            this.setDataInGrid();
+            this.SetDataInGrid();
         }
 
-        private void setDataInGrid()
+        private void SetDataInGrid()
         {
-            dgTesis.DataContext = documentos.GetDocumentosRelacionados(selectedTag);
+            listaDocumentos = documentos.GetDocumentosRelacionados(selectedTag);
+            dgTesis.DataContext = listaDocumentos;
             txtTotal.Text = dgTesis.Records.Count + " registro(s)";
         }
 
-        private void btnAgregar_Click(object sender, RoutedEventArgs e)
+        private void BtnAgregarClick(object sender, RoutedEventArgs e)
         {
             if (txtIUS.Text.Length > 0 && selectedTag != 0)
             {
-                long numIUS = Convert.ToInt32(txtIUS.Text);
-                
-                DocumentoTO documento = documentos.GetDocumentoPorIus(numIUS);
+                long numIus = Convert.ToInt32(txtIUS.Text);
 
-                if (documento != null)
-                    documentos.SetDocumento(documento, selectedTag);
+                bool existeRelacion = false;
+                foreach (DocumentoTO doc in listaDocumentos)
+                {
+                    if (doc.Id == numIus)
+                    {
+                        existeRelacion = true;
+                        break;
+                    }
+                }
+
+                if (!existeRelacion)
+                {
+
+                    DocumentoTO documento = documentos.GetDocumentoPorIus(numIus);
+
+                    if (documento != null)
+                        documentos.SetDocumento(documento, selectedTag);
+                    else
+                        MessageBox.Show("Ingresar un número de IUS válido");
+
+                    this.SetDataInGrid();
+                }
                 else
-                    MessageBox.Show("Ingresar un número de IUS válido");
-
-                this.setDataInGrid();
+                {
+                    MessageBox.Show("El tema ya fue relacionado con esta ejecutoria/voto");
+                }
             }
             else if (selectedTag == 0)
             {
@@ -88,18 +110,18 @@ namespace ManttoProductosAlternos
             txtIUS.Text = "";
         }
 
-        private void btnEliminar_Click(object sender, RoutedEventArgs e)
+        private void BtnEliminarClick(object sender, RoutedEventArgs e)
         {
             documentos.DeleteDocumento(docSeleccionado, selectedTag);
-            this.setDataInGrid();
+            this.SetDataInGrid();
         }
 
-        private void btnSalir_Click(object sender, RoutedEventArgs e)
+        private void BtnSalirClick(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
 
-        private void dgTesis_RecordActivated_1(object sender, Infragistics.Windows.DataPresenter.Events.RecordActivatedEventArgs e)
+        private void DgTesisRecordActivated1(object sender, Infragistics.Windows.DataPresenter.Events.RecordActivatedEventArgs e)
         {
             if (e.Record is DataRecord)
             {
@@ -108,17 +130,17 @@ namespace ManttoProductosAlternos
             }
         }
 
-        private void txtIUS_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        private void TxtIusPreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = !IsTextAllowed(e.Text);
+            e.Handled = IsTextAllowed(e.Text);
         }
 
-        private void txtIUS_LostFocus(object sender, RoutedEventArgs e)
+        private void TxtIusLostFocus(object sender, RoutedEventArgs e)
         {
             btnAgregar.IsDefault = false;
         }
 
-        private void txtIUS_GotFocus(object sender, RoutedEventArgs e)
+        private void TxtIusGotFocus(object sender, RoutedEventArgs e)
         {
             btnAgregar.IsDefault = true;
         }
@@ -127,7 +149,7 @@ namespace ManttoProductosAlternos
         {
             // Regex NumEx = new Regex(@"^\d+(?:.\d{0,2})?$"); 
             Regex regex = new Regex("[^0-9.-]+"); //regex that matches disallowed text 
-            return !regex.IsMatch(text);
+            return regex.IsMatch(text);
         }
         
     }

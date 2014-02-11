@@ -40,7 +40,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="ConstMant.cs" />
     <Compile Include="FlowDocumentHighlight.cs" />
     <Compile Include="MiscFunciones.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,35 +1,143 @@
 ﻿<Window x:Class="ManttoProductosAlternos.frmListaTesis"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="frmListaTesis" Height="600" Width="1160" xmlns:igDP="http://infragistics.com/DataPresenter" Loaded="Window_Loaded">
+        xmlns:igDP="http://infragistics.com/DataPresenter"
+        Title="frmListaTesis"
+        Width="1160"
+        Height="600"
+        Loaded="Window_Loaded">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="45"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="45"></RowDefinition>
+            <RowDefinition Height="45" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="45" />
         </Grid.RowDefinitions>
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="24,15,0,0" Name="textBlock3" Text="IUS :" VerticalAlignment="Top" />
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="54,10,0,0" Name="txtIUS" VerticalAlignment="Top" Width="120" />
-        <Button Content="Buscar" FontWeight="Bold" Height="23" HorizontalAlignment="Left" Margin="180,10,0,0" Name="btnIUS" VerticalAlignment="Top" Width="45" Click="btnIUS_Click" />
-        <Button Content="Cerrar" Grid.Row="2" Height="23" HorizontalAlignment="Left" Margin="1051,10,0,0" Name="BtnCerrar" VerticalAlignment="Top" Width="75" Click="BtnCerrar_Click" />
-        <Button Content="Eliminar Tesis" Grid.Row="2" Height="23" HorizontalAlignment="Left" Margin="12,10,0,0" Name="BtnEliminar" VerticalAlignment="Top" Width="97" Click="BtnEliminar_Click" />
-        <igDP:XamDataGrid DataSource="{Binding}"  HorizontalAlignment="Left" Margin="12,14,0,0" Name="dgTesis" VerticalAlignment="Top" Width="1114" Grid.Row="1" RecordActivated="dgTesis_RecordActivated" MouseDoubleClick="dgTesis_MouseDoubleClick" GroupByAreaLocation="None">
+        <TextBlock Name="textBlock3"
+                   Height="23"
+                   Margin="24,15,0,0"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Text="IUS :" />
+        <TextBox Name="txtIUS"
+                 Width="120"
+                 Height="23"
+                 Margin="54,10,0,0"
+                 HorizontalAlignment="Left"
+                 VerticalAlignment="Top" />
+        <Button Name="btnIUS"
+                Width="45"
+                Height="23"
+                Margin="180,10,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="btnIUS_Click"
+                Content="Buscar"
+                FontWeight="Bold" />
+        <Button Name="BtnCerrar"
+                Grid.Row="2"
+                Width="75"
+                Height="23"
+                Margin="1051,10,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="BtnCerrar_Click"
+                Content="Cerrar" />
+        <Button Name="BtnEliminar"
+                Grid.Row="2"
+                Width="97"
+                Height="23"
+                Margin="12,10,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="BtnEliminar_Click"
+                Content="Eliminar Tesis" />
+        <igDP:XamDataGrid Name="dgTesis"
+                          Grid.Row="1"
+                          Width="1114"
+                          Margin="12,14,0,0"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Top"
+                          DataSource="{Binding}"
+                          GroupByAreaLocation="None"
+                          MouseDoubleClick="dgTesis_MouseDoubleClick"
+                          RecordActivated="dgTesis_RecordActivated">
             <igDP:XamDataGrid.FieldLayouts>
                 <igDP:FieldLayout>
-                    <igDP:Field Label=" IUS " Name="Ius" Width="60" />
-                    <igDP:Field Height="80" Label="Rubro" Name="Rubro" Width="*" />
-                    <igDP:Field Height="80" Label="Texto" Name="Texto" Visibility="Collapsed" Width="0" />
-                    <igDP:Field Height="80" Label="Precedente" Name="Precedente" Visibility="Collapsed" Width="0" />
-                    <igDP:Field Height="80" Label="Local" Name="LocAbr" Width="200" />
-                    <igDP:Field Height="80" Label="LocalExpr" Name="LocExpr" Visibility="Collapsed" Width="0" />
-                    <igDP:Field Height="80" Label="Volumen" Name="Volumen" Visibility="Collapsed" Width="0" />
-                    <igDP:Field Height="80" Label="Parte" Name="Parte" Visibility="Collapsed" Width="0" />
+                    <igDP:Field Name="Ius"
+                                Width="60"
+                                Label=" IUS " />
+                    <igDP:Field Name="Rubro"
+                                Width="*"
+                                Height="80"
+                                Label="Rubro" />
+                    <igDP:Field Name="Texto"
+                                Width="0"
+                                Height="80"
+                                Label="Texto"
+                                Visibility="Collapsed" />
+                    <igDP:Field Name="Precedente"
+                                Width="0"
+                                Height="80"
+                                Label="Precedente"
+                                Visibility="Collapsed" />
+                    <igDP:Field Name="LocAbr"
+                                Width="200"
+                                Height="80"
+                                Label="Local" />
+                    <igDP:Field Name="LocExpr"
+                                Width="0"
+                                Height="80"
+                                Label="LocalExpr"
+                                Visibility="Collapsed" />
+                    <igDP:Field Name="Volumen"
+                                Width="0"
+                                Height="80"
+                                Label="Volumen"
+                                Visibility="Collapsed" />
+                    <igDP:Field Name="Parte"
+                                Width="0"
+                                Height="80"
+                                Label="Parte"
+                                Visibility="Collapsed" />
                 </igDP:FieldLayout>
             </igDP:XamDataGrid.FieldLayouts>
         </igDP:XamDataGrid>
-        <Button Content="Sustituir tesis" Grid.Row="2" Height="23" HorizontalAlignment="Left" Margin="125,10,0,0" Name="BtnSustituir" VerticalAlignment="Top" Width="100" Click="BtnSustituir_Click" />
-        <TextBox Grid.Row="2" Height="23" HorizontalAlignment="Left" Margin="387,10,0,0" Name="TxtNumeroIus" VerticalAlignment="Top" Width="120" Visibility="Hidden" PreviewTextInput="TxtNumeroIus_PreviewTextInput" />
-        <TextBlock Grid.Row="2" Height="23" HorizontalAlignment="Left" Margin="292,13,0,0" Name="TextoS" Text="Sustituir por:" VerticalAlignment="Top" Width="78" Visibility="Hidden" />
-        <Button Content="Ok" Grid.Row="2" Height="23" HorizontalAlignment="Right" Margin="0,10,571,0" Name="BtnSustituye" VerticalAlignment="Top" Width="41" Visibility="Hidden" Click="BtnSustituye_Click" />
+        <Button Name="BtnSustituir"
+                Grid.Row="2"
+                Width="100"
+                Height="23"
+                Margin="125,10,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="BtnSustituir_Click"
+                Content="Sustituir tesis" />
+        <TextBox Name="TxtNumeroIus"
+                 Grid.Row="2"
+                 Width="120"
+                 Height="23"
+                 Margin="387,10,0,0"
+                 HorizontalAlignment="Left"
+                 VerticalAlignment="Top"
+                 PreviewTextInput="TxtNumeroIus_PreviewTextInput"
+                 Visibility="Hidden" />
+        <TextBlock Name="TextoS"
+                   Grid.Row="2"
+                   Width="78"
+                   Height="23"
+                   Margin="292,13,0,0"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Text="Sustituir por:"
+                   Visibility="Hidden" />
+        <Button Name="BtnSustituye"
+                Grid.Row="2"
+                Width="41"
+                Height="23"
+                Margin="0,10,571,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Click="BtnSustituye_Click"
+                Content="Ok"
+                Visibility="Hidden" />
     </Grid>
 </Window>

@@ -16,6 +16,8 @@ namespace ManttoProductosAlternos.DTO
 
         private bool isChecked;
 
+        
+
         public bool IsChecked
         {
             get
@@ -53,6 +55,8 @@ namespace ManttoProductosAlternos.DTO
             set
             {
                 tema = value;
+                this.OnPropertyChanged("Tema");
+                longitudTema = 250 - tema.Length;
             }
         }
 
@@ -109,6 +113,21 @@ namespace ManttoProductosAlternos.DTO
             set
             {
                 nivel = value;
+            }
+        }
+
+        private int longitudTema;
+
+        public int LongitudTema
+        {
+            get
+            {
+                return this.longitudTema;
+            }
+            set
+            {
+                this.longitudTema = value;
+                this.OnPropertyChanged("LongitudTema");
             }
         }
 

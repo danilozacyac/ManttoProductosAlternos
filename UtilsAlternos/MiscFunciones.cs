@@ -5,124 +5,29 @@ namespace UtilsAlternos
     public class MiscFunciones
     {
 
-        public static string CambiaLtr123(string cLineaPr, string cCarOld, string cCarNvo)
-        {
-            string cLinea = cLineaPr;
-            string cLin;
-            string cLineaTmp;
-            int nPos, nAct;
-            int nLengthLinea;
-            int nLengthCarOld;
 
-
-            //  C# IndexOf | VB6 InStr
-
-            nLengthCarOld = cCarOld.Length;
-            nAct = 1;
-            cLin = "";
-            nPos = cLinea.IndexOf(cCarOld, nAct);
-
-            while (nPos > 0)
-            {
-                cLin = cLin + cLinea.Substring(0, nPos) + cCarNvo;
-                nLengthLinea = cLinea.Length - (nPos + nLengthCarOld);
-                cLineaTmp = cLinea.Substring(nPos + nLengthCarOld, nLengthLinea);
-                cLinea = cLineaTmp;
-
-                if (cLinea != "")
-                {
-                    nPos = cLinea.IndexOf(cCarOld, nAct);
-                }
-                else
-                {
-                    nPos = 0;
-                }
-
-            }
-            cLin = cLin + cLinea;
-
-            return cLin;
-        }  // fin CambiaLtr123
-
-        public static string QuitaCarCad(string cCadena)
-        {
-            string cChr = "";
-            string sCadena = cCadena;
-
-            sCadena = CambiaLtr123(sCadena, "+", " ");
-            sCadena = CambiaLtr123(sCadena, "=", " ");
-            sCadena = CambiaLtr123(sCadena, "*", " ");
-            sCadena = CambiaLtr123(sCadena, "&", " ");
-            sCadena = CambiaLtr123(sCadena, "^", " ");
-            sCadena = CambiaLtr123(sCadena, "$", " ");
-
-            sCadena = CambiaLtr123(sCadena, "#", " ");
-            sCadena = CambiaLtr123(sCadena, "@", " ");
-            sCadena = CambiaLtr123(sCadena, "!", " ");
-            sCadena = CambiaLtr123(sCadena, "¡", " ");
-            sCadena = CambiaLtr123(sCadena, "?", " ");
-            sCadena = CambiaLtr123(sCadena, "¿", " ");
-            sCadena = CambiaLtr123(sCadena, "<", " ");
-            sCadena = CambiaLtr123(sCadena, ">", " ");
-            sCadena = CambiaLtr123(sCadena, "~", " ");
-
-            sCadena = CambiaLtr123(sCadena, "|", " ");
-            sCadena = CambiaLtr123(sCadena, "°", " ");
-            sCadena = CambiaLtr123(sCadena, "ª", " ");
-            sCadena = CambiaLtr123(sCadena, "º", " ");
-
-            sCadena = CambiaLtr123(sCadena, ".", " ");
-            sCadena = CambiaLtr123(sCadena, ",", " ");
-            sCadena = CambiaLtr123(sCadena, ":", " ");
-            sCadena = CambiaLtr123(sCadena, ";", " ");
-            sCadena = CambiaLtr123(sCadena, "%", " ");
-
-            sCadena = CambiaLtr123(sCadena, "(", " ");
-            sCadena = CambiaLtr123(sCadena, ")", " ");
-            sCadena = CambiaLtr123(sCadena, "[", " ");
-            sCadena = CambiaLtr123(sCadena, "]", " ");
-            sCadena = CambiaLtr123(sCadena, "{", " ");
-            sCadena = CambiaLtr123(sCadena, "}", " ");
-            sCadena = CambiaLtr123(sCadena, "`", " ");
-            sCadena = CambiaLtr123(sCadena, "-", " ");
-            sCadena = CambiaLtr123(sCadena, "_", " ");
-            sCadena = CambiaLtr123(sCadena, "/", " ");
-
-
-            cChr = Convert.ToChar(92).ToString();
-            sCadena = CambiaLtr123(sCadena, cChr, " ");
-            sCadena = CambiaLtr123(sCadena, "'", " ");
-
-            cChr = Convert.ToChar(34).ToString();
-            sCadena = CambiaLtr123(sCadena, cChr, " ");
-
-            cChr = Convert.ToChar(13).ToString();
-            sCadena = CambiaLtr123(sCadena, cChr, " ");
-
-            cChr = Convert.ToChar(10).ToString();
-            sCadena = CambiaLtr123(sCadena, cChr, " ");
-
-
-            return sCadena;
-        }  // fin QuitaCarCad
-
+        /// <summary>
+        /// Convierte a mayúsculas las vocales cuando tienen acento o diéresis en el caso de la U, también la Ñ
+        /// </summary>
+        /// <param name="cCadena"></param>
+        /// <returns></returns>
         public static string ConvMay(string cCadena)
         {
             string sCadena = cCadena;
 
-            sCadena = CambiaLtr123(sCadena, "á", "A");
-            sCadena = CambiaLtr123(sCadena, "é", "E");
-            sCadena = CambiaLtr123(sCadena, "í", "I");
-            sCadena = CambiaLtr123(sCadena, "ó", "O");
-            sCadena = CambiaLtr123(sCadena, "ú", "U");
-            sCadena = CambiaLtr123(sCadena, "ñ", "Ñ");
-            sCadena = CambiaLtr123(sCadena, "ü", "U");
-            sCadena = CambiaLtr123(sCadena, "Ü", "U");
-            sCadena = CambiaLtr123(sCadena, "Á", "A");
-            sCadena = CambiaLtr123(sCadena, "É", "E");
-            sCadena = CambiaLtr123(sCadena, "Í", "I");
-            sCadena = CambiaLtr123(sCadena, "Ó", "O");
-            sCadena = CambiaLtr123(sCadena, "Ú", "U");
+            sCadena = FlowDocumentHighlight.CambiaLtr123(sCadena, "á", "A");
+            sCadena = FlowDocumentHighlight.CambiaLtr123(sCadena, "é", "E");
+            sCadena = FlowDocumentHighlight.CambiaLtr123(sCadena, "í", "I");
+            sCadena = FlowDocumentHighlight.CambiaLtr123(sCadena, "ó", "O");
+            sCadena = FlowDocumentHighlight.CambiaLtr123(sCadena, "ú", "U");
+            sCadena = FlowDocumentHighlight.CambiaLtr123(sCadena, "ñ", "Ñ");
+            sCadena = FlowDocumentHighlight.CambiaLtr123(sCadena, "ü", "U");
+            sCadena = FlowDocumentHighlight.CambiaLtr123(sCadena, "Ü", "U");
+            sCadena = FlowDocumentHighlight.CambiaLtr123(sCadena, "Á", "A");
+            sCadena = FlowDocumentHighlight.CambiaLtr123(sCadena, "É", "E");
+            sCadena = FlowDocumentHighlight.CambiaLtr123(sCadena, "Í", "I");
+            sCadena = FlowDocumentHighlight.CambiaLtr123(sCadena, "Ó", "O");
+            sCadena = FlowDocumentHighlight.CambiaLtr123(sCadena, "Ú", "U");
 
             sCadena.ToUpper();
             return sCadena;
@@ -132,7 +37,7 @@ namespace UtilsAlternos
         public static String GetTemasStr(String cCadena)
         {
             String texto = ""; 
-            cCadena = MiscFunciones.ConvMay(MiscFunciones.QuitaCarCad(cCadena)).ToUpper();
+            cCadena = MiscFunciones.ConvMay(FlowDocumentHighlight.QuitaCarCad(cCadena)).ToUpper();
 
             foreach (String palabra in cCadena.Split(' '))
             {
@@ -182,6 +87,11 @@ namespace UtilsAlternos
 
         }
 
+        /// <summary>
+        /// Devuelve el título de la ventana principal de acuerdo al usuario que iongreso
+        /// </summary>
+        /// <param name="idProducto"></param>
+        /// <returns></returns>
         public static String TituloVentanas(int idProducto)
         {
             switch (idProducto)

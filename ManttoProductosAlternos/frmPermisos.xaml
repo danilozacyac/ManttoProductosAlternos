@@ -1,31 +1,155 @@
 ﻿<Window x:Class="ManttoProductosAlternos.frmPermisos"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="frmPermisos" Height="402" Width="895" Loaded="Window_Loaded">
+        Title="frmPermisos"
+        Width="895"
+        Height="402"
+        Loaded="Window_Loaded">
     <Grid>
-        <!--<DataGrid AutoGenerateColumns="False" Height="200" HorizontalAlignment="Left" Margin="283,12,0,0" Name="gPermisos" VerticalAlignment="Top" Width="401" />-->
-        <ListBox Height="310" HorizontalAlignment="Left" Margin="12,12,0,0" Name="lstUsuarios" VerticalAlignment="Top" Width="278" SelectionChanged="lstUsuarios_SelectionChanged" />
-        <RadioButton Content="Activo" Height="16" HorizontalAlignment="Left" Margin="315,290,0,0" Name="radActivo" VerticalAlignment="Top" Foreground="Black" />
-        <RadioButton Content="Inactivo" Height="16" HorizontalAlignment="Left" Margin="423,290,0,0" Name="radInactivo" VerticalAlignment="Top" Foreground="Black" />
-        <Button Content="Agregar" Height="23" HorizontalAlignment="Left" Margin="12,328,0,0" Name="btnAgregarUsuario" VerticalAlignment="Top" Width="75" Click="btnAgregarUsuario_Click" />
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="315,33,0,0" Name="textBlock1" Text="Nombre" VerticalAlignment="Top" />
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="315,60,0,0" Name="txtNombre" VerticalAlignment="Top" Width="238" IsEnabled="False" />
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="315,102,0,0" Name="Usuario" Text="Usuario" VerticalAlignment="Top" />
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="315,131,0,0" Name="txtUsuario" VerticalAlignment="Top" Width="139" IsEnabled="False" />
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="315,170,0,0" Name="txtContra" Text="Contraseña" VerticalAlignment="Top" />
-        <PasswordBox Height="23" HorizontalAlignment="Left" Margin="315,203,0,0" Name="txtPass" VerticalAlignment="Top" Width="139" />
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="315,250,0,0" Name="textBlock2" Text="Estado" VerticalAlignment="Top" />
-        <GroupBox Header="Programas autorizados" Height="254" HorizontalAlignment="Left" Margin="573,52,0,0" Name="groupBox1" VerticalAlignment="Top" Width="275">
+        <!--  <DataGrid AutoGenerateColumns="False" Height="200" HorizontalAlignment="Left" Margin="283,12,0,0" Name="gPermisos" VerticalAlignment="Top" Width="401" />  -->
+        <ListBox Name="lstUsuarios"
+                 Width="278"
+                 Height="310"
+                 Margin="12,12,0,0"
+                 HorizontalAlignment="Left"
+                 VerticalAlignment="Top"
+                 SelectionChanged="LstUsuarios_SelectionChanged" />
+        <RadioButton Name="radActivo"
+                     Height="16"
+                     Margin="315,290,0,0"
+                     HorizontalAlignment="Left"
+                     VerticalAlignment="Top"
+                     Content="Activo"
+                     Foreground="Black" />
+        <RadioButton Name="radInactivo"
+                     Height="16"
+                     Margin="423,290,0,0"
+                     HorizontalAlignment="Left"
+                     VerticalAlignment="Top"
+                     Content="Inactivo"
+                     Foreground="Black" />
+        <Button Name="btnAgregarUsuario"
+                Width="75"
+                Height="23"
+                Margin="12,328,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="BtnAgregarUsuario_Click"
+                Content="Agregar" />
+        <TextBlock Name="textBlock1"
+                   Height="23"
+                   Margin="315,33,0,0"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Text="Nombre" />
+        <TextBox Name="txtNombre"
+                 Width="238"
+                 Height="23"
+                 Margin="315,60,0,0"
+                 HorizontalAlignment="Left"
+                 VerticalAlignment="Top"
+                 IsEnabled="False" />
+        <TextBlock Name="Usuario"
+                   Height="23"
+                   Margin="315,102,0,0"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Text="Usuario" />
+        <TextBox Name="txtUsuario"
+                 Width="139"
+                 Height="23"
+                 Margin="315,131,0,0"
+                 HorizontalAlignment="Left"
+                 VerticalAlignment="Top"
+                 IsEnabled="False" />
+        <TextBlock Name="txtContra"
+                   Height="23"
+                   Margin="315,170,0,0"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Text="Contraseña" />
+        <PasswordBox Name="txtPass"
+                     Width="139"
+                     Height="23"
+                     Margin="315,203,0,0"
+                     HorizontalAlignment="Left"
+                     VerticalAlignment="Top" />
+        <TextBlock Name="textBlock2"
+                   Height="23"
+                   Margin="315,250,0,0"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   Text="Estado" />
+        <GroupBox Name="groupBox1"
+                  Width="275"
+                  Height="254"
+                  Margin="573,52,0,0"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Top"
+                  Header="Programas autorizados">
             <Grid>
-                <CheckBox Content="Jurisprudencia en materia agraria" Foreground="Black" Height="16" HorizontalAlignment="Left" Margin="29,32,0,0" Name="chkAgraria" VerticalAlignment="Top" />
-                <CheckBox Content="Suspensión del acto Reclamado" Foreground="Black" Height="16" HorizontalAlignment="Left" Margin="29,66,0,0" Name="chkSuspension" VerticalAlignment="Top" />
-                <CheckBox Content="Improcedencia del Juicio de amparo" Foreground="Black" Height="16" HorizontalAlignment="Left" Margin="29,101,0,0" Name="chkImprocedencia" VerticalAlignment="Top" />
-                <CheckBox Content="Facultades exclusivas de las SCJN" Foreground="Black" Height="16" HorizontalAlignment="Left" Margin="29,137,0,0" Name="chkFacultades" VerticalAlignment="Top" />
-                <CheckBox Content="Electoral" Foreground="Black" Height="16" HorizontalAlignment="Left" Margin="29,169,0,0" Name="chkElectoral" VerticalAlignment="Top" />
+                <CheckBox Name="chkAgraria"
+                          Height="16"
+                          Margin="29,32,0,0"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Top"
+                          Content="Jurisprudencia en materia agraria"
+                          Foreground="Black" />
+                <CheckBox Name="chkSuspension"
+                          Height="16"
+                          Margin="29,66,0,0"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Top"
+                          Content="Suspensión del acto Reclamado"
+                          Foreground="Black" />
+                <CheckBox Name="chkImprocedencia"
+                          Height="16"
+                          Margin="29,101,0,0"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Top"
+                          Content="Improcedencia del Juicio de amparo"
+                          Foreground="Black" />
+                <CheckBox Name="chkFacultades"
+                          Height="16"
+                          Margin="29,137,0,0"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Top"
+                          Content="Facultades exclusivas de las SCJN"
+                          Foreground="Black" />
+                <CheckBox Name="chkElectoral"
+                          Height="16"
+                          Margin="29,169,0,0"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Top"
+                          Content="Electoral"
+                          Foreground="Black" />
             </Grid>
         </GroupBox>
-        <Button Content="Aceptar" Height="23" HorizontalAlignment="Right" Margin="0,328,225,0" Name="btnAceptar" VerticalAlignment="Top" Width="75" Click="btnAceptar_Click" Visibility="Hidden" />
-        <Button Content="Cancelar" Height="23" HorizontalAlignment="Left" Margin="656,328,0,0" Name="btnCancelar" VerticalAlignment="Top" Width="75" Click="btnCancelar_Click" Visibility="Hidden" />
-        <Button Content="Actualizar" Height="23" HorizontalAlignment="Right" Margin="0,328,25,0" Name="btnActualizar" VerticalAlignment="Top" Width="75" Click="btnActualizar_Click" />
+        <Button Name="btnAceptar"
+                Width="75"
+                Height="23"
+                Margin="0,328,225,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Click="btnAceptar_Click"
+                Content="Aceptar"
+                Visibility="Hidden" />
+        <Button Name="btnCancelar"
+                Width="75"
+                Height="23"
+                Margin="656,328,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="btnCancelar_Click"
+                Content="Cancelar"
+                Visibility="Hidden" />
+        <Button Name="btnActualizar"
+                Width="75"
+                Height="23"
+                Margin="0,328,25,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Click="btnActualizar_Click"
+                Content="Actualizar" />
     </Grid>
 </Window>

@@ -116,6 +116,7 @@
       <DependentUpon>AlertDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="DTO\DocumentoTO.cs" />
+    <Compile Include="DTO\TemaNuevo.cs" />
     <Compile Include="DTO\Usuarios.cs" />
     <Compile Include="EjeVotos.xaml.cs">
       <DependentUpon>EjeVotos.xaml</DependentUpon>

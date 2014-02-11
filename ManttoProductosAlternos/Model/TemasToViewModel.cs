@@ -515,7 +515,7 @@ namespace ManttoProductosAlternos.Model
             String resultString1 = "'%";
             foreach (string palabra in listadoPalabras)
             {
-                if (!Constants.STOPERS.Contains(palabra.Trim().ToLower()))
+                if (!Constants.Stopers.Contains(palabra.Trim().ToLower()))
                     resultString1 += FlowDocumentHighlight.Normaliza(palabra.Trim()) + "%";
                 //resultString += "OR DescripcionStr LIKE '%" + FlowDocumentHighlight.Normaliza( palabra.Trim() ) + "%' ";
             }
@@ -524,7 +524,7 @@ namespace ManttoProductosAlternos.Model
             String resultString2 = "'%";
             foreach (string palabra in listadoPalabras.Reverse())
             {
-                if (!Constants.STOPERS.Contains(palabra.Trim().ToLower()))
+                if (!Constants.Stopers.Contains(palabra.Trim().ToLower()))
                     resultString2 += FlowDocumentHighlight.Normaliza(palabra.Trim()) + "%";
                 //resultString += "OR DescripcionStr LIKE '%" + FlowDocumentHighlight.Normaliza( palabra.Trim() ) + "%' ";
             }

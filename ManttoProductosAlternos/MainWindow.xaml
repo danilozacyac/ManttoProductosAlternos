@@ -1,24 +1,82 @@
 ﻿<Window x:Class="ManttoProductosAlternos.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Mantenimiento Consultas Especiales" Loaded="Window_Loaded" Closing="Window_Closing" mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" Height="350" Width="525" WindowStartupLocation="CenterScreen" Icon="/ManttoProductosAlternos;component/Images/Libros.ico">
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Title="Mantenimiento Consultas Especiales"
+        Width="525"
+        Height="350"
+        Closing="Window_Closing"
+        Icon="/ManttoProductosAlternos;component/Images/Libros.ico"
+        Loaded="Window_Loaded"
+        WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d">
     <Grid>
-        <Button  Height="74" HorizontalAlignment="Left" Margin="36,22,0,0" Name="btnAgraria" VerticalAlignment="Top" Width="100" Click="BtnAgraria_Click" IsEnabled="False" ToolTip="Jurisprudencia en Materia Agraria">
+        <Button Name="btnAgraria"
+                Width="100"
+                Height="74"
+                Margin="36,22,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="BtnAgraria_Click"
+                IsEnabled="False"
+                ToolTip="Jurisprudencia en Materia Agraria">
             <Image Source="/ManttoProductosAlternos;component/Images/campo.png" />
         </Button>
-        <Button Height="74" HorizontalAlignment="Left" Margin="154,22,0,0" Name="btnSAR" VerticalAlignment="Top" Width="100" Click="BtnSar_Click" IsEnabled="False" ToolTip="Suspensión del Acto Reclamado">
+        <Button Name="btnSAR"
+                Width="100"
+                Height="74"
+                Margin="154,22,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="BtnSar_Click"
+                IsEnabled="False"
+                ToolTip="Suspensión del Acto Reclamado">
             <Image Source="/ManttoProductosAlternos;component/Images/suspension.png" />
         </Button>
-        <Button Height="74" HorizontalAlignment="Left" Margin="280,22,0,0" Name="btnImprocedencia" VerticalAlignment="Top" Width="100" IsEnabled="False" ToolTip="Improcedencia del Juicio de Amparo" Click="BtnImprocedencia_Click">
+        <Button Name="btnImprocedencia"
+                Width="100"
+                Height="74"
+                Margin="280,22,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="BtnImprocedencia_Click"
+                IsEnabled="False"
+                ToolTip="Improcedencia del Juicio de Amparo">
             <Image Source="/ManttoProductosAlternos;component/Images/impAmparo.jpeg" />
         </Button>
-        <Button Height="74" HorizontalAlignment="Left" Margin="36,206,0,0" Name="btnAdmin" VerticalAlignment="Top" Width="100"  IsEnabled="True" ToolTip="Suspensión del Acto Reclamado" Visibility="Hidden" Click="BtnAdmin_Click">
+        <Button Name="btnAdmin"
+                Width="100"
+                Height="74"
+                Margin="36,206,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="BtnAdmin_Click"
+                IsEnabled="True"
+                ToolTip="Suspensión del Acto Reclamado"
+                Visibility="Hidden">
             <Image Source="/ManttoProductosAlternos;component/Images/keys.png" />
         </Button>
-        <Button Height="74" HorizontalAlignment="Left" IsEnabled="False" Margin="391,25,0,0" Name="BtnSCJN" ToolTip="Facultades de la Suprema Corte" VerticalAlignment="Top" Width="100" Click="BtnScjn_Click">
+        <Button Name="BtnSCJN"
+                Width="100"
+                Height="74"
+                Margin="391,25,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="BtnScjn_Click"
+                IsEnabled="False"
+                ToolTip="Facultades de la Suprema Corte">
             <Image Source="/ManttoProductosAlternos;component/Images/scjn.png" />
         </Button>
-        <Button Height="74" HorizontalAlignment="Left" IsEnabled="False" Margin="36,102,0,0" Name="BtnElectoral" ToolTip="Materia Electoral" VerticalAlignment="Top" Width="100" Click="BtnElectoral_Click">
+        <Button Name="BtnElectoral"
+                Width="100"
+                Height="74"
+                Margin="36,102,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="BtnElectoral_Click"
+                IsEnabled="False"
+                ToolTip="Materia Electoral">
             <Image Source="/ManttoProductosAlternos;component/Images/electoral.jpg" />
         </Button>
     </Grid>
