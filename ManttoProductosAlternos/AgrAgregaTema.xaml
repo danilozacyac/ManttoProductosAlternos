@@ -3,11 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Agregar Tema"
         Width="512"
-        Height="452"
+        Height="529"
         Loaded="Window_Loaded">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="70" />
+            <RowDefinition Height="100" />
             <RowDefinition Height="*" />
             <RowDefinition Height="35" />
         </Grid.RowDefinitions>
@@ -22,7 +22,7 @@
                  Height="23"
                  Margin="12,41,0,0"
                  HorizontalAlignment="Left"
-                 VerticalAlignment="Top" />
+                 VerticalAlignment="Top" MaxLength="250" TextChanged="txtTema_TextChanged" />
         <Button Name="btnCancelar"
                 Grid.Row="2"
                 Width="75"
@@ -45,10 +45,9 @@
         <TreeView Name="tvAgraria"
                   Grid.Row="1"
                   Width="465"
-                  Height="293"
                   Margin="17,7,0,0"
                   HorizontalAlignment="Left"
-                  VerticalAlignment="Top"
+                  VerticalAlignment="Stretch"
                   AllowDrop="True"
                   SelectedItemChanged="tvAgraria_SelectedItemChanged"
                   Visibility="Hidden" />
@@ -73,5 +72,7 @@
                   IsChecked="True"
                   Unchecked="chkNodoPadre_Unchecked"
                   Visibility="Hidden" />
+        <Label Content="caractéres restantes" Height="28" HorizontalAlignment="Left" Margin="358,72,0,0" Name="label1" VerticalAlignment="Top" Foreground="Black" Width="119" />
+        <Label Content="{Binding LongitudTema,Mode=TwoWay}" Height="28" HorizontalAlignment="Left" Margin="321,72,0,0" Name="LblRestantes" VerticalAlignment="Top" Foreground="Black" Width="33" />
     </Grid>
 </Window>

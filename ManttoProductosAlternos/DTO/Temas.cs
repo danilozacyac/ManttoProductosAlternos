@@ -4,7 +4,7 @@ using ManttoProductosAlternos.Model;
 
 namespace ManttoProductosAlternos.DTO
 {
-    public class Temas
+    public class Temas : INotifyPropertyChanged
     {
         static readonly Temas dummyChild = new Temas();
         Temas parent;
@@ -122,6 +122,9 @@ namespace ManttoProductosAlternos.DTO
         {
             get
             {
+                if (this.longitudTema == 0)
+                    longitudTema = tema.Length;
+
                 return this.longitudTema;
             }
             set

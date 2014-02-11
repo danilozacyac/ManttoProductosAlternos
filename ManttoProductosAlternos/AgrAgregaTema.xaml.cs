@@ -5,6 +5,7 @@ using ManttoProductosAlternos.DTO;
 using UtilsAlternos;
 using ManttoProductosAlternos.Model;
 using ManttoProductosAlternos.Utils;
+using System.Windows.Media;
 
 namespace ManttoProductosAlternos
 {
@@ -15,7 +16,8 @@ namespace ManttoProductosAlternos
     {
         private int nivelPadre = 0;
         private int idPadre = 0;
-       
+
+        private TemaNuevo temaBinding;
 
         private Temas temaActualizar = null;
 
@@ -23,19 +25,26 @@ namespace ManttoProductosAlternos
         private int nivelActNuevoPadre = 0;
         private int idProducto = 0;
 
-        public AgrAgregaTema(int idPadre, int nivelPadre,int idProducto) // 1 = Tema Nuevo, 2 = Actualizar Tema
+        public AgrAgregaTema(int idPadre, int nivelPadre,int idProducto) 
         {
             InitializeComponent();
+
+            //temaBinding = new TemaNuevo();
+            //temaBinding.NuevoTema = "Probando2";
+            ////temaBinding.LongitudTema = 100;
+
+            this.DataContext = temaBinding;
 
             this.idPadre = idPadre;
             this.nivelPadre = nivelPadre;
             this.idProducto = idProducto;
         }
 
-        public AgrAgregaTema(int idPadre, int nivelPadre, Temas temaActualizar,int idProducto) // 1 = Tema Nuevo, 2 = Actualizar Tema
+        public AgrAgregaTema(int idPadre, int nivelPadre, Temas temaActualizar,int idProducto) 
         {
             InitializeComponent();
 
+            
             this.idPadre = idPadre;
             this.nivelPadre = nivelPadre;
             this.temaActualizar = temaActualizar;
@@ -51,12 +60,12 @@ namespace ManttoProductosAlternos
             tvAgraria.Items.Clear();
             if (temaActualizar  == null)
             {
-                this.Height = 150;
+                this.Height = 180;
                 chkNodoPadre.Visibility = Visibility.Visible;
             }
             else if (temaActualizar != null)
             {
-                this.Height = 150;
+                this.Height = 180;
                 chkCambiarPosicion.Visibility = Visibility.Visible;
                 chkNodoPadre.Visibility = Visibility.Hidden;
                 tvAgraria.Visibility = Visibility.Hidden;
@@ -74,7 +83,7 @@ namespace ManttoProductosAlternos
         {
             Temas tema = new Temas();
             tema.Tema = (idProducto == 1) ? txtTema.Text.ToUpper() : txtTema.Text;
-            tema.TemaStr = MiscFunciones.GetTemasStr(txtTema.Text); //MiscFunciones.ConvMay(MiscFunciones.QuitaCarCad(txtTema.Text)).ToUpper();
+            tema.TemaStr = MiscFunciones.GetTemasStr(txtTema.Text); 
             tema.Orden = 0;
             tema.LInicial = Convert.ToChar(txtTema.Text.Substring(0, 1).ToUpper());
             tema.IdProducto = idProducto;
@@ -148,7 +157,7 @@ namespace ManttoProductosAlternos
 
         private void chkNodoPadre_Checked(object sender, RoutedEventArgs e)
         {
-            this.Height = 150;
+            this.Height = 180;
         }
 
         private void chkNodoPadre_Unchecked(object sender, RoutedEventArgs e)
@@ -177,6 +186,30 @@ namespace ManttoProductosAlternos
             TreeViewItem item = (TreeViewItem)tvAgraria.SelectedItem;
             idActNuevoPadre = ((Temas)item.Tag).IdTema;
             nivelActNuevoPadre = ((Temas)item.Tag).Nivel;
+        }
+
+        private void txtTema_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            int carRestantes = txtTema.MaxLength - txtTema.Text.Length;
+
+            LblRestantes.Content = carRestantes;
+
+            if (carRestantes == 0)
+            {
+                MessageBox.Show("Has alcanzado el límite de 250 caractéres permitidos \npara la descripción del tema");
+            }
+
+            if (carRestantes <= 10)
+            {
+                LblRestantes.Foreground = new SolidColorBrush(Colors.Red);
+            }
+            else
+            {
+                LblRestantes.Foreground = new SolidColorBrush(Colors.Black);
+            }
+
+            
+
         }
 
 
