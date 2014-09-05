@@ -71,6 +71,48 @@ namespace ManttoProductosAlternos.Model
             return listaTesis;
         }
 
+        public List<int> GetRegistrosRelacionados(int idTema)
+        {
+            List<int> listaTesis = new List<int>();
+            SqlConnection sqlNueva = (SqlConnection)Conexion.GetConecctionManttoCE();
+
+            SqlDataReader dataReader;
+            SqlCommand cmdAntes;
+
+            cmdAntes = sqlNueva.CreateCommand();
+            cmdAntes.Connection = sqlNueva;
+
+            try
+            {
+                sqlNueva.Open();
+
+                string miQry = "SELECT IUS FROM TemasIUS " +
+                               " WHERE Id = " + idTema + " AND IdProd = " + idProducto  +
+                               " ORDER BY ConsecIndx";
+
+                cmdAntes = new SqlCommand(miQry, sqlNueva);
+                dataReader = cmdAntes.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    listaTesis.Add(dataReader["IUS"] as int? ?? -1);
+                }
+                dataReader.Close();
+
+            }
+            catch (SqlException sql)
+            {
+                MessageBox.Show("Error ({0}) : {1}" + sql.Source + sql.Message, "Error Interno");
+            }
+            finally
+            {
+                sqlNueva.Close();
+            }
+
+            return listaTesis;
+        }
+
+
         public List<TesisDTO> GetTesisPorTema()
         {
             List<TesisDTO> listaTesis = new List<TesisDTO>();
@@ -631,5 +673,50 @@ namespace ManttoProductosAlternos.Model
                 }
             }
         }
+
+
+        /// <summary>
+        /// Copia todas las tesis relacionadas de un tema a otro
+        /// </summary>
+        /// <param name="idTemaViejo">Tema de donde se toman las tesis relacionadas</param>
+        /// <param name="idTemaNuevo">Tema donde se establecera la nueva relacion de las tesis </param>
+        public void CopiaTesis(int idTemaViejo, int idTemaNuevo)
+        {
+            List<int> tesisCopiar =  this.GetRegistrosRelacionados(idTemaViejo);
+
+            foreach (int tesis in tesisCopiar)
+                this.InsertaTesis(tesis, idTemaNuevo);
+                    
+        }
+
+        /// <summary>
+        /// Elimina todas las tesis relacionadas a un tema y las relaciona con otro
+        /// </summary>
+        /// <param name="idTemaViejo">Tema de donde se tomaran y eliminaran las tesis relacionadas</param>
+        /// <param name="idTemaNuevo">Tema donde se establecera la nueva relacion de las tesis</param>
+        public void CortarTesis(int idTemaViejo, int idTemaNuevo)
+        {
+            List<int> tesisCortar = this.GetRegistrosRelacionados(idTemaViejo);
+
+            foreach (int tesis in tesisCortar)
+                this.InsertaTesis(tesis, idTemaNuevo);
+
+            foreach (int tesis in tesisCortar)
+                this.EliminaRelacion(tesis, idTemaViejo);
+        }
+
+
+        /// <summary>
+        /// Elimina todas las relaciones tema-tesis del tema seleccionado
+        /// </summary>
+        /// <param name="idTema"></param>
+        public void EliminaTesis(int idTema)
+        {
+            List<int> tesisEliminar = this.GetRegistrosRelacionados(idTema);
+
+            foreach (int tesis in tesisEliminar)
+                this.EliminaRelacion(tesis, idTema);
+        }
+
     }
 }

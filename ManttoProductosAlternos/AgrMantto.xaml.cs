@@ -39,8 +39,7 @@ namespace ManttoProductosAlternos
             InitializeComponent();
             this.idProducto = idProducto;
             updatePbDelegate =
-                   new UpdateProgressBarDelegate(pbBusqueda.SetValue);
-
+                new UpdateProgressBarDelegate(pbBusqueda.SetValue);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -84,7 +83,6 @@ namespace ManttoProductosAlternos
 
                 lblTemaSeleccionado.Text = temaSeleccionado.Tema;
                 txtRegistros.Text = tesisRelacionadas.Count + " Registros";
-
             }
         }
 
@@ -104,12 +102,14 @@ namespace ManttoProductosAlternos
                         treeNode.Tag = VarGlobales.temaNuevo;
                         treeNode.Header = VarGlobales.temaNuevo.Tema;
 
-
                         if (VarGlobales.temaNuevo.Nivel == 0)
                         {
                             tvAgraria.Items.Add(treeNode);
                         }
-                        else { nodoSelect.Items.Add(treeNode); }
+                        else
+                        {
+                            nodoSelect.Items.Add(treeNode);
+                        }
                     }
                 }
                 else
@@ -129,12 +129,14 @@ namespace ManttoProductosAlternos
                     treeNode.Tag = VarGlobales.temaNuevo;
                     treeNode.Header = VarGlobales.temaNuevo.Tema;
 
-
                     if (VarGlobales.temaNuevo.Nivel == 0)
                     {
                         tvAgraria.Items.Add(treeNode);
                     }
-                    else { nodoSelect.Items.Add(treeNode); }
+                    else
+                    {
+                        nodoSelect.Items.Add(treeNode);
+                    }
                 }
             }
         }
@@ -170,8 +172,6 @@ namespace ManttoProductosAlternos
                 MessageBox.Show("Seleccione el tema que desea eliminar", "Atención : ", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
-
-
 
         private void BtnEliminarClick(object sender, RoutedEventArgs e)
         {
@@ -286,7 +286,6 @@ namespace ManttoProductosAlternos
             ////////TematicoConst.miBusquedaPrin = busqueda;
             this.Cursor = Cursors.Arrow;
 
-
             if (find == 0)
                 MessageBox.Show("No existe el texto buscado");
         }
@@ -298,7 +297,6 @@ namespace ManttoProductosAlternos
             Buscador(tvAgraria, busqueda, Color.FromRgb(0, 0, 0));
             this.Cursor = Cursors.Arrow;
         }
-
 
         private void Buscador(System.Windows.Controls.TreeView treeView, List<string> llave, Color color)
         {
@@ -324,7 +322,9 @@ namespace ManttoProductosAlternos
                             {
                                 nItem.IsSelected = true;
                             }
-                            catch (NullReferenceException) { }
+                            catch (NullReferenceException)
+                            {
+                            }
 
                             nItem.BringIntoView();
                         }
@@ -339,8 +339,8 @@ namespace ManttoProductosAlternos
                 BuscaItem(nItem, llave, color);
 
                 Dispatcher.Invoke(updatePbDelegate,
-                System.Windows.Threading.DispatcherPriority.Background,
-                new object[] { ProgressBar.ValueProperty, pbBusqueda.Value });
+                    System.Windows.Threading.DispatcherPriority.Background,
+                    new object[] { ProgressBar.ValueProperty, pbBusqueda.Value });
             }
             pbBusqueda.Visibility = Visibility.Hidden;
         }
@@ -392,16 +392,13 @@ namespace ManttoProductosAlternos
                 {
                     if (((TreeViewItem)root).Parent.GetType() == typeof(TreeViewItem))
                     {
-                        ((
-                        TreeViewItem)node.Parent).IsExpanded = expande;
+                        ((TreeViewItem)node.Parent).IsExpanded = expande;
 
-                        AbreRaiz((
-                        TreeViewItem)node.Parent);
+                        AbreRaiz((TreeViewItem)node.Parent);
                     }
                 }
             }
         }
-
 
         private void BtnSalirClick(object sender, RoutedEventArgs e)
         {
@@ -425,11 +422,11 @@ namespace ManttoProductosAlternos
         }
 
         private delegate void UpdateProgressBarDelegate(
-        System.Windows.DependencyProperty dp, Object value);
+            System.Windows.DependencyProperty dp, Object value);
 
         private void BtnIr_Click(object sender, RoutedEventArgs e)
         {
-                MoveGridToIus((Convert.ToInt32(txtNumIUSBuscr.Text)));
+            MoveGridToIus((Convert.ToInt32(txtNumIUSBuscr.Text)));
         }
 
         private void MoveGridToIus(long nIus)
@@ -451,6 +448,71 @@ namespace ManttoProductosAlternos
 
             if (!find)
                 MessageBox.Show("Número de registro no encontrado");
+        }
+
+        private Temas temaCopia;
+
+        private void HCopiar_Click(object sender, RoutedEventArgs e)
+        {
+            TreeViewItem item  = tvAgraria.SelectedItem as TreeViewItem;
+            temaCopia = item.Tag as Temas;
+            temaCortar = null;
+        }
+
+        private Temas temaCortar;
+        private void HCortar_Click(object sender, RoutedEventArgs e)
+        {
+            TreeViewItem item = tvAgraria.SelectedItem as TreeViewItem;
+            temaCortar = item.Tag as Temas;
+            temaCopia = null;
+        }
+         
+        private void HPegar_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result;
+            TesisModel model = new TesisModel(idProducto);
+
+            if (temaCopia != null)
+            {
+                result = MessageBox.Show("¿Estas segur@ que deseas copiar las tesis del tema \"" + temaCopia.Tema + "\" al tema \"" +
+                    temaSeleccionado.Tema + "\"?", "ATENCIÓN:", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    model.CopiaTesis(temaCopia.IdTema, temaSeleccionado.IdTema);
+                }
+
+            }
+            else if (temaCortar != null)
+            {
+                result = MessageBox.Show("¿Estas segur@ que deseas eliminart todas las tesis del tema \"" + temaCortar.Tema + "\" y pegarlas al tema \"" +
+                    temaSeleccionado.Tema + "\"?", "ATENCIÓN:", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    model.CortarTesis(temaCortar.IdTema, temaSeleccionado.IdTema);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Antes de pegar selecciona copiar/pegar mientras seleccionas el temas con las tesis de interes");
+            }
+
+            temaCopia = null;
+            temaCortar = null;
+        }
+
+        private void HEliminar_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxResult result = MessageBox.Show("¿Estas segur@ que deseas eliminar todas las tesis relacionadas al tema \"" + 
+                temaSeleccionado.Tema + "\" ?", "ATENCIÓN:", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            TesisModel model = new TesisModel(idProducto);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                model.EliminaTesis(temaSeleccionado.IdTema);
+            }
         }
     }
 }

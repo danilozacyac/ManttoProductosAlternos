@@ -22,7 +22,9 @@
                  Height="23"
                  Margin="12,41,0,0"
                  HorizontalAlignment="Left"
-                 VerticalAlignment="Top" MaxLength="250" TextChanged="txtTema_TextChanged" />
+                 VerticalAlignment="Top"
+                 MaxLength="250"
+                 TextChanged="TxtTemaTextChanged" />
         <Button Name="btnCancelar"
                 Grid.Row="2"
                 Width="75"
@@ -30,7 +32,7 @@
                 Margin="0,4,11,0"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
-                Click="btnCancelar_Click"
+                Click="BtnCancelarClick"
                 Content="Cancelar"
                 IsCancel="True" />
         <Button Name="btnAgregar"
@@ -40,7 +42,7 @@
                 Margin="321,4,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Click="btnAgregar_Click"
+                Click="BtnAgregarClick"
                 Content="Agregar" />
         <TreeView Name="tvAgraria"
                   Grid.Row="1"
@@ -49,30 +51,45 @@
                   HorizontalAlignment="Left"
                   VerticalAlignment="Stretch"
                   AllowDrop="True"
-                  SelectedItemChanged="tvAgraria_SelectedItemChanged"
+                  SelectedItemChanged="TvAgrariaSelectedItemChanged"
                   Visibility="Hidden" />
         <CheckBox Name="chkCambiarPosicion"
                   Height="16"
                   Margin="0,12,13,0"
                   HorizontalAlignment="Right"
                   VerticalAlignment="Top"
-                  Checked="chkCambiarPosicion_Checked"
+                  Checked="ChkCambiarPosicionChecked"
                   Content=" Cambiar Posición"
                   Foreground="Black"
-                  Unchecked="chkCambiarPosicion_Unchecked"
+                  Unchecked="ChkCambiarPosicionUnchecked"
                   Visibility="Hidden" />
         <CheckBox Name="chkNodoPadre"
                   Height="16"
                   Margin="232,12,0,0"
                   HorizontalAlignment="Left"
                   VerticalAlignment="Top"
-                  Checked="chkNodoPadre_Checked"
+                  Checked="ChkNodoPadreChecked"
                   Content="Cabeza de Estructura"
                   Foreground="Black"
                   IsChecked="True"
-                  Unchecked="chkNodoPadre_Unchecked"
+                  Unchecked="ChkNodoPadreUnchecked"
                   Visibility="Hidden" />
-        <Label Content="caractéres restantes" Height="28" HorizontalAlignment="Left" Margin="358,72,0,0" Name="label1" VerticalAlignment="Top" Foreground="Black" Width="119" />
-        <Label Content="{Binding LongitudTema,Mode=TwoWay}" Height="28" HorizontalAlignment="Left" Margin="321,72,0,0" Name="LblRestantes" VerticalAlignment="Top" Foreground="Black" Width="33" />
+        <Label Name="label1"
+               Width="119"
+               Height="28"
+               Margin="358,72,0,0"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Top"
+               Content="caractéres restantes"
+               Foreground="Black" />
+        <Label Name="LblRestantes"
+               Width="33"
+               Height="28"
+               Margin="321,72,0,0"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Top"
+               Content="{Binding LongitudTema,
+                                 Mode=TwoWay}"
+               Foreground="Black" />
     </Grid>
 </Window>

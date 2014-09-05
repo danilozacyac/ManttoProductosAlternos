@@ -39,6 +39,7 @@
     <ApplicationIcon>Libros.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Accessibility" />
     <Reference Include="Infragistics3.Wpf.DataPresenter.v10.1, Version=10.1.20101.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb">
       <Private>True</Private>
     </Reference>
@@ -56,6 +57,8 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
       <Private>False</Private>
     </Reference>
+    <Reference Include="PresentationUI, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="ReachFramework" />
     <Reference Include="System">
       <Private>False</Private>
     </Reference>
@@ -65,9 +68,11 @@
     <Reference Include="System.Data">
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing">
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Printing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Forms">
@@ -116,7 +121,6 @@
       <DependentUpon>AlertDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="DTO\DocumentoTO.cs" />
-    <Compile Include="DTO\TemaNuevo.cs" />
     <Compile Include="DTO\Usuarios.cs" />
     <Compile Include="EjeVotos.xaml.cs">
       <DependentUpon>EjeVotos.xaml</DependentUpon>

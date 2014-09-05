@@ -17,7 +17,6 @@ namespace ManttoProductosAlternos
         private int nivelPadre = 0;
         private int idPadre = 0;
 
-        private TemaNuevo temaBinding;
 
         private Temas temaActualizar = null;
 
@@ -28,12 +27,6 @@ namespace ManttoProductosAlternos
         public AgrAgregaTema(int idPadre, int nivelPadre,int idProducto) 
         {
             InitializeComponent();
-
-            //temaBinding = new TemaNuevo();
-            //temaBinding.NuevoTema = "Probando2";
-            ////temaBinding.LongitudTema = 100;
-
-            this.DataContext = temaBinding;
 
             this.idPadre = idPadre;
             this.nivelPadre = nivelPadre;
@@ -60,12 +53,12 @@ namespace ManttoProductosAlternos
             tvAgraria.Items.Clear();
             if (temaActualizar  == null)
             {
-                this.Height = 180;
+                this.Height = Constants.WinHeightAgregaTema;
                 chkNodoPadre.Visibility = Visibility.Visible;
             }
             else if (temaActualizar != null)
             {
-                this.Height = 180;
+                this.Height = Constants.WinHeightAgregaTema;
                 chkCambiarPosicion.Visibility = Visibility.Visible;
                 chkNodoPadre.Visibility = Visibility.Hidden;
                 tvAgraria.Visibility = Visibility.Hidden;
@@ -79,7 +72,7 @@ namespace ManttoProductosAlternos
 
         }
 
-        private void btnAgregar_Click(object sender, RoutedEventArgs e)
+        private void BtnAgregarClick(object sender, RoutedEventArgs e)
         {
             Temas tema = new Temas();
             tema.Tema = (idProducto == 1) ? txtTema.Text.ToUpper() : txtTema.Text;
@@ -138,35 +131,35 @@ namespace ManttoProductosAlternos
             this.Close();
         }
 
-        private void btnCancelar_Click(object sender, RoutedEventArgs e)
+        private void BtnCancelarClick(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
 
-        private void chkCambiarPosicion_Checked(object sender, RoutedEventArgs e)
+        private void ChkCambiarPosicionChecked(object sender, RoutedEventArgs e)
         {
             chkNodoPadre.Visibility = Visibility.Visible;
             tvAgraria.Visibility = Visibility.Visible;
         }
 
-        private void chkCambiarPosicion_Unchecked(object sender, RoutedEventArgs e)
+        private void ChkCambiarPosicionUnchecked(object sender, RoutedEventArgs e)
         {
             chkNodoPadre.Visibility = Visibility.Collapsed;
             chkNodoPadre.IsChecked = true;
         }
 
-        private void chkNodoPadre_Checked(object sender, RoutedEventArgs e)
+        private void ChkNodoPadreChecked(object sender, RoutedEventArgs e)
         {
-            this.Height = 180;
+            this.Height = Constants.WinHeightAgregaTema;
         }
 
-        private void chkNodoPadre_Unchecked(object sender, RoutedEventArgs e)
+        private void ChkNodoPadreUnchecked(object sender, RoutedEventArgs e)
         {
             if (temaActualizar != null)
             {
                 if (tvAgraria.Items.Count == 0)
                 {
-                    this.Height = 452;
+                    this.Height = Constants.WinHeightAgregaTemaLargo;
                     GeneraArbol gArbol = new GeneraArbol();
 
                     foreach (TreeViewItem tema in gArbol.GeneraAgraria(0,idProducto))
@@ -176,19 +169,19 @@ namespace ManttoProductosAlternos
                 }
                 else
                 {
-                    this.Height = 452;
+                    this.Height = Constants.WinHeightAgregaTemaLargo;
                 }
             }
         }
 
-        private void tvAgraria_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void TvAgrariaSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             TreeViewItem item = (TreeViewItem)tvAgraria.SelectedItem;
             idActNuevoPadre = ((Temas)item.Tag).IdTema;
             nivelActNuevoPadre = ((Temas)item.Tag).Nivel;
         }
 
-        private void txtTema_TextChanged(object sender, TextChangedEventArgs e)
+        private void TxtTemaTextChanged(object sender, TextChangedEventArgs e)
         {
             int carRestantes = txtTema.MaxLength - txtTema.Text.Length;
 

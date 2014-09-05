@@ -5,6 +5,16 @@ namespace UtilsAlternos
 {
     public class Constants
     {
+
+        public const int WinHeightAgregaTema = 180;
+        public const int WinHeightAgregaTemaLargo = 452;
+
+
+        /// <summary>
+        /// Mensajes que se envían en  diferentes escenarios de la aplicación para 
+        /// confirmar la realización de algunas acciones
+        /// </summary>
+
         public const String MensajeMoverTema = "¿Está seguro de que quiere mover el tema \n";
         public const String MensajeEliminar = "¿Esta seguro que desea eliminar: \n";
         public const String TituloGeneral = "Mantenimiento de temas";
