@@ -7,7 +7,7 @@
         Width="525"
         Height="350"
         Closing="Window_Closing"
-        Icon="/ManttoProductosAlternos;component/Images/Libros.ico"
+        Icon="/ManttoProductosAlternos;component/Resources/Libros.ico"
         Loaded="Window_Loaded"
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d">
@@ -21,7 +21,7 @@
                 Click="BtnAgraria_Click"
                 IsEnabled="False"
                 ToolTip="Jurisprudencia en Materia Agraria">
-            <Image Source="/ManttoProductosAlternos;component/Images/campo.png" />
+            <Image Source="/ManttoProductosAlternos;component/Resources/campo.png" />
         </Button>
         <Button Name="btnSAR"
                 Width="100"
@@ -32,7 +32,7 @@
                 Click="BtnSar_Click"
                 IsEnabled="False"
                 ToolTip="Suspensión del Acto Reclamado">
-            <Image Source="/ManttoProductosAlternos;component/Images/suspension.png" />
+            <Image Source="/ManttoProductosAlternos;component/Resources/suspension.png" />
         </Button>
         <Button Name="btnImprocedencia"
                 Width="100"
@@ -43,7 +43,7 @@
                 Click="BtnImprocedencia_Click"
                 IsEnabled="False"
                 ToolTip="Improcedencia del Juicio de Amparo">
-            <Image Source="/ManttoProductosAlternos;component/Images/impAmparo.jpeg" />
+            <Image Source="/ManttoProductosAlternos;component/Resources/impAmparo.jpeg" />
         </Button>
         <Button Name="btnAdmin"
                 Width="100"
@@ -55,7 +55,7 @@
                 IsEnabled="True"
                 ToolTip="Suspensión del Acto Reclamado"
                 Visibility="Hidden">
-            <Image Source="/ManttoProductosAlternos;component/Images/keys.png" />
+            <Image Source="/ManttoProductosAlternos;component/Resources/keys.png" />
         </Button>
         <Button Name="BtnSCJN"
                 Width="100"
@@ -66,7 +66,7 @@
                 Click="BtnScjn_Click"
                 IsEnabled="False"
                 ToolTip="Facultades de la Suprema Corte">
-            <Image Source="/ManttoProductosAlternos;component/Images/scjn.png" />
+            <Image Source="/ManttoProductosAlternos;component/Resources/scjn.png" />
         </Button>
         <Button Name="BtnElectoral"
                 Width="100"
@@ -77,7 +77,7 @@
                 Click="BtnElectoral_Click"
                 IsEnabled="False"
                 ToolTip="Materia Electoral">
-            <Image Source="/ManttoProductosAlternos;component/Images/electoral.jpg" />
+            <Image Source="/ManttoProductosAlternos;component/Resources/electoral.jpg" />
         </Button>
     </Grid>
 </Window>

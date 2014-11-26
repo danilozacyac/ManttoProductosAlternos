@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Windows;
 using ManttoProductosAlternos.DBAccess;
 using ManttoProductosAlternos.DTO;
 using ManttoProductosAlternos.Utils;
+using System.Windows.Forms;
+using ScjnUtilities;
 
 namespace ManttoProductosAlternos.Model
 {
@@ -24,11 +25,13 @@ namespace ManttoProductosAlternos.Model
         */
         private readonly int idProducto;
 
-        private readonly String textoBuscado;
+        //private readonly String textoBuscado;
 
         #region Constructores
 
-        public TemasModel() { }
+        public TemasModel()
+        {
+        }
         
         public TemasModel(int idProducto)
         {
@@ -43,9 +46,8 @@ namespace ManttoProductosAlternos.Model
         public TemasModel(int idProducto, String textoBuscado)
         {
             this.idProducto = idProducto;
-            this.textoBuscado = textoBuscado;
+            //this.textoBuscado = textoBuscado;
         }
-
 
         #endregion
 
@@ -53,7 +55,7 @@ namespace ManttoProductosAlternos.Model
         {
             ObservableCollection<Temas> temas = new ObservableCollection<Temas>();
 
-            SqlConnection sqlConne = (SqlConnection)Conexion.GetConecctionManttoCE();
+            SqlConnection sqlConne = Conexion.GetConecctionManttoCE();
             SqlDataReader dataReader;
             SqlCommand cmd;
 
@@ -64,8 +66,10 @@ namespace ManttoProductosAlternos.Model
             {
                 sqlConne.Open();
 
-                string miQry = "select * from Temas Where Padre = " + idPadre + " AND idProd = " + idProducto + "  ORDER BY TemaStr";
+                string miQry = "select * from Temas Where Padre = @idPadre AND idProd = @idProducto  ORDER BY TemaStr";
                 cmd = new SqlCommand(miQry, sqlConne);
+                cmd.Parameters.AddWithValue("@idPadre", idPadre);
+                cmd.Parameters.AddWithValue("@idProducto", idProducto);
                 dataReader = cmd.ExecuteReader();
 
                 while (dataReader.Read())
@@ -85,9 +89,12 @@ namespace ManttoProductosAlternos.Model
                 dataReader.Close();
                 //temas = temas.Distinct().ToList();
             }
-            catch (SqlException sql)
+            catch (SqlException ex)
             {
-                MessageBox.Show("Error ({0}) : {1}" + sql.Source + sql.Message, "Error Interno");
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
             }
             finally
             {
@@ -96,13 +103,9 @@ namespace ManttoProductosAlternos.Model
             return temas;
         }
 
-
-
-
-
         public void InsertaTemaNuevo(Temas tema)
         {
-            SqlConnection sqlConne = (SqlConnection)Conexion.GetConecctionManttoCE();
+            SqlConnection sqlConne = Conexion.GetConecctionManttoCE();
 
             SqlCommand cmd;
             SqlDataReader dataReader;
@@ -142,13 +145,19 @@ namespace ManttoProductosAlternos.Model
                     throw new ArgumentException();
                 }
             }
-            catch (SqlException sql)
+            catch (SqlException ex)
             {
-                MessageBox.Show("Error ({0}) : {1}" + sql.Source + sql.Message, "Error Interno");
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
             }
-            catch (ArgumentException)
+            catch (ArgumentException ex)
             {
-                MessageBox.Show("Error ({0}) : {1} No se pudo asignar un identificador al tema, intentar más tarde", "Error Interno");
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
             }
             finally
             {
@@ -158,7 +167,7 @@ namespace ManttoProductosAlternos.Model
 
         public void ActualizaTema(Temas tema)
         {
-            SqlConnection sqlConne = (SqlConnection)Conexion.GetConecctionManttoCE();
+            SqlConnection sqlConne = Conexion.GetConecctionManttoCE();
 
             SqlCommand cmd;
 
@@ -177,9 +186,12 @@ namespace ManttoProductosAlternos.Model
                                   "values(" + tema.IdTema + ",2,' ','" + Environment.MachineName + "'," + tema.IdProducto + ")";
                 cmd.ExecuteNonQuery();
             }
-            catch (SqlException sql)
+            catch (SqlException ex)
             {
-                MessageBox.Show("Error ({0}) : {1}" + sql.Source + sql.Message, "Error Interno");
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
             }
             finally
             {
@@ -193,7 +205,7 @@ namespace ManttoProductosAlternos.Model
         /// <param name="idTema"></param>
         public void EliminaTema(int idTema)
         {
-            SqlConnection sqlConne = (SqlConnection)Conexion.GetConecctionManttoCE();
+            SqlConnection sqlConne = Conexion.GetConecctionManttoCE();
 
             SqlCommand cmd;
             SqlDataReader dataReader;
@@ -232,13 +244,16 @@ namespace ManttoProductosAlternos.Model
                                   "values(" + idTema + ",3,' ','" + Environment.MachineName + "'," + idProducto + ")";
                 cmd.ExecuteNonQuery();
             }
-            catch (SqlException sql)
+            catch (SqlException ex)
             {
-                MessageBox.Show("Error ({0}) : {1}" + sql.Source + sql.Message, "Error Interno");
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
             }
             catch (OperationCanceledException)
             {
-                MessageBox.Show("El tema que desea eliminar contiene subtemas, elimine primero los subtemas para completar la operación", "Error Interno", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("El tema que desea eliminar contiene subtemas, elimine primero los subtemas para completar la operación", "Error Interno", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -249,43 +264,48 @@ namespace ManttoProductosAlternos.Model
         public List<Temas> GetTemasRelacionados(long ius)
         {
             List<Temas> temas = new List<Temas>();
-            SqlConnection sqlNueva = (SqlConnection)Conexion.GetConecctionManttoCE();
+            SqlConnection connection = Conexion.GetConecctionManttoCE();
 
-            SqlDataReader dataReader;
-            SqlCommand cmdAntes;
+            SqlDataReader reader;
+            SqlCommand cmd;
 
-            cmdAntes = sqlNueva.CreateCommand();
-            cmdAntes.Connection = sqlNueva;
+            cmd = connection.CreateCommand();
+            cmd.Connection = connection;
 
             try
             {
-                sqlNueva.Open();
+                connection.Open();
 
                 string miQry = "SELECT T.Id,T.Tema " +
                                " FROM Temas T INNER JOIN TemasIUS I ON I.Id = T.Id  " +
-                               " WHERE (I.IUS = " + ius + " AND T.IdProd = " + idProducto + " ) AND I.idProd = " + idProducto + " " +
+                               " WHERE (I.IUS = @ius AND T.IdProd = @idProducto ) AND I.idProd = @idProducto " +
                                " ORDER BY T.TemaStr";
 
-                cmdAntes = new SqlCommand(miQry, sqlNueva);
-                dataReader = cmdAntes.ExecuteReader();
+                cmd = new SqlCommand(miQry, connection);
+                cmd.Parameters.AddWithValue("@ius", ius);
+                cmd.Parameters.AddWithValue("@idProducto", idProducto);
+                reader = cmd.ExecuteReader();
 
-                while (dataReader.Read())
+                while (reader.Read())
                 {
                     Temas tema = new Temas();
-                    tema.IdTema = Convert.ToInt32(dataReader["Id"].ToString());
-                    tema.Tema = dataReader["Tema"].ToString();
+                    tema.IdTema = reader["Id"] as int? ?? -1;
+                    tema.Tema = reader["Tema"].ToString();
 
                     temas.Add(tema);
                 }
-                dataReader.Close();
+                reader.Close();
             }
-            catch (SqlException sql)
+            catch (SqlException ex)
             {
-                MessageBox.Show("Error ({0}) : {1}" + sql.Source + sql.Message, "Error Interno");
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
             }
             finally
             {
-                sqlNueva.Close();
+                connection.Close();
             }
 
             return temas;
@@ -293,7 +313,7 @@ namespace ManttoProductosAlternos.Model
 
         public void EliminaRelacion(long ius)
         {
-            SqlConnection b2Conne = (SqlConnection)Conexion.GetConecctionManttoCE();
+            SqlConnection b2Conne = Conexion.GetConecctionManttoCE();
             SqlCommand cmd;
 
             cmd = b2Conne.CreateCommand();
@@ -311,13 +331,115 @@ namespace ManttoProductosAlternos.Model
                                   "values(" + ius + ",12,'0-" + ius + " ','" + Environment.MachineName + "'," + idProducto + ")";
                 cmd.ExecuteNonQuery();
             }
-            catch (SqlException sql)
+            catch (SqlException ex)
             {
-                MessageBox.Show("Error ({0}) : {1}" + sql.Source + sql.Message, "Error Interno");
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
             }
             finally
             {
                 b2Conne.Close();
+            }
+        }
+
+        /// <summary>
+        /// Obtiene el listado de temas completo de acuerdo a la materia seleccionada
+        /// para la posterior verificación en busca de temas duplicados
+        /// </summary>
+        /// <param name="idProducto"></param>
+        /// <returns></returns>
+        public List<Temas> GetTemasForReview(int idProducto)
+        {
+            List<Temas> temas = new List<Temas>();
+            SqlConnection sqlNueva = Conexion.GetConecctionManttoCE();
+
+            SqlDataReader dataReader;
+            SqlCommand cmdAntes;
+
+            cmdAntes = sqlNueva.CreateCommand();
+            cmdAntes.Connection = sqlNueva;
+
+            try
+            {
+                sqlNueva.Open();
+
+                string miQry = "SELECT TemaStr  FROM Temas WHERE idProd = @IdProducto ORDER BY TemaStr";
+
+                cmdAntes = new SqlCommand(miQry, sqlNueva);
+                cmdAntes.Parameters.AddWithValue("@IdProducto", idProducto);
+                dataReader = cmdAntes.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    Temas tema = new Temas();
+                    tema.TemaStr = dataReader["TemaStr"].ToString();
+
+                    temas.Add(tema);
+                }
+                dataReader.Close();
+            }
+            catch (SqlException ex)
+            {
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+            }
+            finally
+            {
+                sqlNueva.Close();
+            }
+
+            return temas;
+        }
+
+        public void SearchForDuplicates(ObservableCollection<List<Temas>> repetidos, string temaBuscado, int idProducto)
+        {
+            List<Temas> temas = new List<Temas>();
+            SqlConnection connection = Conexion.GetConecctionManttoCE();
+
+            SqlDataReader reader;
+            SqlCommand cmd;
+
+            cmd = connection.CreateCommand();
+            cmd.Connection = connection;
+
+            try
+            {
+                connection.Open();
+
+                string miQry = "SELECT Id,TemaStr  FROM Temas WHERE TemaStr = @temaBuscado and IDProd = @idProducto";
+
+                cmd = new SqlCommand(miQry, connection);
+                cmd.Parameters.AddWithValue("@temaBuscado", temaBuscado);
+                cmd.Parameters.AddWithValue("@idProducto", idProducto);
+                reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Temas tema = new Temas();
+                    tema.IdTema = reader["Id"] as Int16? ?? -1;
+                    tema.Tema = reader["TemaStr"].ToString().Trim();
+
+                    temas.Add(tema);
+                }
+                reader.Close();
+
+                if (temas.Count >= 2)
+                    repetidos.Add(temas);
+            }
+            catch (SqlException ex)
+            {
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+            }
+            finally
+            {
+                connection.Close();
             }
         }
     }

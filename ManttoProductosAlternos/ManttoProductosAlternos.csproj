@@ -10,11 +10,28 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ManttoProductosAlternos</RootNamespace>
     <AssemblyName>ManttoProductosAlternos</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>C:\Users\lavega\Documents\ProyectosPublicados\ManttoAlternos\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <AutorunEnabled>true</AutorunEnabled>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>2.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -38,6 +55,18 @@
   <PropertyGroup>
     <ApplicationIcon>Libros.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>148628507579370BD0E4CCA31270047407E6A88B</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>ManttoProductosAlternos_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />
     <Reference Include="Infragistics3.Wpf.DataPresenter.v10.1, Version=10.1.20101.1000, Culture=neutral, PublicKeyToken=7dd5c3163f2cd0cb">
@@ -57,8 +86,13 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Microsoft.Windows.Shell, Version=3.5.41019.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="PresentationUI, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="ReachFramework" />
+    <Reference Include="ribboncontrolslibrary, Version=3.5.41019.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="ScjnUtilities">
+      <HintPath>..\..\..\..\Visual Studio 2012\Projects\ScjnUtilities\ScjnUtilities\bin\Debug\ScjnUtilities.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Private>False</Private>
     </Reference>
@@ -78,6 +112,7 @@
     <Reference Include="System.Windows.Forms">
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml">
       <Private>False</Private>
     </Reference>
@@ -90,6 +125,10 @@
     <Reference Include="System.Data.DataSetExtensions">
       <Private>False</Private>
     </Reference>
+    <Reference Include="Telerik.Windows.Controls, Version=2014.2.729.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.Windows.Controls.Input, Version=2014.2.729.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.Windows.Controls.Navigation, Version=2014.2.729.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
+    <Reference Include="telerik.windows.controls.ribbonview, Version=2014.2.729.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
     <Reference Include="UIAutomationProvider">
       <Private>False</Private>
     </Reference>
@@ -144,6 +183,11 @@
     <Compile Include="Model\TemasToViewModel.cs" />
     <Compile Include="Model\UsuariosModel.cs" />
     <Compile Include="Model\VotosModel.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Reportes\agrRelacionesMes.cs" />
     <Compile Include="SelDocument.xaml.cs">
       <DependentUpon>SelDocument.xaml</DependentUpon>
@@ -213,16 +257,11 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\AgrArbolModel.cs" />
+    <Compile Include="Model\GeneraArbol.cs" />
     <Compile Include="Model\TemasModel.cs" />
     <Compile Include="Model\TesisModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -232,11 +271,14 @@
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="ClassDiagram1.cd" />
+    <None Include="ManttoProductosAlternos_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -251,16 +293,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Libros.ico" />
-    <Resource Include="Images\buscar.png">
+    <Resource Include="Resources\buscar.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Images\back.png" />
-    <Resource Include="Images\campo.png" />
-    <Resource Include="Images\suspension.png" />
-    <Resource Include="Images\add.png" />
-    <Resource Include="Images\minus.png" />
-    <Resource Include="Images\keys.png" />
-    <Resource Include="Images\Libros.ico">
+    <Resource Include="Resources\back.png" />
+    <Resource Include="Resources\campo.png" />
+    <Resource Include="Resources\suspension.png" />
+    <Resource Include="Resources\minus.png" />
+    <Resource Include="Resources\keys.png" />
+    <Resource Include="Resources\Libros.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
@@ -268,18 +309,75 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\impAmparo.jpeg" />
+    <Resource Include="Resources\impAmparo.jpeg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\scjn.png" />
+    <Resource Include="Resources\scjn.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\AlertsHelp128.png" />
+    <Resource Include="Resources\AlertsHelp128.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\electoral.jpg" />
+    <Resource Include="Resources\electoral.jpg" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\exit_128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\copy_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\cut_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\deleteAll.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\delTesis_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\paste_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\viewTesis_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\del.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\update_72.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\number_128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\listado.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

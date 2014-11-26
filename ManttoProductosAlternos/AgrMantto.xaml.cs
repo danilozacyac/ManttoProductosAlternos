@@ -13,6 +13,10 @@ using ManttoProductosAlternos.Reportes;
 using UtilsAlternos;
 using Infragistics.Windows.DataPresenter;
 using Infragistics.Windows.Editors;
+using System.Collections.ObjectModel;
+using System.Configuration;
+using System.Diagnostics;
+using Telerik.Windows.Controls;
 
 namespace ManttoProductosAlternos
 {
@@ -45,10 +49,11 @@ namespace ManttoProductosAlternos
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             this.Title = MiscFunciones.TituloVentanas(idProducto);
+            Ribbon.ApplicationName = MiscFunciones.TituloVentanas(idProducto);
 
             tvAgraria.Items.Clear();
-            GeneraArbol arbol = new GeneraArbol();
 
+            GeneraArbol arbol = new GeneraArbol();
             arbolAgraria = arbol.GeneraAgraria(0, idProducto);
 
             foreach (TreeViewItem tema in arbolAgraria)
@@ -59,9 +64,9 @@ namespace ManttoProductosAlternos
             btnBuscar.IsEnabled = (idProducto == 4) ? false : true;
             btnRestableceer.IsEnabled = (idProducto == 4) ? false : true;
             txtBuscar.IsEnabled = (idProducto == 4) ? false : true;
-            btnAgregarTema.IsEnabled = (idProducto == 4) ? false : true;
-            btnActualizarTema.IsEnabled = (idProducto == 4) ? false : true;
-            btnEliminarTema.IsEnabled = (idProducto == 4) ? false : true;
+            BtnAddTema.IsEnabled = (idProducto == 4) ? false : true;
+            BtnUpdTema.IsEnabled = (idProducto == 4) ? false : true;
+            BtnDelTema.IsEnabled = (idProducto == 4) ? false : true;
 
             dgTesis.FieldSettings.AllowEdit = false;
             dgTesis.FieldSettings.AllowResize = false;
@@ -83,107 +88,6 @@ namespace ManttoProductosAlternos
 
                 lblTemaSeleccionado.Text = temaSeleccionado.Tema;
                 txtRegistros.Text = tesisRelacionadas.Count + " Registros";
-            }
-        }
-
-        private void BtnAgregarTemaClick(object sender, RoutedEventArgs e)
-        {
-            if (idProducto == 1)
-            {
-                if (temaSeleccionado != null)
-                {
-                    VarGlobales.temaNuevo = null;
-                    AgrAgregaTema agr = new AgrAgregaTema(temaSeleccionado.IdTema, temaSeleccionado.Nivel, idProducto);
-                    agr.ShowDialog();
-
-                    if (VarGlobales.temaNuevo != null)
-                    {
-                        TreeViewItem treeNode = new TreeViewItem();
-                        treeNode.Tag = VarGlobales.temaNuevo;
-                        treeNode.Header = VarGlobales.temaNuevo.Tema;
-
-                        if (VarGlobales.temaNuevo.Nivel == 0)
-                        {
-                            tvAgraria.Items.Add(treeNode);
-                        }
-                        else
-                        {
-                            nodoSelect.Items.Add(treeNode);
-                        }
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Seleccione la voz que contendrá  el tema que desea agregar");
-                }
-            }
-            else
-            {
-                VarGlobales.temaNuevo = null;
-                AgrAgregaTema agr = new AgrAgregaTema(0, 0, idProducto);
-                agr.ShowDialog();
-
-                if (VarGlobales.temaNuevo != null)
-                {
-                    TreeViewItem treeNode = new TreeViewItem();
-                    treeNode.Tag = VarGlobales.temaNuevo;
-                    treeNode.Header = VarGlobales.temaNuevo.Tema;
-
-                    if (VarGlobales.temaNuevo.Nivel == 0)
-                    {
-                        tvAgraria.Items.Add(treeNode);
-                    }
-                    else
-                    {
-                        nodoSelect.Items.Add(treeNode);
-                    }
-                }
-            }
-        }
-
-        private void BtnActualizarTemaClick(object sender, RoutedEventArgs e)
-        {
-            if (temaSeleccionado != null)
-            {
-                AgrAgregaTema agr = new AgrAgregaTema(0, 0, temaSeleccionado, idProducto);
-                agr.ShowDialog();
-            }
-            else
-            {
-                MessageBox.Show("Seleccione el tema que desea actualizar", "Atención : ", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-        }
-
-        private void BtnEliminarTemaClick(object sender, RoutedEventArgs e)
-        {
-            if (temaSeleccionado != null)
-            {
-                MessageBoxResult result = MessageBox.Show("¿Desea eliminar el tema " + temaSeleccionado.Tema + "?", "Error Interno", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-                if (result == MessageBoxResult.Yes)
-                {
-                    TemasModel temasModel = new TemasModel(idProducto);
-                    temasModel.EliminaTema(temaSeleccionado.IdTema);
-                    tvAgraria.Items.Remove(nodoSelect);
-                }
-            }
-            else
-            {
-                MessageBox.Show("Seleccione el tema que desea eliminar", "Atención : ", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-        }
-
-        private void BtnEliminarClick(object sender, RoutedEventArgs e)
-        {
-            if (tesisSeleccionada != null && temaSeleccionado != null)
-            {
-                TesisModel tesisModel = new TesisModel(idProducto);
-                tesisModel.EliminaRelacion(tesisSeleccionada.Ius, temaSeleccionado.IdTema);
-                TvAgrariaSelectedItemChanged(sender, null);
-            }
-            else
-            {
-                MessageBox.Show("Seleccione la tesis cuya relación va a eliminar");
             }
         }
 
@@ -249,11 +153,7 @@ namespace ManttoProductosAlternos
             return !regex.IsMatch(text);
         }
 
-        private void BtnOrdenarClick(object sender, RoutedEventArgs e)
-        {
-            TesisModel tesisModel = new TesisModel(idProducto);
-            tesisModel.SetConsecIndx();
-        }
+        
 
         private void BtnGeneraArbolClick(object sender, RoutedEventArgs e)
         {
@@ -415,11 +315,7 @@ namespace ManttoProductosAlternos
             }
         }
 
-        private void BtnListaTesis_Click(object sender, RoutedEventArgs e)
-        {
-            frmListaTesis tesis = new frmListaTesis(idProducto);
-            tesis.ShowDialog();
-        }
+        
 
         private delegate void UpdateProgressBarDelegate(
             System.Windows.DependencyProperty dp, Object value);
@@ -450,24 +346,159 @@ namespace ManttoProductosAlternos
                 MessageBox.Show("Número de registro no encontrado");
         }
 
+        private void RadRibbonButton_Click(object sender, RoutedEventArgs e)
+        {
+            RadRibbonButton boton = sender as RadRibbonButton;
+
+            switch (boton.Name)
+            {
+                case "BtnCopiar":
+                    this.CopiarRelaciones();
+                    break;
+                case "BtnCortar":
+                    this.CortarRelaciones();
+                    break;
+                case "BtnPegar":
+                    this.PegarRelaciones();
+                    break;
+                case "BtnDelOne":
+                    this.DeleteOne();
+                    break;
+                case "BtnDelAll":
+                    
+                    this.DeleteAll();
+                    break;
+                case "BtnBuscar":
+                    this.BuscarDuplicados();
+                    break;
+                case "BtnAddTema":
+                    this.AgregarTema();
+                    break;
+                case "BtnUpdTema":
+                    this.ActualizaTema();
+                    break;
+                case "BtnDelTema":
+                    this.EliminaTema();
+                    break;
+                case "BtnListadoTesis": this.ShowListaTesis();
+                    break;
+                case "BtnOrdenar": this.OrdenaTesis();
+                    break;
+            }
+        }
+
+        #region Metodos Temas
+
+        private void AgregarTema()
+        {
+            if (idProducto == 1)
+            {
+                if (temaSeleccionado != null)
+                {
+                    VarGlobales.temaNuevo = null;
+                    AgrAgregaTema agr = new AgrAgregaTema(temaSeleccionado.IdTema, temaSeleccionado.Nivel, idProducto);
+                    agr.ShowDialog();
+
+                    if (VarGlobales.temaNuevo != null)
+                    {
+                        TreeViewItem treeNode = new TreeViewItem();
+                        treeNode.Tag = VarGlobales.temaNuevo;
+                        treeNode.Header = VarGlobales.temaNuevo.Tema;
+
+                        if (VarGlobales.temaNuevo.Nivel == 0)
+                        {
+                            tvAgraria.Items.Add(treeNode);
+                        }
+                        else
+                        {
+                            nodoSelect.Items.Add(treeNode);
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Seleccione la voz que contendrá  el tema que desea agregar");
+                }
+            }
+            else
+            {
+                VarGlobales.temaNuevo = null;
+                AgrAgregaTema agr = new AgrAgregaTema(0, 0, idProducto);
+                agr.ShowDialog();
+
+                if (VarGlobales.temaNuevo != null)
+                {
+                    TreeViewItem treeNode = new TreeViewItem();
+                    treeNode.Tag = VarGlobales.temaNuevo;
+                    treeNode.Header = VarGlobales.temaNuevo.Tema;
+
+                    if (VarGlobales.temaNuevo.Nivel == 0)
+                    {
+                        tvAgraria.Items.Add(treeNode);
+                    }
+                    else
+                    {
+                        nodoSelect.Items.Add(treeNode);
+                    }
+                }
+            }
+        }
+
+        private void ActualizaTema()
+        {
+            if (temaSeleccionado != null)
+            {
+                AgrAgregaTema agr = new AgrAgregaTema(0, 0, temaSeleccionado, idProducto);
+                agr.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("Seleccione el tema que desea actualizar", "Atención : ", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        private void EliminaTema()
+        {
+            if (temaSeleccionado != null)
+            {
+                MessageBoxResult result = MessageBox.Show("¿Estas seguro de eliminar el tema " + temaSeleccionado.Tema + " y todas sus tesis relacionadas?", "Error Interno", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    TemasModel temasModel = new TemasModel(idProducto);
+                    temasModel.EliminaTema(temaSeleccionado.IdTema);
+                    tvAgraria.Items.Remove(nodoSelect);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Seleccione el tema que desea eliminar", "Atención : ", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        #endregion
+
+        #region Metodos Relaciones
+
         private Temas temaCopia;
 
-        private void HCopiar_Click(object sender, RoutedEventArgs e)
+        private void CopiarRelaciones()
         {
-            TreeViewItem item  = tvAgraria.SelectedItem as TreeViewItem;
+            TreeViewItem item = tvAgraria.SelectedItem as TreeViewItem;
             temaCopia = item.Tag as Temas;
             temaCortar = null;
         }
 
         private Temas temaCortar;
-        private void HCortar_Click(object sender, RoutedEventArgs e)
+
+        private void CortarRelaciones()
         {
             TreeViewItem item = tvAgraria.SelectedItem as TreeViewItem;
             temaCortar = item.Tag as Temas;
             temaCopia = null;
         }
-         
-        private void HPegar_Click(object sender, RoutedEventArgs e)
+
+        private void PegarRelaciones()
         {
             MessageBoxResult result;
             TesisModel model = new TesisModel(idProducto);
@@ -475,18 +506,17 @@ namespace ManttoProductosAlternos
             if (temaCopia != null)
             {
                 result = MessageBox.Show("¿Estas segur@ que deseas copiar las tesis del tema \"" + temaCopia.Tema + "\" al tema \"" +
-                    temaSeleccionado.Tema + "\"?", "ATENCIÓN:", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                                         temaSeleccionado.Tema + "\"?", "ATENCIÓN:", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                 if (result == MessageBoxResult.Yes)
                 {
                     model.CopiaTesis(temaCopia.IdTema, temaSeleccionado.IdTema);
                 }
-
             }
             else if (temaCortar != null)
             {
                 result = MessageBox.Show("¿Estas segur@ que deseas eliminart todas las tesis del tema \"" + temaCortar.Tema + "\" y pegarlas al tema \"" +
-                    temaSeleccionado.Tema + "\"?", "ATENCIÓN:", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                                         temaSeleccionado.Tema + "\"?", "ATENCIÓN:", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                 if (result == MessageBoxResult.Yes)
                 {
@@ -502,11 +532,24 @@ namespace ManttoProductosAlternos
             temaCortar = null;
         }
 
-        private void HEliminar_Click(object sender, RoutedEventArgs e)
+        private void DeleteOne()
         {
-            MessageBoxResult result = MessageBox.Show("¿Estas segur@ que deseas eliminar todas las tesis relacionadas al tema \"" + 
-                temaSeleccionado.Tema + "\" ?", "ATENCIÓN:", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (tesisSeleccionada != null && temaSeleccionado != null)
+            {
+                TesisModel tesisModel = new TesisModel(idProducto);
+                tesisModel.EliminaRelacion(tesisSeleccionada.Ius, temaSeleccionado.IdTema);
+                TvAgrariaSelectedItemChanged(null, null);
+            }
+            else
+            {
+                MessageBox.Show("Seleccione la tesis cuya relación va a eliminar");
+            }
+        }
 
+        private void DeleteAll()
+        {
+            MessageBoxResult result = MessageBox.Show("¿Estas segur@ que deseas eliminar todas las tesis relacionadas al tema \"" +
+                                                      temaSeleccionado.Tema + "\" ?", "ATENCIÓN:", MessageBoxButton.YesNo, MessageBoxImage.Question);
             TesisModel model = new TesisModel(idProducto);
 
             if (result == MessageBoxResult.Yes)
@@ -514,5 +557,65 @@ namespace ManttoProductosAlternos
                 model.EliminaTesis(temaSeleccionado.IdTema);
             }
         }
+
+        private void BuscarDuplicados()
+        {
+            TemasModel model = new TemasModel();
+
+            string str = ConfigurationManager.AppSettings.Get("RutaTxtErrorFile");
+            List<Temas> temas = model.GetTemasForReview(idProducto);
+
+            ObservableCollection<List<Temas>> repetidas = new ObservableCollection<List<Temas>>();
+
+            foreach (Temas tema in temas)
+            {
+                model.SearchForDuplicates(repetidas, tema.TemaStr, idProducto);
+            }
+
+            foreach (List<Temas> lista in repetidas)
+            {
+                foreach (Temas tmstr in lista)
+                {
+                    System.IO.StreamWriter streamWriter = new System.IO.StreamWriter(str, true);
+                    try
+                    {
+                        streamWriter.WriteLine(" ");
+                        streamWriter.WriteLine(" ");
+                        streamWriter.WriteLine(" ");
+
+                        streamWriter.WriteLine(string.Concat("*********************", DateTime.Now.ToString(), "***************************"));
+                        streamWriter.WriteLine(string.Concat(tmstr.IdTema + "      " + tmstr.Tema, " "));
+
+                        streamWriter.WriteLine("***************************************************************************************");
+                    }
+                    finally
+                    {
+                        if (streamWriter != null)
+                        {
+                            ((System.IDisposable)streamWriter).Dispose();
+                        }
+                    }
+                }
+            }
+            Process.Start(str);
+        }
+        
+        #endregion
+
+        #region Otros Ribbon
+
+        private void ShowListaTesis()
+        {
+            frmListaTesis tesis = new frmListaTesis(idProducto);
+            tesis.ShowDialog();
+        }
+
+        private void OrdenaTesis()
+        {
+            TesisModel tesisModel = new TesisModel(idProducto);
+            tesisModel.SetConsecIndx();
+        }
+
+        #endregion
     }
 }

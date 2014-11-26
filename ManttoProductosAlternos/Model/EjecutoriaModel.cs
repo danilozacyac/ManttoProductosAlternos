@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using ManttoProductosAlternos.DTO;
 using System.Data.SqlClient;
 using ManttoProductosAlternos.DBAccess;
-using System.Windows;
 using System.Data;
 using System.Data.Common;
 using ManttoProductosAlternos.Interface;
+using ScjnUtilities;
+using System.Windows.Forms;
 
 namespace ManttoProductosAlternos.Model
 {
@@ -20,7 +21,7 @@ namespace ManttoProductosAlternos.Model
         /// <returns></returns>
         public DocumentoTO GetDocumentoPorIus(long ius)
         {
-            SqlConnection conneDSQL = (SqlConnection)Conexion.GetConecctionDsql();
+            SqlConnection conneDsql = Conexion.GetConecctionDsql();
             SqlCommand cmd;
             SqlDataReader dataReader;
 
@@ -28,10 +29,11 @@ namespace ManttoProductosAlternos.Model
 
             try
             {
-                conneDSQL.Open();
-                string sqlCadena = "SELECT E.* FROM Ejecutoria E  WHERE E.Id = " + ius;
+                conneDsql.Open();
+                string sqlCadena = "SELECT E.* FROM Ejecutoria E  WHERE E.Id = @ius";
 
-                cmd = new SqlCommand(sqlCadena, conneDSQL);
+                cmd = new SqlCommand(sqlCadena, conneDsql);
+                cmd.Parameters.AddWithValue("@ius", ius);
                 dataReader = cmd.ExecuteReader();
 
                 while (dataReader.Read())
@@ -57,26 +59,32 @@ namespace ManttoProductosAlternos.Model
                     ejecutoria.Pagina = dataReader["Pagina"].ToString();
                 }
             }
-            catch (SqlException sql)
+            catch (SqlException ex)
             {
-                MessageBox.Show("Error ({0}) : {1}" + sql.Source + sql.Message, "Error Interno");
-                
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, "Error Interno");
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
             }
             finally
             {
-                conneDSQL.Close();
+                conneDsql.Close();
             }
             return ejecutoria;
         }
 
-        public void SetDocumento(DocumentoTO ejecutoriaDTO,int idTipoEje)
+
+        public void SetDocumento(DocumentoTO ejecutoriaDto,int idTipoEje)
         {
-            SqlConnection connectionCT9BD2 = (SqlConnection)Conexion.GetConecctionManttoCE();
-            DbDataAdapter dataAdapter;
+            SqlConnection connectionCT9BD2 = Conexion.GetConecctionManttoCE();
+            SqlDataAdapter dataAdapter;
             SqlCommand cmd;
             SqlDataReader dataReader;
 
@@ -86,7 +94,7 @@ namespace ManttoProductosAlternos.Model
             try
             {
                 connectionCT9BD2.Open();
-                string miQry = "SELECT * FROM Ejecutoria Where Id = " + ejecutoriaDTO.Id;
+                string miQry = "SELECT * FROM Ejecutoria Where Id = " + ejecutoriaDto.Id;
                 cmd = new SqlCommand(miQry, connectionCT9BD2);
                 dataReader = cmd.ExecuteReader();
 
@@ -102,24 +110,24 @@ namespace ManttoProductosAlternos.Model
                     dataAdapter.Fill(dataSet, "Ejecutoria");
 
                     dr = dataSet.Tables["Ejecutoria"].NewRow();
-                    dr["Id"] = ejecutoriaDTO.Id;
-                    dr["Rubro"] = ejecutoriaDTO.Rubro;
-                    dr["ConsecIndx"] = ejecutoriaDTO.ConsecIndx;
-                    dr["LocExp"] = ejecutoriaDTO.LocExp;
-                    dr["LocAbr"] = ejecutoriaDTO.LocAbr;
-                    dr["Parte"] = ejecutoriaDTO.Parte;
-                    dr["Asunto"] = ejecutoriaDTO.Asunto;
-                    dr["Promovente"] = ejecutoriaDTO.Promovente;
-                    dr["API"] = ejecutoriaDTO.AsuntoIndx;
-                    dr["MI"] = ejecutoriaDTO.DatosAsuntoIndx;
-                    dr["LI"] = ejecutoriaDTO.LocIndx;
-                    dr["Volumen"] = ejecutoriaDTO.Volumen;
-                    dr["Consec"] = ejecutoriaDTO.Consec;
-                    dr["tesis"] = ejecutoriaDTO.Tesis;
-                    dr["Sala"] = ejecutoriaDTO.Sala;
-                    dr["Epoca"] = ejecutoriaDTO.Epoca;
-                    dr["Fuente"] = ejecutoriaDTO.Fuente;
-                    dr["Pagina"] = ejecutoriaDTO.Pagina;
+                    dr["Id"] = ejecutoriaDto.Id;
+                    dr["Rubro"] = ejecutoriaDto.Rubro;
+                    dr["ConsecIndx"] = ejecutoriaDto.ConsecIndx;
+                    dr["LocExp"] = ejecutoriaDto.LocExp;
+                    dr["LocAbr"] = ejecutoriaDto.LocAbr;
+                    dr["Parte"] = ejecutoriaDto.Parte;
+                    dr["Asunto"] = ejecutoriaDto.Asunto;
+                    dr["Promovente"] = ejecutoriaDto.Promovente;
+                    dr["API"] = ejecutoriaDto.AsuntoIndx;
+                    dr["MI"] = ejecutoriaDto.DatosAsuntoIndx;
+                    dr["LI"] = ejecutoriaDto.LocIndx;
+                    dr["Volumen"] = ejecutoriaDto.Volumen;
+                    dr["Consec"] = ejecutoriaDto.Consec;
+                    dr["tesis"] = ejecutoriaDto.Tesis;
+                    dr["Sala"] = ejecutoriaDto.Sala;
+                    dr["Epoca"] = ejecutoriaDto.Epoca;
+                    dr["Fuente"] = ejecutoriaDto.Fuente;
+                    dr["Pagina"] = ejecutoriaDto.Pagina;
                     dr["IdProd"] = idTipoEje;
 
                     dataSet.Tables["Ejecutoria"].Rows.Add(dr);
@@ -130,25 +138,25 @@ namespace ManttoProductosAlternos.Model
                         " VALUES(@Id,@Rubro,@ConsecIndx,@LocExp,@LocAbr,@Parte,@Asunto,@Promovente,@API,@MI,@LI," +
                         "@Volumen,@Consec,@Tesis,@Sala,@Epoca,@Fuente,@Pagina,@IdProd)";
 
-                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Id", SqlDbType.Int, 0, "Id");
-                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Rubro", SqlDbType.NText, 0, "Rubro");
-                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@ConsecIndx", SqlDbType.Int, 0, "ConsecIndx");
-                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@locExp", SqlDbType.NText, 0, "LocExp");
-                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@LocAbr", SqlDbType.NVarChar, 0, "LocAbr");
-                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Parte", SqlDbType.TinyInt, 0, "Parte");
-                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Asunto", SqlDbType.NVarChar, 0, "Asunto");
-                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Promovente", SqlDbType.NText, 0, "Promovente");
-                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@API", SqlDbType.NText, 0, "API");
-                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@MI", SqlDbType.NText, 0, "MI");
-                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@LI", SqlDbType.NText, 0, "LI");
-                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Volumen", SqlDbType.SmallInt, 0, "Volumen");
-                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Consec", SqlDbType.SmallInt, 0, "Consec");
-                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Tesis", SqlDbType.NVarChar, 0, "Tesis");
-                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Sala", SqlDbType.TinyInt, 0, "Sala");
-                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Epoca", SqlDbType.TinyInt, 0, "Epoca");
-                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Fuente", SqlDbType.TinyInt, 0, "Fuente");
-                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Pagina", SqlDbType.NVarChar, 0, "Pagina");
-                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@IdProd", SqlDbType.Int, 0, "IdProd");
+                    dataAdapter.InsertCommand.Parameters.Add("@Id", SqlDbType.Int, 0, "Id");
+                    dataAdapter.InsertCommand.Parameters.Add("@Rubro", SqlDbType.NText, 0, "Rubro");
+                    dataAdapter.InsertCommand.Parameters.Add("@ConsecIndx", SqlDbType.Int, 0, "ConsecIndx");
+                    dataAdapter.InsertCommand.Parameters.Add("@locExp", SqlDbType.NText, 0, "LocExp");
+                    dataAdapter.InsertCommand.Parameters.Add("@LocAbr", SqlDbType.NVarChar, 0, "LocAbr");
+                    dataAdapter.InsertCommand.Parameters.Add("@Parte", SqlDbType.TinyInt, 0, "Parte");
+                    dataAdapter.InsertCommand.Parameters.Add("@Asunto", SqlDbType.NVarChar, 0, "Asunto");
+                    dataAdapter.InsertCommand.Parameters.Add("@Promovente", SqlDbType.NText, 0, "Promovente");
+                    dataAdapter.InsertCommand.Parameters.Add("@API", SqlDbType.NText, 0, "API");
+                    dataAdapter.InsertCommand.Parameters.Add("@MI", SqlDbType.NText, 0, "MI");
+                    dataAdapter.InsertCommand.Parameters.Add("@LI", SqlDbType.NText, 0, "LI");
+                    dataAdapter.InsertCommand.Parameters.Add("@Volumen", SqlDbType.SmallInt, 0, "Volumen");
+                    dataAdapter.InsertCommand.Parameters.Add("@Consec", SqlDbType.SmallInt, 0, "Consec");
+                    dataAdapter.InsertCommand.Parameters.Add("@Tesis", SqlDbType.NVarChar, 0, "Tesis");
+                    dataAdapter.InsertCommand.Parameters.Add("@Sala", SqlDbType.TinyInt, 0, "Sala");
+                    dataAdapter.InsertCommand.Parameters.Add("@Epoca", SqlDbType.TinyInt, 0, "Epoca");
+                    dataAdapter.InsertCommand.Parameters.Add("@Fuente", SqlDbType.TinyInt, 0, "Fuente");
+                    dataAdapter.InsertCommand.Parameters.Add("@Pagina", SqlDbType.NVarChar, 0, "Pagina");
+                    dataAdapter.InsertCommand.Parameters.Add("@IdProd", SqlDbType.Int, 0, "IdProd");
 
                     dataAdapter.Update(dataSet, "Ejecutoria");
 
@@ -158,9 +166,12 @@ namespace ManttoProductosAlternos.Model
                 dataReader.Close();
 
             }
-            catch (SqlException sql)
+            catch (SqlException ex)
             {
-                MessageBox.Show("Error ({0}) : {1}" + sql.Source + sql.Message, "Error Interno");
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
             }
             finally
             {
@@ -176,18 +187,19 @@ namespace ManttoProductosAlternos.Model
         /// <returns></returns>
         public List<DocumentoTO> GetDocumentosRelacionados(int idTipoEje)
         {
-            SqlConnection conneCT9BD2 = (SqlConnection)Conexion.GetConecctionManttoCE();
+            SqlConnection conneCT9BD2 = Conexion.GetConecctionManttoCE();
             SqlCommand cmd;
             SqlDataReader dataReader;
 
-            List<DocumentoTO> Ejecutorias = new List<DocumentoTO>();
+            List<DocumentoTO> ejecutorias = new List<DocumentoTO>();
 
             try
             {
                 conneCT9BD2.Open();
-                string sqlCadena = "SELECT Id,Rubro,Asunto,Promovente FROM Ejecutoria WHERE idProd = " + idTipoEje + " ORDER BY ConsecIndx";
+                string sqlCadena = "SELECT Id,Rubro,Asunto,Promovente FROM Ejecutoria WHERE idProd = @idTipoEje ORDER BY ConsecIndx";
 
                 cmd = new SqlCommand(sqlCadena, conneCT9BD2);
+                cmd.Parameters.AddWithValue("@idTipoEje", idTipoEje);
                 dataReader = cmd.ExecuteReader();
 
                 while (dataReader.Read())
@@ -198,28 +210,34 @@ namespace ManttoProductosAlternos.Model
                     ejecutoria.Asunto = dataReader["Asunto"].ToString();
                     ejecutoria.Promovente = dataReader["Promovente"].ToString();
 
-                    Ejecutorias.Add(ejecutoria);
+                    ejecutorias.Add(ejecutoria);
                 }
             }
-            catch (SqlException sql)
+            catch (SqlException ex)
             {
-                MessageBox.Show("Error ({0}) : {1}" + sql.Source + sql.Message, "Error Interno");
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, "Error Interno");
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
             }
             finally
             {
                 conneCT9BD2.Close();
             }
 
-            return Ejecutorias;
+            return ejecutorias;
         }
 
         public void DeleteDocumento(long ius, int idTipoEje)
         {
-            SqlConnection conneCT9BD2 = (SqlConnection)Conexion.GetConecctionManttoCE();
+            SqlConnection conneCT9BD2 = Conexion.GetConecctionManttoCE();
             SqlCommand cmd;
 
             cmd = conneCT9BD2.CreateCommand();
@@ -233,13 +251,19 @@ namespace ManttoProductosAlternos.Model
                 cmd.ExecuteNonQuery();
 
             }
-            catch (SqlException sql)
+            catch (SqlException ex)
             {
-                MessageBox.Show("Error ({0}) : {1}" + sql.Source + sql.Message, "Error Interno");
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
             }
-            catch (Exception sql)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error ({0}) : {1}" + sql.Source + sql.Message, "Error Interno");
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
             }
             finally
             {
@@ -429,25 +453,25 @@ namespace ManttoProductosAlternos.Model
                             " VALUES(@IdTema,@Rubro,@ConsecIndx,@LocExp,@LocAbr,@Parte,@Asunto,@Promovente,@API,@MI,@LI," +
                             "@Volumen,@Consec,@Tesis,@Sala,@Epoca,@Fuente,@Pagina,@IdProducto)";
 
-                        ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@IdTema", SqlDbType.Int, 0, "IdTema");
-                        ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Rubro", SqlDbType.NText, 0, "Rubro");
-                        ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@ConsecIndx", SqlDbType.Int, 0, "ConsecIndx");
-                        ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@locExp", SqlDbType.NText, 0, "LocExp");
-                        ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@LocAbr", SqlDbType.NVarChar, 0, "LocAbr");
-                        ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Parte", SqlDbType.TinyInt, 0, "Parte");
-                        ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Asunto", SqlDbType.NVarChar, 0, "Asunto");
-                        ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Promovente", SqlDbType.NText, 0, "Promovente");
-                        ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@API", SqlDbType.NText, 0, "API");
-                        ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@MI", SqlDbType.NText, 0, "MI");
-                        ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@LI", SqlDbType.NText, 0, "LI");
-                        ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Volumen", SqlDbType.SmallInt, 0, "Volumen");
-                        ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Consec", SqlDbType.SmallInt, 0, "Consec");
-                        ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Tesis", SqlDbType.NVarChar, 0, "Tesis");
-                        ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Sala", SqlDbType.TinyInt, 0, "Sala");
-                        ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Epoca", SqlDbType.TinyInt, 0, "Epoca");
-                        ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Fuente", SqlDbType.TinyInt, 0, "Fuente");
-                        ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Pagina", SqlDbType.NVarChar, 0, "Pagina");
-                        ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@IdProducto", SqlDbType.Int, 0, "IdProducto");
+                        dataAdapter.InsertCommand.Parameters.Add("@IdTema", SqlDbType.Int, 0, "IdTema");
+                        dataAdapter.InsertCommand.Parameters.Add("@Rubro", SqlDbType.NText, 0, "Rubro");
+                        dataAdapter.InsertCommand.Parameters.Add("@ConsecIndx", SqlDbType.Int, 0, "ConsecIndx");
+                        dataAdapter.InsertCommand.Parameters.Add("@locExp", SqlDbType.NText, 0, "LocExp");
+                        dataAdapter.InsertCommand.Parameters.Add("@LocAbr", SqlDbType.NVarChar, 0, "LocAbr");
+                        dataAdapter.InsertCommand.Parameters.Add("@Parte", SqlDbType.TinyInt, 0, "Parte");
+                        dataAdapter.InsertCommand.Parameters.Add("@Asunto", SqlDbType.NVarChar, 0, "Asunto");
+                        dataAdapter.InsertCommand.Parameters.Add("@Promovente", SqlDbType.NText, 0, "Promovente");
+                        dataAdapter.InsertCommand.Parameters.Add("@API", SqlDbType.NText, 0, "API");
+                        dataAdapter.InsertCommand.Parameters.Add("@MI", SqlDbType.NText, 0, "MI");
+                        dataAdapter.InsertCommand.Parameters.Add("@LI", SqlDbType.NText, 0, "LI");
+                        dataAdapter.InsertCommand.Parameters.Add("@Volumen", SqlDbType.SmallInt, 0, "Volumen");
+                        dataAdapter.InsertCommand.Parameters.Add("@Consec", SqlDbType.SmallInt, 0, "Consec");
+                        dataAdapter.InsertCommand.Parameters.Add("@Tesis", SqlDbType.NVarChar, 0, "Tesis");
+                        dataAdapter.InsertCommand.Parameters.Add("@Sala", SqlDbType.TinyInt, 0, "Sala");
+                        dataAdapter.InsertCommand.Parameters.Add("@Epoca", SqlDbType.TinyInt, 0, "Epoca");
+                        dataAdapter.InsertCommand.Parameters.Add("@Fuente", SqlDbType.TinyInt, 0, "Fuente");
+                        dataAdapter.InsertCommand.Parameters.Add("@Pagina", SqlDbType.NVarChar, 0, "Pagina");
+                        dataAdapter.InsertCommand.Parameters.Add("@IdProducto", SqlDbType.Int, 0, "IdProducto");
 
                         dataAdapter.Update(dataSet, "Ejecutoria");
 
@@ -508,13 +532,13 @@ namespace ManttoProductosAlternos.Model
                     dataAdapter.InsertCommand.CommandText = "INSERT INTO ParteEjecutoria(IdTema,Consec,txtParte,TI,TontaUnica,Parte,ConsecIndx)" +
                         " VALUES(@IdTema,@Consec,@txtParte,@TI,@TontaUnica,@Parte,@ConsecIndx)";
 
-                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@IdTema", SqlDbType.Int, 0, "IdTema");
-                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Consec", SqlDbType.Int, 0, "Consec");
-                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@txtParte", SqlDbType.NText, 0, "txtParte");
-                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@TI", SqlDbType.NText, 0, "TI");
-                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@TontaUnica", SqlDbType.SmallInt, 0, "TontaUnica");
-                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@Parte", SqlDbType.TinyInt, 0, "Parte");
-                    ((SqlDataAdapter)dataAdapter).InsertCommand.Parameters.Add("@ConsecIndx", SqlDbType.Int, 0, "ConsecIndx");
+                    dataAdapter.InsertCommand.Parameters.Add("@IdTema", SqlDbType.Int, 0, "IdTema");
+                    dataAdapter.InsertCommand.Parameters.Add("@Consec", SqlDbType.Int, 0, "Consec");
+                    dataAdapter.InsertCommand.Parameters.Add("@txtParte", SqlDbType.NText, 0, "txtParte");
+                    dataAdapter.InsertCommand.Parameters.Add("@TI", SqlDbType.NText, 0, "TI");
+                    dataAdapter.InsertCommand.Parameters.Add("@TontaUnica", SqlDbType.SmallInt, 0, "TontaUnica");
+                    dataAdapter.InsertCommand.Parameters.Add("@Parte", SqlDbType.TinyInt, 0, "Parte");
+                    dataAdapter.InsertCommand.Parameters.Add("@ConsecIndx", SqlDbType.Int, 0, "ConsecIndx");
 
                     dataAdapter.Update(dataSet, "Ejecutoria");
 

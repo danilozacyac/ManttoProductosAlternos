@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Data;
-using System.Data.Common;
-using System.Windows;
+using System.Data.SqlClient;
 using ManttoProductosAlternos.DBAccess;
 
 namespace ManttoProductosAlternos.Model
@@ -9,38 +7,24 @@ namespace ManttoProductosAlternos.Model
     public class AccesoModel
     {
 
-        private DataTableReader GetDatosTabla(string sqlString, DbConnection lConn)
-        {
-            DataTableReader dtr = null;
-            try
-            {
-                //lConn.Open();
-                DataAdapter query = Conexion.GetDataAdapter(sqlString, lConn);
-                dtr = Conexion.GetDatosReader(query);
-            }
-            catch (DbException ex)
-            {
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, "Error Interno");
-            }
-            catch (SystemException sex)
-            {
-                MessageBox.Show("Error ({0}) : {1}" + sex.Source + sex.Message, "Error Interno");
-            }
-            return dtr;
-        }
+        
 
         public bool ObtenerUsuarioContraseña(string sUsuario, string sPwd)
         {
             bool bExisteUsuario = false;
             string sSql;
-            DataTableReader reader;
-            DbConnection connection;
+            SqlDataReader reader;
+            SqlConnection connection;
+            SqlCommand cmd;
 
             connection = Conexion.GetConecctionManttoCE();
             connection.Open();
 
-            sSql = "SELECT * FROM cUsuarios WHERE usuario = '" + sUsuario + "' AND Contrasena ='" + sPwd + "'";
-            reader = this.GetDatosTabla(sSql, connection);
+            sSql = "SELECT * FROM cUsuarios WHERE usuario = @usuario AND Contrasena = @pass";
+            cmd = new SqlCommand(sSql, connection);
+            cmd.Parameters.AddWithValue("@usuario", sUsuario);
+            cmd.Parameters.AddWithValue("@pass", sPwd);
+            reader = cmd.ExecuteReader();
 
             if (reader.Read())
             {
