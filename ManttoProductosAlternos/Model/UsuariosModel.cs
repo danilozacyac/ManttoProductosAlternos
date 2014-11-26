@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using ManttoProductosAlternos.DTO;
-using System.Windows;
 using System.Data.SqlClient;
 using ManttoProductosAlternos.DBAccess;
+using ScjnUtilities;
+using System.Windows.Forms;
 
 namespace ManttoProductosAlternos.Model
 {
@@ -12,7 +13,7 @@ namespace ManttoProductosAlternos.Model
         public List<Usuarios> GetUsuarios()
         {
             List<Usuarios> usuarios = new List<Usuarios>();
-            SqlConnection sqlNueva = (SqlConnection)Conexion.GetConecctionManttoCE();
+            SqlConnection sqlNueva = Conexion.GetConecctionManttoCE();
 
             SqlDataReader dataReader;
             SqlCommand cmdAntes;
@@ -42,9 +43,12 @@ namespace ManttoProductosAlternos.Model
                 }
                 dataReader.Close();
             }
-            catch (SqlException sql)
+            catch (SqlException ex)
             {
-                MessageBox.Show("Error ({0}) : {1}" + sql.Source + sql.Message, "Error Interno");
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
             }
             finally
             {
@@ -56,7 +60,7 @@ namespace ManttoProductosAlternos.Model
 
         public void UpdateUsuario(Usuarios usuario)
         {
-            SqlConnection sqlConne = (SqlConnection)Conexion.GetConecctionManttoCE();
+            SqlConnection sqlConne = Conexion.GetConecctionManttoCE();
             SqlCommand cmd;
 
             cmd = sqlConne.CreateCommand();
@@ -78,9 +82,12 @@ namespace ManttoProductosAlternos.Model
                 cmd.CommandText = query;
                 cmd.ExecuteNonQuery();
             }
-            catch (SqlException sql)
+            catch (SqlException ex)
             {
-                MessageBox.Show("Error ({0}) : {1}" + sql.Source + sql.Message, "Error Interno");
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
             }
             finally
             {
@@ -90,7 +97,7 @@ namespace ManttoProductosAlternos.Model
 
         public void SetNewUsuario(Usuarios usuario)
         {
-            SqlConnection sqlConne = (SqlConnection)Conexion.GetConecctionManttoCE();
+            SqlConnection sqlConne = Conexion.GetConecctionManttoCE();
             SqlCommand cmd;
 
             cmd = sqlConne.CreateCommand();
@@ -107,9 +114,12 @@ namespace ManttoProductosAlternos.Model
 
                 MessageBox.Show("Usuario agregado correctamente");
             }
-            catch (SqlException sql)
+            catch (SqlException ex)
             {
-                MessageBox.Show("Error ({0}) : {1}" + sql.Source + sql.Message, "Error Interno");
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
             }
             finally
             {

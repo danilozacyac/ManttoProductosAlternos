@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="frmPermisos"
         Width="895"
+        Icon="Resources/Libros.ico"
         Height="402"
         Loaded="Window_Loaded">
     <Grid>

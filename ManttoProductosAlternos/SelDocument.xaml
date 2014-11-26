@@ -5,6 +5,7 @@
         Width="233"
         Height="202"
         ResizeMode="NoResize"
+        Icon="Resources/Libros.ico"
         ShowInTaskbar="False"
         WindowStartupLocation="CenterScreen">
     <Grid>

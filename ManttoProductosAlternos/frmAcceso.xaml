@@ -6,6 +6,7 @@
         Height="274"
         Loaded="Window_Loaded"
         ResizeMode="NoResize"
+        Icon="Resources/Libros.ico"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>

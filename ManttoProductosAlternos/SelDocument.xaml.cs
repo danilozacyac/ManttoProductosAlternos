@@ -14,16 +14,16 @@ namespace ManttoProductosAlternos
 
         private void BtnAceptar_Click(object sender, RoutedEventArgs e)
         {
-            if (radTesis.IsChecked == true)
-            {
-                AgrMantto agrTesis = new AgrMantto(4);
-                agrTesis.ShowDialog();
-            }
-            else
-            {
-                EjeVotos ejevot = new EjeVotos();
-                ejevot.ShowDialog();
-            }
+            //if (radTesis.IsChecked == true)
+            //{
+            //    AgrMantto agrTesis = new AgrMantto(4);
+            //    agrTesis.ShowDialog();
+            //}
+            //else
+            //{
+            //    EjeVotos ejevot = new EjeVotos();
+            //    ejevot.ShowDialog();
+            //}
         }
     }
 }

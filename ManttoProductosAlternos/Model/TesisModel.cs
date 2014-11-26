@@ -183,7 +183,7 @@ namespace ManttoProductosAlternos.Model
 
         public void InsertaTesis(long ius, int idTema)
         {
-            SqlConnection sqlConne = Conexion.GetConecctionDsql();
+            SqlConnection sqlConne = Conexion.GetConnectionCt9bd3();
             SqlConnection b2Conne = null;
 
             SqlCommand sqlCmd;
@@ -194,7 +194,7 @@ namespace ManttoProductosAlternos.Model
 
             try
             {
-                SqlConnection conneMant = Conexion.GetConnectMant();
+                SqlConnection conneMant = Conexion.GetConnectMantesis();
                 SqlCommand oleCmd;
                 string miQry = "SELECT * FROM OtrosTExtos WHERE IUS = " + ius;
                 string nota = String.Empty;
@@ -430,7 +430,7 @@ namespace ManttoProductosAlternos.Model
         public void SetConsecIndx()
         {
             SqlConnection db2Conne = Conexion.GetConecctionManttoCE();
-            SqlConnection sqlConne = Conexion.GetConecctionDsql();
+            SqlConnection sqlConne = Conexion.GetConnectionCt9bd3();
             SqlConnection db2InsertConne = Conexion.GetConecctionManttoCE();
 
             SqlCommand db2Cmd;
@@ -494,7 +494,7 @@ namespace ManttoProductosAlternos.Model
         public static void SetNumTesis()
         {
             SqlConnection db2Conne = Conexion.GetConecctionManttoCE();
-            SqlConnection sqlConne = Conexion.GetConecctionDsql();
+            SqlConnection sqlConne = Conexion.GetConnectionCt9bd3();
             SqlConnection db2InsertConne = Conexion.GetConecctionManttoCE();
 
             SqlCommand db2Cmd;
@@ -560,7 +560,7 @@ namespace ManttoProductosAlternos.Model
 
         public bool SustituyeTesis(long iusViejo, long iusNuevo)
         {
-            SqlConnection sqlConne = Conexion.GetConecctionDsql();
+            SqlConnection sqlConne = Conexion.GetConnectionCt9bd3();
             SqlConnection b2Conne = null;
 
             SqlCommand sqlCmd;
@@ -573,7 +573,7 @@ namespace ManttoProductosAlternos.Model
 
             try
             {
-                SqlConnection conneMant = Conexion.GetConnectMant();
+                SqlConnection conneMant = Conexion.GetConnectMantesis();
                 SqlCommand oleCmd;
                 string miQry = "SELECT * FROM OtrosTExtos WHERE IUS = " + iusNuevo;
                 string nota = String.Empty;

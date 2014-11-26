@@ -229,13 +229,13 @@
                                VerticalAlignment="Top">
             <telerik:RadRibbonView.ApplicationMenu>
                 <telerik:ApplicationMenu>
-                    <telerik:RadRibbonButton LargeImage="Resources/campo.png" Text="J. en Materia Agraria" />
-                    <telerik:RadRibbonButton LargeImage="Resources/suspension.png" Text="S. del Acto Reclamado" />
-                    <telerik:RadRibbonButton LargeImage="Resources/impAmparo.jpeg" Text="I. del Juicio de Amparo" />
-                    <telerik:RadRibbonButton LargeImage="Resources/scjn.png" Text="Facultades de la SCJN" />
-                    <telerik:RadRibbonButton LargeImage="Resources/electoral.jpg" Text="Electoral" />
+                    <telerik:RadRibbonButton LargeImage="Resources/campo.png" Text="J. en Materia Agraria" Name="RBtnAgraria" Click="ButtonMaterias_Click" IsEnabled="False" />
+                    <telerik:RadRibbonButton LargeImage="Resources/suspension.png" Text="S. del Acto Reclamado" Name="RBtnSuspension" Click="ButtonMaterias_Click"  IsEnabled="False" />
+                    <telerik:RadRibbonButton LargeImage="Resources/impAmparo.jpeg" Text="I. del Juicio de Amparo" Name="RBtnImprocedencia" Click="ButtonMaterias_Click" IsEnabled="False"  />
+                    <telerik:RadRibbonButton LargeImage="Resources/scjn.png" Text="Facultades de la SCJN" Name="RBtnScjn" Click="ButtonMaterias_Click" IsEnabled="False"  />
+                    <telerik:RadRibbonButton LargeImage="Resources/electoral.jpg" Text="Electoral" Name="RBtnElectoral" Click="ButtonMaterias_Click" IsEnabled="False"  />
                     <telerik:Separator />
-                    <telerik:RadRibbonButton LargeImage="Resources/keys.png" Text="Permisos" />
+                    <telerik:RadRibbonButton LargeImage="Resources/keys.png" Text="Permisos" Name="RBtnPermisos" IsEnabled="False"  />
                     <telerik:Separator />
                     <telerik:RadRibbonButton LargeImage="Resources/exit_128.png" Text="Salir" />
                 </telerik:ApplicationMenu>

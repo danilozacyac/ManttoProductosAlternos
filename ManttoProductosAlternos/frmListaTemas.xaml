@@ -4,6 +4,7 @@
         Title="Temas relacionados"
         Width="470"
         Height="372"
+        Icon="Resources/Libros.ico"
         Loaded="Window_Loaded"
         ResizeMode="NoResize">
     <Grid>

@@ -4,6 +4,7 @@
         xmlns:igDP="http://infragistics.com/DataPresenter"
         Title="AgrMantto"
         Width="1161"
+        Icon="Resources/Libros.ico"
         Height="602"
         Loaded="Window_Loaded">
     <Grid>

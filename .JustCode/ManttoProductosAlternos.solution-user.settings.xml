@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<JustCodeSettings Version="0.0" Timestamp="8904c9b8-c2fd-47e7-b839-0fafcb471ca4">
+  <IgnoredErrorsAndWarningsSettings xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+    <IgnoredErrorsAndWarnings Version="2">
+      <FilePath>
+        <FileRelativePath>ManttoProductosAlternos/Controller/AgrManttoController.cs</FileRelativePath>
+        <ProjectRelativePath>ManttoProductosAlternos/ManttoProductosAlternos.csproj</ProjectRelativePath>
+        <IgnoredElement>
+          <TextualIdentifier>8500300573166598547</TextualIdentifier>
+        </IgnoredElement>
+      </FilePath>
+    </IgnoredErrorsAndWarnings>
+  </IgnoredErrorsAndWarningsSettings>
+</JustCodeSettings>

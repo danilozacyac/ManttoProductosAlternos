@@ -1,13 +1,13 @@
 ﻿<Application x:Class="ManttoProductosAlternos.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             StartupUri="MainWindow.xaml">
+             StartupUri="AgrMantto.xaml">
     <Application.Resources>
 
         <ResourceDictionary>
-           <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Themes/ShinyBlue.xaml"/>
-                <ResourceDictionary Source="/Themes/Botones.xaml"/>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Themes/ShinyBlue.xaml" />
+                <ResourceDictionary Source="/Themes/Botones.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 

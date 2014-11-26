@@ -21,7 +21,7 @@ namespace ManttoProductosAlternos.Model
         /// <returns></returns>
         public DocumentoTO GetDocumentoPorIus(long ius)
         {
-            SqlConnection conneDsql = Conexion.GetConecctionDsql();
+            SqlConnection conneDsql = Conexion.GetConnectionCt9bd3();
             SqlCommand cmd;
             SqlDataReader dataReader;
 
@@ -83,29 +83,29 @@ namespace ManttoProductosAlternos.Model
 
         public void SetDocumento(DocumentoTO ejecutoriaDto,int idTipoEje)
         {
-            SqlConnection connectionCT9BD2 = Conexion.GetConecctionManttoCE();
+            SqlConnection connection = Conexion.GetConecctionManttoCE();
             SqlDataAdapter dataAdapter;
             SqlCommand cmd;
-            SqlDataReader dataReader;
+            SqlDataReader reader;
 
             DataSet dataSet = new DataSet();
             DataRow dr;
 
             try
             {
-                connectionCT9BD2.Open();
+                connection.Open();
                 string miQry = "SELECT * FROM Ejecutoria Where Id = " + ejecutoriaDto.Id;
-                cmd = new SqlCommand(miQry, connectionCT9BD2);
-                dataReader = cmd.ExecuteReader();
+                cmd = new SqlCommand(miQry, connection);
+                reader = cmd.ExecuteReader();
 
-                if (!dataReader.HasRows)
+                if (!reader.HasRows)
                 {
-                    dataReader.Close();
+                    reader.Close();
                     string sqlCadena = "SELECT * FROM Ejecutoria WHERE id = 0";
 
 
                     dataAdapter = new SqlDataAdapter();
-                    dataAdapter.SelectCommand = new SqlCommand(sqlCadena, connectionCT9BD2);
+                    dataAdapter.SelectCommand = new SqlCommand(sqlCadena, connection);
 
                     dataAdapter.Fill(dataSet, "Ejecutoria");
 
@@ -132,7 +132,7 @@ namespace ManttoProductosAlternos.Model
 
                     dataSet.Tables["Ejecutoria"].Rows.Add(dr);
 
-                    dataAdapter.InsertCommand = connectionCT9BD2.CreateCommand();
+                    dataAdapter.InsertCommand = connection.CreateCommand();
                     dataAdapter.InsertCommand.CommandText = "INSERT INTO Ejecutoria(Id,Rubro,ConsecIndx,LocExp,LocAbr,Parte,Asunto,Promovente,API,MI,LI," +
                         "Volumen,Consec,Tesis,Sala,Epoca,Fuente,Pagina,IdProd)" +
                         " VALUES(@Id,@Rubro,@ConsecIndx,@LocExp,@LocAbr,@Parte,@Asunto,@Promovente,@API,@MI,@LI," +
@@ -163,7 +163,7 @@ namespace ManttoProductosAlternos.Model
                     dataSet.Dispose();
                     dataAdapter.Dispose();
                 }
-                dataReader.Close();
+                reader.Close();
 
             }
             catch (SqlException ex)
@@ -175,7 +175,7 @@ namespace ManttoProductosAlternos.Model
             }
             finally
             {
-                connectionCT9BD2.Close();
+                connection.Close();
             }
         }
 
@@ -187,28 +187,28 @@ namespace ManttoProductosAlternos.Model
         /// <returns></returns>
         public List<DocumentoTO> GetDocumentosRelacionados(int idTipoEje)
         {
-            SqlConnection conneCT9BD2 = Conexion.GetConecctionManttoCE();
+            SqlConnection connection = Conexion.GetConecctionManttoCE();
             SqlCommand cmd;
-            SqlDataReader dataReader;
+            SqlDataReader reader;
 
             List<DocumentoTO> ejecutorias = new List<DocumentoTO>();
 
             try
             {
-                conneCT9BD2.Open();
+                connection.Open();
                 string sqlCadena = "SELECT Id,Rubro,Asunto,Promovente FROM Ejecutoria WHERE idProd = @idTipoEje ORDER BY ConsecIndx";
 
-                cmd = new SqlCommand(sqlCadena, conneCT9BD2);
+                cmd = new SqlCommand(sqlCadena, connection);
                 cmd.Parameters.AddWithValue("@idTipoEje", idTipoEje);
-                dataReader = cmd.ExecuteReader();
+                reader = cmd.ExecuteReader();
 
-                while (dataReader.Read())
+                while (reader.Read())
                 {
                     DocumentoTO ejecutoria = new DocumentoTO();
-                    ejecutoria.Id = Convert.ToInt32(dataReader["Id"].ToString());
-                    ejecutoria.Rubro = dataReader["Rubro"].ToString();
-                    ejecutoria.Asunto = dataReader["Asunto"].ToString();
-                    ejecutoria.Promovente = dataReader["Promovente"].ToString();
+                    ejecutoria.Id = Convert.ToInt32(reader["Id"].ToString());
+                    ejecutoria.Rubro = reader["Rubro"].ToString();
+                    ejecutoria.Asunto = reader["Asunto"].ToString();
+                    ejecutoria.Promovente = reader["Promovente"].ToString();
 
                     ejecutorias.Add(ejecutoria);
                 }
@@ -229,7 +229,7 @@ namespace ManttoProductosAlternos.Model
             }
             finally
             {
-                conneCT9BD2.Close();
+                connection.Close();
             }
 
             return ejecutorias;
@@ -237,15 +237,15 @@ namespace ManttoProductosAlternos.Model
 
         public void DeleteDocumento(long ius, int idTipoEje)
         {
-            SqlConnection conneCT9BD2 = Conexion.GetConecctionManttoCE();
+            SqlConnection connection = Conexion.GetConecctionManttoCE();
             SqlCommand cmd;
 
-            cmd = conneCT9BD2.CreateCommand();
-            cmd.Connection = conneCT9BD2;
+            cmd = connection.CreateCommand();
+            cmd.Connection = connection;
 
             try
             {
-                conneCT9BD2.Open();
+                connection.Open();
 
                 cmd.CommandText = "DELETE FROM Ejecutoria WHERE Id = " + ius + " AND idProd = " + idTipoEje;
                 cmd.ExecuteNonQuery();
@@ -267,7 +267,7 @@ namespace ManttoProductosAlternos.Model
             }
             finally
             {
-                conneCT9BD2.Close();
+                connection.Close();
             }
 
         }

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Configuration;
-using System.Data.Common;
 using System.Data.SqlClient;
 
 namespace ManttoProductosAlternos.DBAccess
 {
     public class Conexion
     {
-        public static SqlConnection GetConnectMant()
+        public static SqlConnection GetConnectMantesis()
         {
             String bd = ConfigurationManager.ConnectionStrings["BaseMantesis"].ConnectionString;
 
@@ -23,7 +22,7 @@ namespace ManttoProductosAlternos.DBAccess
             return realConnection;
         }
 
-        public static SqlConnection GetConecctionDsql()
+        public static SqlConnection GetConnectionCt9bd3()
         {
             String bdStringSql = ConfigurationManager.ConnectionStrings["BaseIUS"].ConnectionString;
 

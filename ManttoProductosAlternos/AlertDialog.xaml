@@ -4,7 +4,7 @@
         Title="AlertDialog"
         Width="450"
         Height="200"
-        Icon="/ManttoProductosAlternos;component/Images/AlertsHelp128.png"
+        Icon="Resources/AlertsHelp128.png"
         Loaded="Window_Loaded"
         ResizeMode="NoResize">
     <Grid>
@@ -40,7 +40,7 @@
                Margin="30,20,0,0"
                HorizontalAlignment="Left"
                VerticalAlignment="Top"
-               Source="/ManttoProductosAlternos;component/Images/AlertsHelp128.png"
+               Source="Resources/AlertsHelp128.png"
                Stretch="Fill" />
         <Button Name="BtnTemas"
                 Width="75"

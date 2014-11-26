@@ -4,7 +4,7 @@ using ManttoProductosAlternos.DTO;
 
 namespace ManttoProductosAlternos.Reportes
 {
-    public class agrRelacionesMes
+    public class AgrRelacionesMes
     {
         Microsoft.Office.Interop.Word.Application oWord;
         Microsoft.Office.Interop.Word.Document oDoc;
@@ -14,7 +14,7 @@ namespace ManttoProductosAlternos.Reportes
 
         private readonly TreeView treeView = null;
 
-        public agrRelacionesMes(TreeView treeView)
+        public AgrRelacionesMes(TreeView treeView)
         {
             this.treeView = treeView;
         }

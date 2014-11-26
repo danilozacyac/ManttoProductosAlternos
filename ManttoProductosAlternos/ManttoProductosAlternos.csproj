@@ -27,9 +27,10 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationRevision>2</ApplicationRevision>
     <ApplicationVersion>2.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -159,6 +160,7 @@
     <Compile Include="AlertDialog.xaml.cs">
       <DependentUpon>AlertDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controller\AgrManttoController.cs" />
     <Compile Include="DTO\DocumentoTO.cs" />
     <Compile Include="DTO\Usuarios.cs" />
     <Compile Include="EjeVotos.xaml.cs">
@@ -180,7 +182,6 @@
     <Compile Include="Model\AccesoModel.cs" />
     <Compile Include="Model\AccesoUsuarioModel.cs" />
     <Compile Include="Model\EjecutoriaModel.cs" />
-    <Compile Include="Model\TemasToViewModel.cs" />
     <Compile Include="Model\UsuariosModel.cs" />
     <Compile Include="Model\VotosModel.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -188,7 +189,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Reportes\agrRelacionesMes.cs" />
+    <Compile Include="Reportes\AgrRelacionesMes.cs" />
     <Compile Include="SelDocument.xaml.cs">
       <DependentUpon>SelDocument.xaml</DependentUpon>
     </Compile>
@@ -225,10 +226,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="AgrMantto.xaml.cs">
       <DependentUpon>AgrMantto.xaml</DependentUpon>
     </Compile>
@@ -239,10 +236,6 @@
     <Compile Include="DBAccess\Conexion.cs" />
     <Compile Include="DTO\Temas.cs" />
     <Compile Include="DTO\TesisDTO.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
     <Page Include="SelDocument.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
