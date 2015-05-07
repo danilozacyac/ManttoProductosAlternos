@@ -2,10 +2,10 @@
 using System.Windows;
 using System.Windows.Controls;
 using ManttoProductosAlternos.DTO;
-using UtilsAlternos;
 using ManttoProductosAlternos.Model;
 using ManttoProductosAlternos.Utils;
 using System.Windows.Media;
+using ScjnUtilities;
 
 namespace ManttoProductosAlternos
 {
@@ -53,12 +53,12 @@ namespace ManttoProductosAlternos
             tvAgraria.Items.Clear();
             if (temaActualizar  == null)
             {
-                this.Height = Constants.WinHeightAgregaTema;
+                this.Height = VarGlobales.WinHeightAgregaTema;
                 chkNodoPadre.Visibility = Visibility.Visible;
             }
             else if (temaActualizar != null)
             {
-                this.Height = Constants.WinHeightAgregaTema;
+                this.Height = VarGlobales.WinHeightAgregaTema;
                 chkCambiarPosicion.Visibility = Visibility.Visible;
                 chkNodoPadre.Visibility = Visibility.Hidden;
                 tvAgraria.Visibility = Visibility.Hidden;
@@ -76,7 +76,7 @@ namespace ManttoProductosAlternos
         {
             Temas tema = new Temas();
             tema.Tema = (idProducto == 1) ? txtTema.Text.ToUpper() : txtTema.Text;
-            tema.TemaStr = MiscFunciones.GetTemasStr(txtTema.Text); 
+            tema.TemaStr = StringUtilities.PrepareToAlphabeticalOrder(txtTema.Text); 
             tema.Orden = 0;
             tema.LInicial = Convert.ToChar(txtTema.Text.Substring(0, 1).ToUpper());
             tema.IdProducto = idProducto;
@@ -150,7 +150,7 @@ namespace ManttoProductosAlternos
 
         private void ChkNodoPadreChecked(object sender, RoutedEventArgs e)
         {
-            this.Height = Constants.WinHeightAgregaTema;
+            this.Height = VarGlobales.WinHeightAgregaTema;
         }
 
         private void ChkNodoPadreUnchecked(object sender, RoutedEventArgs e)
@@ -159,7 +159,7 @@ namespace ManttoProductosAlternos
             {
                 if (tvAgraria.Items.Count == 0)
                 {
-                    this.Height = Constants.WinHeightAgregaTemaLargo;
+                    this.Height = VarGlobales.WinHeightAgregaTemaLargo;
                     GeneraArbol gArbol = new GeneraArbol();
 
                     foreach (TreeViewItem tema in gArbol.GeneraAgraria(0,idProducto))
@@ -169,7 +169,7 @@ namespace ManttoProductosAlternos
                 }
                 else
                 {
-                    this.Height = Constants.WinHeightAgregaTemaLargo;
+                    this.Height = VarGlobales.WinHeightAgregaTemaLargo;
                 }
             }
         }

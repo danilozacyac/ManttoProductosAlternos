@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using ManttoProductosAlternos.Model;
 using System.Windows;
-using UtilsAlternos;
 using System.Windows.Controls;
 using Infragistics.Windows.Editors;
 using System.Diagnostics;
@@ -16,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using Infragistics.Windows.DataPresenter;
 using System.Configuration;
+using ScjnUtilities;
 
 namespace ManttoProductosAlternos.Controller
 {
@@ -46,7 +46,7 @@ namespace ManttoProductosAlternos.Controller
         public void WindowLoad(int idProducto)
         {
             this.idProducto = idProducto;
-            main.Ribbon.ApplicationName = MiscFunciones.TituloVentanas(idProducto);
+            main.Ribbon.ApplicationName = VarGlobales.TituloVentanas(idProducto);
 
             main.tvAgraria.Items.Clear();
 
@@ -112,6 +112,7 @@ namespace ManttoProductosAlternos.Controller
                 {
                     main.RBtnPermisos.Visibility = Visibility.Visible;
                     this.WindowLoad(1);
+                    main.RBtnPermisos.IsEnabled = true;
                 }
                 else
                     this.WindowLoad(Convert.ToInt16(acceso[0]));
@@ -232,7 +233,7 @@ namespace ManttoProductosAlternos.Controller
                 int cont = 0;
                 foreach (string bus in llave)
                 {
-                    if (FlowDocumentHighlight.QuitaCarCad(nItem.Header.ToString().ToUpper()).Contains(FlowDocumentHighlight.QuitaCarCad(bus.ToUpper())))
+                    if (StringUtilities.QuitaCarCad(nItem.Header.ToString().ToUpper()).Contains(StringUtilities.QuitaCarCad(bus.ToUpper())))
                     {
                         cont++;
 
@@ -279,7 +280,7 @@ namespace ManttoProductosAlternos.Controller
                 int cont = 0;
                 foreach (string bus in llave)
                 {
-                    if (FlowDocumentHighlight.QuitaCarCad(child.Header.ToString().ToUpper()).Contains(FlowDocumentHighlight.QuitaCarCad(bus.ToUpper())))
+                    if (StringUtilities.QuitaCarCad(child.Header.ToString().ToUpper()).Contains(StringUtilities.QuitaCarCad(bus.ToUpper())))
                     {
                         cont++;
                         if (find == 0)
