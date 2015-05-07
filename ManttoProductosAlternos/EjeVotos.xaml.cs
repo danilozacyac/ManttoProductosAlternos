@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Infragistics.Windows.DataPresenter;
-using Infragistics.Windows.Editors;
 using ManttoProductosAlternos.DTO;
 using ManttoProductosAlternos.Interface;
 using ManttoProductosAlternos.Model;
+using ScjnUtilities;
 
 namespace ManttoProductosAlternos
 {
@@ -17,6 +15,7 @@ namespace ManttoProductosAlternos
     /// </summary>
     public partial class EjeVotos : Window
     {
+
         private int selectedTag;
         private long docSeleccionado = 0;
         private IDocumentos documentos = new EjecutoriaModel();
@@ -30,11 +29,7 @@ namespace ManttoProductosAlternos
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            dgTesis.FieldSettings.AllowEdit = false;
-            dgTesis.FieldSettings.AllowResize = false;
-            Style wrapstyle = new Style(typeof(XamTextEditor));
-            wrapstyle.Setters.Add(new Setter(XamTextEditor.TextWrappingProperty, TextWrapping.Wrap));
-            dgTesis.FieldSettings.EditorStyle = wrapstyle;
+            
         }
 
         private void TvAgrariaSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -62,8 +57,8 @@ namespace ManttoProductosAlternos
         private void SetDataInGrid()
         {
             listaDocumentos = documentos.GetDocumentosRelacionados(selectedTag);
-            dgTesis.DataContext = listaDocumentos;
-            txtTotal.Text = dgTesis.Records.Count + " registro(s)";
+            DgTesis.DataContext = listaDocumentos;
+            txtTotal.Text = DgTesis.Items.Count + " registro(s)";
         }
 
         private void BtnAgregarClick(object sender, RoutedEventArgs e)
@@ -121,18 +116,9 @@ namespace ManttoProductosAlternos
             this.Close();
         }
 
-        private void DgTesisRecordActivated1(object sender, Infragistics.Windows.DataPresenter.Events.RecordActivatedEventArgs e)
-        {
-            if (e.Record is DataRecord)
-            {
-                DataRecord myRecord = (DataRecord)e.Record;
-                docSeleccionado = ((DocumentoTO)myRecord.DataItem).Id;
-            }
-        }
-
         private void TxtIusPreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = IsTextAllowed(e.Text);
+            e.Handled = StringUtilities.IsTextAllowed(e.Text);
         }
 
         private void TxtIusLostFocus(object sender, RoutedEventArgs e)
@@ -145,12 +131,13 @@ namespace ManttoProductosAlternos
             btnAgregar.IsDefault = true;
         }
 
-        private static bool IsTextAllowed(string text)
+        private void DgTesisSelectionChanged(object sender, Telerik.Windows.Controls.SelectionChangeEventArgs e)
         {
-            // Regex NumEx = new Regex(@"^\d+(?:.\d{0,2})?$"); 
-            Regex regex = new Regex("[^0-9.-]+"); //regex that matches disallowed text 
-            return regex.IsMatch(text);
+            DocumentoTO selectedDocto = DgTesis.SelectedItem as DocumentoTO;
+            docSeleccionado = selectedDocto.Id;
         }
-        
+
+       
+
     }
 }

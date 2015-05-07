@@ -5,9 +5,7 @@ using System.Windows;
 using System.Windows.Input;
 using ManttoProductosAlternos.DTO;
 using ManttoProductosAlternos.Model;
-using Infragistics.Windows.Editors;
-using Infragistics.Windows.DataPresenter;
-using System.Text.RegularExpressions;
+using ScjnUtilities;
 
 namespace ManttoProductosAlternos
 {
@@ -16,13 +14,14 @@ namespace ManttoProductosAlternos
     /// </summary>
     public partial class frmListaTesis : Window
     {
+
         private List<TesisDTO> tesisRelacionadas = null;
         private int idProducto;
 
         private long pIus = 0;
         private long pId;
         private string pTesis;
-        private Int32 pRecordPos;
+        //private Int32 pRecordPos;
 
         public frmListaTesis(int idProducto)
         {
@@ -40,14 +39,14 @@ namespace ManttoProductosAlternos
             /**
              * Buscar como realizar las acciones de las siguientes líneas desde el editor
              * */
-            dgTesis.FieldSettings.AllowEdit = false;
-            dgTesis.FieldSettings.AllowResize = false;
-            Style wrapstyle = new Style(typeof(XamTextEditor));
-            wrapstyle.Setters.Add(new Setter(XamTextEditor.TextWrappingProperty, TextWrapping.Wrap));
-            dgTesis.FieldSettings.EditorStyle = wrapstyle;
+            //dgTesis.FieldSettings.AllowEdit = false;
+            //dgTesis.FieldSettings.AllowResize = false;
+            //Style wrapstyle = new Style(typeof(XamTextEditor));
+            //wrapstyle.Setters.Add(new Setter(XamTextEditor.TextWrappingProperty, TextWrapping.Wrap));
+            //dgTesis.FieldSettings.EditorStyle = wrapstyle;
         }
 
-        private void btnIUS_Click(object sender, RoutedEventArgs e)
+        private void BtnIusClick(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -69,7 +68,8 @@ namespace ManttoProductosAlternos
                 if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)
                 {
                     new TesisModel(idProducto).EliminaTesisLista(pIus);
-                    dgTesis.Records[this.pRecordPos].Visibility = System.Windows.Visibility.Collapsed;
+                    tesisRelacionadas.Remove(tesisSelected);
+                    //dgTesis.Records[this.pRecordPos].Visibility = System.Windows.Visibility.Collapsed;
                 }
             }
         }
@@ -79,32 +79,42 @@ namespace ManttoProductosAlternos
             Close();
         }
 
-        private void dgTesis_RecordActivated(object sender, Infragistics.Windows.DataPresenter.Events.RecordActivatedEventArgs e)
+        private TesisDTO tesisSelected;
+        private void DgTesisSelectionChanged(object sender, Telerik.Windows.Controls.SelectionChangeEventArgs e)
         {
-            if (e.Record is DataRecord)
-            {
-                DataRecord myRecord = (DataRecord)e.Record;
-                this.pIus = Convert.ToInt32(myRecord.Cells[0].Value);
-                //this.pIus = Convert.ToInt32(myRecord.Cells[1].Value);
-                //this.pTesis = myRecord.Cells[2].Value.ToString();
-                this.pRecordPos = myRecord.Index;
-
-            }
+            tesisSelected = dgTesis.SelectedItem as TesisDTO;
+            this.pIus = tesisSelected.Ius;
         }
 
-        private void MoveGridToIus(long nIus)
+        //private void dgTesis_RecordActivated(object sender, Infragistics.Windows.DataPresenter.Events.RecordActivatedEventArgs e)
+        //{
+        //    if (e.Record is DataRecord)
+        //    {
+        //        DataRecord myRecord = (DataRecord)e.Record;
+        //        this.pIus = Convert.ToInt32(myRecord.Cells[0].Value);
+        //        //this.pIus = Convert.ToInt32(myRecord.Cells[1].Value);
+        //        //this.pTesis = myRecord.Cells[2].Value.ToString();
+        //        this.pRecordPos = myRecord.Index;
+
+        //    }
+        //}
+
+        public void MoveGridToIus(long nIus)
         {
             //int nRow = 0;
             bool find = false;
 
-            foreach (DataRecord item in dgTesis.Records)
+            foreach (TesisDTO item in dgTesis.Items)
             {
-                if (nIus == Convert.ToInt32(item.Cells["Ius"].Value))
+                if (nIus == item.Ius)
                 {
-                    item.IsSelected = true;
+                    //item.IsSelected = true;
                     //nRow = item.Index;
                     find = true;
-                    dgTesis.ActiveRecord = item;
+                    //main.dgTesis.ActiveRecord = item;
+                    dgTesis.CurrentItem = item;
+                    dgTesis.SelectedItem = item;
+                    dgTesis.ScrollIntoView(item);
                     break;
                 }
             }
@@ -113,25 +123,7 @@ namespace ManttoProductosAlternos
                 MessageBox.Show("Número de registro no encontrado");
         }
 
-        private void dgTesis_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            DependencyObject source = e.OriginalSource as DependencyObject;
-            if (source == null)
-                return;
-
-            DataRecordPresenter drp = Infragistics.Windows.Utilities.GetAncestorFromType(source,
-                    typeof(DataRecordPresenter), true) as DataRecordPresenter;
-            if (drp == null)
-                return;
-
-            if (drp.Record != null)
-            {
-                frmListaTemas temas = new frmListaTemas(idProducto, pIus,true);
-                temas.ShowDialog();
-                //Lanzar ventana con el listado de temas a los que esta asociada la tesis
-             //   btnVisualizar_Click(sender, null);
-            }
-        }
+        
 
         private void BtnSustituir_Click(object sender, RoutedEventArgs e)
         {
@@ -142,14 +134,7 @@ namespace ManttoProductosAlternos
 
         private void TxtNumeroIus_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = !IsTextAllowed(e.Text);
-        }
-
-        private static bool IsTextAllowed(string text)
-        {
-            // Regex NumEx = new Regex(@"^\d+(?:.\d{0,2})?$"); 
-            Regex regex = new Regex("[^0-9.-]+"); //regex that matches disallowed text 
-            return !regex.IsMatch(text);
+            e.Handled = StringUtilities.IsTextAllowed(e.Text);
         }
 
         private void BtnSustituye_Click(object sender, RoutedEventArgs e)
@@ -169,5 +154,27 @@ namespace ManttoProductosAlternos
 
             Window_Loaded(null, null);
         }
+
+        private void DgTesisMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            //DependencyObject source = e.OriginalSource as DependencyObject;
+            //if (source == null)
+            //    return;
+
+            //DataRecordPresenter drp = Infragistics.Windows.Utilities.GetAncestorFromType(source,
+            //        typeof(DataRecordPresenter), true) as DataRecordPresenter;
+            //if (drp == null)
+            //    return;
+
+            //if (drp.Record != null)
+            //{
+                frmListaTemas temas = new frmListaTemas(idProducto, pIus, true);
+                temas.ShowDialog();
+                //Lanzar ventana con el listado de temas a los que esta asociada la tesis
+                //   btnVisualizar_Click(sender, null);
+            //}
+        }
+
+        
     }
 }

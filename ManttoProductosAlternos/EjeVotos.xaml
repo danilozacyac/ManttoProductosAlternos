@@ -1,12 +1,11 @@
 ﻿<Window x:Class="ManttoProductosAlternos.EjeVotos"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:igDP="http://infragistics.com/DataPresenter"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
         Title="AgrMantto"
         Width="1161"
-        Icon="Resources/Libros.ico"
         Height="602"
-        Loaded="Window_Loaded">
+        Icon="Resources/Libros.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25" />
@@ -90,6 +89,7 @@
                 VerticalAlignment="Top"
                 Click="BtnAgregarClick"
                 Content="Agregar" />
+        
         <TextBlock Name="textBlock2"
                    Grid.Row="1"
                    Grid.Column="1"
@@ -126,125 +126,34 @@
                    HorizontalAlignment="Left"
                    VerticalAlignment="Top"
                    Text="" />
-        <igDP:XamDataGrid Name="dgTesis"
-                          Grid.Row="1"
-                          Grid.Column="1"
-                          Width="698"
-                          Margin="20,67,0,0"
-                          HorizontalAlignment="Left"
-                          VerticalAlignment="Top"
-                          DataSource="{Binding}"
-                          GroupByAreaLocation="None"
-                          RecordActivated="DgTesisRecordActivated1">
-            <igDP:XamDataGrid.FieldLayouts>
+        <telerik:RadGridView x:Name="DgTesis"
+                             Grid.Row="1"
+                             Grid.Column="1"
+                             Margin="15,65,15,15"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Stretch"
+                             AutoGenerateColumns="False"
+                             IsFilteringAllowed="False"
+                             IsReadOnly="True"
+                             ItemsSource="{Binding}"
+                             SelectionChanged="DgTesisSelectionChanged"
+                             ShowGroupPanel="False">
+            <telerik:RadGridView.Columns>
+                <telerik:GridViewDataColumn Width="50"
+                                            DataMemberBinding="{Binding Id}"
+                                            Header="Id" />
+                <telerik:GridViewDataColumn Width="350"
+                                            DataMemberBinding="{Binding Rubro}"
+                                            Header="Rubro" />
+                <telerik:GridViewDataColumn Width="*"
+                                            DataMemberBinding="{Binding Asunto}"
+                                            Header="Asunto" />
+                <telerik:GridViewDataColumn Width="350"
+                                            DataMemberBinding="{Binding Promovente}"
+                                            Header="Promovente" />
+            </telerik:RadGridView.Columns>
+        </telerik:RadGridView>
 
-                <igDP:FieldLayout>
-                    <igDP:FieldLayout.Fields>
-                        <igDP:Field Name="Id"
-                                    Width="50"
-                                    Label=" Id " />
-                        <igDP:Field Name="Rubro"
-                                    Width="350"
-                                    Height="80"
-                                    Label="Rubro" />
-                        <igDP:Field Name="Asunto"
-                                    Width="*"
-                                    Height="80"
-                                    Label="Asunto" />
-                        <igDP:Field Name="Promovente"
-                                    Width="*"
-                                    Height="80"
-                                    Label="Promovente" />
-                        <igDP:Field Name="LocAbr"
-                                    Width="*"
-                                    Height="80"
-                                    Label="Local"
-                                    Visibility="Collapsed" />
-                        <igDP:Field Name="LocExp"
-                                    Width="0"
-                                    Height="80"
-                                    Label="LocalExp"
-                                    Visibility="Collapsed" />
-                        <igDP:Field Name="Volumen"
-                                    Width="0"
-                                    Height="80"
-                                    Label="Volumen"
-                                    Visibility="Collapsed" />
-                        <igDP:Field Name="Parte"
-                                    Width="0"
-                                    Height="80"
-                                    Label="Parte"
-                                    Visibility="Collapsed" />
-                        <igDP:Field Name="Sala"
-                                    Width="0"
-                                    Height="80"
-                                    Label="Sala"
-                                    Visibility="Collapsed" />
-                        <igDP:Field Name="Fuente"
-                                    Width="0"
-                                    Height="80"
-                                    Label="Fuente"
-                                    Visibility="Collapsed" />
-                        <igDP:Field Name="ConsecIndx"
-                                    Width="0"
-                                    Height="80"
-                                    Label="ConsecIndx"
-                                    Visibility="Collapsed" />
-                        <igDP:Field Name="AsuntoIndx"
-                                    Width="0"
-                                    Height="80"
-                                    Label="AsuntoIndx"
-                                    Visibility="Collapsed" />
-                        <igDP:Field Name="DatosAsuntoIndx"
-                                    Width="0"
-                                    Height="80"
-                                    Label="DatosAsuntoIndx"
-                                    Visibility="Collapsed" />
-                        <igDP:Field Name="LocIndx"
-                                    Width="0"
-                                    Height="80"
-                                    Label="LocIndx"
-                                    Visibility="Collapsed" />
-                        <igDP:Field Name="Consec"
-                                    Width="0"
-                                    Height="80"
-                                    Label="Consec"
-                                    Visibility="Collapsed" />
-                        <igDP:Field Name="Tesis"
-                                    Width="0"
-                                    Height="80"
-                                    Label="Tesis"
-                                    Visibility="Collapsed" />
-                        <igDP:Field Name="Epoca"
-                                    Width="0"
-                                    Height="80"
-                                    Label="Epoca"
-                                    Visibility="Collapsed" />
-                        <igDP:Field Name="TontaUnica"
-                                    Width="0"
-                                    Height="80"
-                                    Label="TontaUnica"
-                                    Visibility="Collapsed" />
-                        <igDP:Field Name="Pagina"
-                                    Width="0"
-                                    Height="80"
-                                    Label="Pagina"
-                                    Visibility="Collapsed" />
-                        <igDP:Field Name="TextoParte"
-                                    Width="0"
-                                    Height="80"
-                                    Label="TextoParte"
-                                    Visibility="Collapsed" />
-                        <igDP:Field Name="TextoIndx"
-                                    Width="0"
-                                    Height="80"
-                                    Label="TextoIndx"
-                                    Visibility="Collapsed" />
-                    </igDP:FieldLayout.Fields>
-                </igDP:FieldLayout>
-            </igDP:XamDataGrid.FieldLayouts>
-
-        </igDP:XamDataGrid>
         <TextBlock Name="txtTotal"
                    Grid.Row="1"
                    Grid.Column="1"

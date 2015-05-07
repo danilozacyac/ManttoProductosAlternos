@@ -1,12 +1,11 @@
 ﻿<Window x:Class="ManttoProductosAlternos.frmListaTesis"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:igDP="http://infragistics.com/DataPresenter"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
         Title="frmListaTesis"
         Icon="Resources/Libros.ico"
         Width="1160"
-        Height="600"
-        Loaded="Window_Loaded">
+        Height="600" Loaded="Window_Loaded">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="45" />
@@ -31,7 +30,7 @@
                 Margin="180,10,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Click="btnIUS_Click"
+                Click="BtnIusClick"
                 Content="Buscar"
                 FontWeight="Bold" />
         <Button Name="BtnCerrar"
@@ -52,57 +51,27 @@
                 VerticalAlignment="Top"
                 Click="BtnEliminar_Click"
                 Content="Eliminar Tesis" />
-        <igDP:XamDataGrid Name="dgTesis"
-                          Grid.Row="1"
-                          Width="1114"
-                          Margin="12,14,0,0"
-                          HorizontalAlignment="Left"
-                          VerticalAlignment="Top"
-                          DataSource="{Binding}"
-                          GroupByAreaLocation="None"
-                          MouseDoubleClick="dgTesis_MouseDoubleClick"
-                          RecordActivated="dgTesis_RecordActivated">
-            <igDP:XamDataGrid.FieldLayouts>
-                <igDP:FieldLayout>
-                    <igDP:Field Name="Ius"
-                                Width="60"
-                                Label=" IUS " />
-                    <igDP:Field Name="Rubro"
-                                Width="*"
-                                Height="80"
-                                Label="Rubro" />
-                    <igDP:Field Name="Texto"
-                                Width="0"
-                                Height="80"
-                                Label="Texto"
-                                Visibility="Collapsed" />
-                    <igDP:Field Name="Precedente"
-                                Width="0"
-                                Height="80"
-                                Label="Precedente"
-                                Visibility="Collapsed" />
-                    <igDP:Field Name="LocAbr"
-                                Width="200"
-                                Height="80"
-                                Label="Local" />
-                    <igDP:Field Name="LocExpr"
-                                Width="0"
-                                Height="80"
-                                Label="LocalExpr"
-                                Visibility="Collapsed" />
-                    <igDP:Field Name="Volumen"
-                                Width="0"
-                                Height="80"
-                                Label="Volumen"
-                                Visibility="Collapsed" />
-                    <igDP:Field Name="Parte"
-                                Width="0"
-                                Height="80"
-                                Label="Parte"
-                                Visibility="Collapsed" />
-                </igDP:FieldLayout>
-            </igDP:XamDataGrid.FieldLayouts>
-        </igDP:XamDataGrid>
+        <telerik:RadGridView x:Name="dgTesis"
+                                     Grid.Row="1"
+                                     Margin="15,15,15,15"
+                                     HorizontalAlignment="Stretch"
+                                     VerticalAlignment="Stretch"
+                                     AutoGenerateColumns="False"
+                                     IsFilteringAllowed="False"
+                                     ItemsSource="{Binding}"
+                                     ShowGroupPanel="False" SelectionChanged="DgTesisSelectionChanged" MouseDoubleClick="DgTesisMouseDoubleClick">
+            <telerik:RadGridView.Columns>
+                <telerik:GridViewDataColumn Width="60"
+                                                    DataMemberBinding="{Binding Ius}"
+                                                    Header="IUS"
+                                                    IsReadOnly="True" />
+                <telerik:GridViewDataColumn Width="*"
+                                                    DataMemberBinding="{Binding Rubro}"
+                                                    Header="Rubro"
+                                                    IsReadOnly="True" />
+
+            </telerik:RadGridView.Columns>
+        </telerik:RadGridView>
         <Button Name="BtnSustituir"
                 Grid.Row="2"
                 Width="100"

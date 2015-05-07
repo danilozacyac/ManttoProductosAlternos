@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using ManttoProductosAlternos.Controller;
-using ManttoProductosAlternos.DTO;
 using ManttoProductosAlternos.Model;
 using ManttoProductosAlternos.Reportes;
 using ScjnUtilities;
@@ -95,10 +92,7 @@ namespace ManttoProductosAlternos
             this.Close();
         }
 
-        private void DgTesisRecordActivated1(object sender, Infragistics.Windows.DataPresenter.Events.RecordActivatedEventArgs e)
-        {
-            controller.RegistroActivado(e);
-        }
+        
 
         private void BtnIr_Click(object sender, RoutedEventArgs e)
         {
@@ -175,5 +169,12 @@ namespace ManttoProductosAlternos
                     break;
             }
         }
+
+        private void DgTesisSelectionChanged(object sender, SelectionChangeEventArgs e)
+        {
+            controller.RegistroActivado(sender);
+        }
+
+        
     }
 }

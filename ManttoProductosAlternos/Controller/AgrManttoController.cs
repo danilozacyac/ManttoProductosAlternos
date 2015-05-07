@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using ManttoProductosAlternos.Model;
 using System.Windows;
 using System.Windows.Controls;
-using Infragistics.Windows.Editors;
-using System.Diagnostics;
-using ManttoProductosAlternos.DTO;
-using ManttoProductosAlternos.Utils;
-using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using Infragistics.Windows.DataPresenter;
-using System.Configuration;
+using ManttoProductosAlternos.DTO;
+using ManttoProductosAlternos.Model;
+using ManttoProductosAlternos.Utils;
 using ScjnUtilities;
+using Telerik.Windows.Controls;
 
 namespace ManttoProductosAlternos.Controller
 {
@@ -67,11 +65,7 @@ namespace ManttoProductosAlternos.Controller
             main.BtnUpdTema.IsEnabled = enable;
             main.BtnDelTema.IsEnabled = enable;
 
-            main.dgTesis.FieldSettings.AllowEdit = false;
-            main.dgTesis.FieldSettings.AllowResize = false;
-            Style wrapstyle = new Style(typeof(XamTextEditor));
-            wrapstyle.Setters.Add(new Setter(XamTextEditor.TextWrappingProperty, TextWrapping.Wrap));
-            main.dgTesis.FieldSettings.EditorStyle = wrapstyle;
+            
         }
 
         private String[] acceso;
@@ -331,14 +325,10 @@ namespace ManttoProductosAlternos.Controller
         #region Grid
 
 
-        public void RegistroActivado(Infragistics.Windows.DataPresenter.Events.RecordActivatedEventArgs e)
+        public void RegistroActivado(object sender)
         {
-            if (e.Record is DataRecord)
-            {
-                // Cast the record passed in as a DataRecord
-                DataRecord myRecord = (DataRecord)e.Record;
-                tesisSeleccionada = (TesisDTO)myRecord.DataItem;
-            }
+            tesisSeleccionada = ((RadGridView)sender).SelectedItem as TesisDTO;
+            
         }
 
 
@@ -347,14 +337,17 @@ namespace ManttoProductosAlternos.Controller
             //int nRow = 0;
             bool find = false;
 
-            foreach (DataRecord item in main.dgTesis.Records)
+            foreach (TesisDTO item in main.dgTesis.Items)
             {
-                if (nIus == Convert.ToInt32(item.Cells["Ius"].Value))
+                if (nIus == item.Ius)
                 {
-                    item.IsSelected = true;
+                    //item.IsSelected = true;
                     //nRow = item.Index;
                     find = true;
-                    main.dgTesis.ActiveRecord = item;
+                    //main.dgTesis.ActiveRecord = item;
+                    main.dgTesis.CurrentItem = item;
+                    main.dgTesis.SelectedItem = item;
+                    main.dgTesis.ScrollIntoView(item);
                     break;
                 }
             }
