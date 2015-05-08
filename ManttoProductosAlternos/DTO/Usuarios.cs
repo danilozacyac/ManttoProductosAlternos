@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ManttoProductosAlternos.DTO
+namespace ManttoProductosAlternos.Dto
 {
     public class Usuarios
     {

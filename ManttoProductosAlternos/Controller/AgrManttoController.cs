@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using ManttoProductosAlternos.DTO;
+using ManttoProductosAlternos.Dto;
 using ManttoProductosAlternos.Model;
 using ManttoProductosAlternos.Utils;
 using ScjnUtilities;
@@ -19,7 +19,7 @@ namespace ManttoProductosAlternos.Controller
 {
     public class AgrManttoController
     {
-        List<TreeViewItem> arbolAgraria = new List<TreeViewItem>();
+        ObservableCollection<Temas> arbolTemas; //= new List<TreeViewItem>();
         private Temas temaSeleccionado = null;
         private TesisDTO tesisSeleccionada = null;
         private int idProducto = 0;
@@ -30,15 +30,16 @@ namespace ManttoProductosAlternos.Controller
         TreeViewItem nodoSelect = null;
 
         private UpdateProgressBarDelegate updatePbDelegate = null;
+
         private delegate void UpdateProgressBarDelegate(
             System.Windows.DependencyProperty dp, Object value);
 
-
         private readonly AgrMantto main;
 
-        public AgrManttoController(AgrMantto main)
+        public AgrManttoController(AgrMantto main, ObservableCollection<Temas> arbolTemas)
         {
             this.main = main;
+            this.arbolTemas = arbolTemas;
         }
 
         public void WindowLoad(int idProducto)
@@ -49,23 +50,21 @@ namespace ManttoProductosAlternos.Controller
             main.tvAgraria.Items.Clear();
 
             GeneraArbol arbol = new GeneraArbol();
-            arbolAgraria = arbol.GeneraAgraria(0, idProducto);
+            //arbolTemas = arbol.GeneraAgraria(0, idProducto);
 
-            foreach (TreeViewItem tema in arbolAgraria)
-            {
-                main.tvAgraria.Items.Add(tema);
-            }
+            //foreach (TreeViewItem tema in arbolTemas)
+            //{
+            //    main.tvAgraria.Items.Add(tema);
+            //}
+
+            main.tvAgraria.DataContext = arbolTemas;
 
             bool enable = idProducto == 4 ? false : true;
 
-            main.btnBuscar.IsEnabled = enable;
-            main.btnRestableceer.IsEnabled = enable;
-            main.txtBuscar.IsEnabled = enable;
+            main.BuscadorTxt.IsEnabled = enable;
             main.BtnAddTema.IsEnabled = enable;
             main.BtnUpdTema.IsEnabled = enable;
             main.BtnDelTema.IsEnabled = enable;
-
-            
         }
 
         private String[] acceso;
@@ -75,51 +74,38 @@ namespace ManttoProductosAlternos.Controller
             updatePbDelegate =
                 new UpdateProgressBarDelegate(main.pbBusqueda.SetValue);
 
-            if (AccesoUsuarioModel.Llave == 0 || AccesoUsuarioModel.Llave == -1)
-            {
-                MessageBox.Show("No tienes permiso para utilizar esta aplicación");
-                main.Close();
-            }
-            else
-            {
-                acceso = AccesoUsuarioModel.Programas.Split(',');
+            acceso = AccesoUsuarioModel.Programas.Split(',');
 
-                /*
-                 * 1  Agraria
-                 * 2  Suspensión del acto reclamado
-                 * 3  Improcedencia del Acto Reclamado
-                 * 4  Facultades exclusivas de la SCJN
-                 * 15 Electoral
-                 */
-                if (acceso.Contains("1") || AccesoUsuarioModel.Grupo == 0)
-                    main.RBtnAgraria.IsEnabled = true;
-                if (acceso.Contains("2") || AccesoUsuarioModel.Grupo == 0)
-                    main.RBtnSuspension.IsEnabled = true;
-                if (acceso.Contains("3") || AccesoUsuarioModel.Grupo == 0)
-                    main.RBtnImprocedencia.IsEnabled = true;
-                if (acceso.Contains("4") || AccesoUsuarioModel.Grupo == 0)
-                    main.RBtnScjn.IsEnabled = true;
-                if (acceso.Contains("15") || AccesoUsuarioModel.Grupo == 0)
-                    main.RBtnElectoral.IsEnabled = true;
-
-                if (AccesoUsuarioModel.Grupo == 0)
-                {
-                    main.RBtnPermisos.Visibility = Visibility.Visible;
-                    this.WindowLoad(1);
-                    main.RBtnPermisos.IsEnabled = true;
-                }
-                else
-                    this.WindowLoad(Convert.ToInt16(acceso[0]));
+            /*
+             * 1  Agraria
+             * 2  Suspensión del acto reclamado
+             * 3  Improcedencia del Acto Reclamado
+             * 4  Facultades exclusivas de la SCJN
+             * 15 Electoral
+             */
+            if (acceso.Contains("1") || AccesoUsuarioModel.Grupo == 0)
+                main.RBtnAgraria.IsEnabled = true;
+            if (acceso.Contains("2") || AccesoUsuarioModel.Grupo == 0)
+                main.RBtnSuspension.IsEnabled = true;
+            if (acceso.Contains("3") || AccesoUsuarioModel.Grupo == 0)
+                main.RBtnImprocedencia.IsEnabled = true;
+            if (acceso.Contains("4") || AccesoUsuarioModel.Grupo == 0)
+                main.RBtnScjn.IsEnabled = true;
+            if (acceso.Contains("15") || AccesoUsuarioModel.Grupo == 0)
+                main.RBtnElectoral.IsEnabled = true;
+            if (AccesoUsuarioModel.Grupo == 0)
+            {
+                main.RBtnPermisos.Visibility = Visibility.Visible;
+                main.RBtnPermisos.IsEnabled = true;
             }
         }
 
         public void CambioTemaSeleccionado()
         {
-            
             if (main.tvAgraria.SelectedItem != null)
             {
-                nodoSelect = (TreeViewItem)main.tvAgraria.SelectedItem;
-                temaSeleccionado = (Temas)nodoSelect.Tag;
+                //nodoSelect = (TreeViewItem)main.tvAgraria.SelectedItem;
+                temaSeleccionado = main.tvAgraria.SelectedItem as Temas;
 
                 tesisRelacionadas = new TesisModel(idProducto).GetTesisRelacionadas(temaSeleccionado.IdTema);
                 tesisRelacionadas = tesisRelacionadas.Distinct().ToList();
@@ -129,8 +115,6 @@ namespace ManttoProductosAlternos.Controller
                 main.txtRegistros.Text = tesisRelacionadas.Count + " Registros";
             }
         }
-        
-
 
         public void AgregarRelacion(string registroIus)
         {
@@ -172,48 +156,48 @@ namespace ManttoProductosAlternos.Controller
                 main.txtIUS.Text = "";
         }
 
-
         #region Busqueda
 
-        public void Buscar(string textoBuscado)
+        public void Searcher(string textoBuscado)
         {
-            busqueda.Clear();
-
-            main.Cursor = Cursors.Wait;
-            if (textoBuscado.Length > 3)
+            if (String.IsNullOrEmpty(textoBuscado) || String.IsNullOrWhiteSpace(textoBuscado))
             {
-                if (busqueda.Count > 0)
-                {
-                    Restablecer();
-                    busqueda.Clear();
-                }
-
-                find = 0;
-                expande = true;
-                foreach (string cadena in textoBuscado.TrimEnd(' ').TrimStart(' ').Split(' '))
-                {
-                    busqueda.Add(cadena);
-                }
-
-                Buscador(main.tvAgraria, busqueda, Color.FromRgb(255, 0, 0));
+                main.Cursor = Cursors.Wait;
+                expande = false;
+                Buscador(main.tvAgraria, busqueda, 0);
+                main.Cursor = Cursors.Arrow;
             }
-            
-            main.Cursor = Cursors.Arrow;
+            else
+            {
+                busqueda.Clear();
 
-            if (find == 0)
-                MessageBox.Show("No existe el texto buscado");
+                main.Cursor = Cursors.Wait;
+                if (textoBuscado.Length > 3)
+                {
+                    if (busqueda.Count > 0)
+                    {
+                        Searcher(String.Empty);
+                        busqueda.Clear();
+                    }
+
+                    find = 0;
+                    expande = true;
+                    foreach (string cadena in textoBuscado.TrimEnd(' ').TrimStart(' ').Split(' '))
+                    {
+                        busqueda.Add(cadena);
+                    }
+
+                    Buscador(main.tvAgraria, busqueda, 1);
+                }
+
+                main.Cursor = Cursors.Arrow;
+
+                if (find == 0)
+                    MessageBox.Show("No existe el texto buscado");
+            }
         }
 
-        public void Restablecer()
-        {
-            main.Cursor = Cursors.Wait;
-            expande = false;
-            Buscador(main.tvAgraria, busqueda, Color.FromRgb(0, 0, 0));
-            main.Cursor = Cursors.Arrow;
-        }
-
-        
-        private void Buscador(System.Windows.Controls.TreeView treeView, List<string> llave, Color color)
+        private void Buscador(RadTreeView treeView, List<string> llave, int foregroundColor)
         {
             find = 0;
             main.pbBusqueda.Visibility = Visibility.Visible;
@@ -221,116 +205,102 @@ namespace ManttoProductosAlternos.Controller
             main.pbBusqueda.Maximum = main.tvAgraria.Items.Count;
             main.pbBusqueda.Value = 0;
 
-            foreach (TreeViewItem nItem in treeView.Items)
+            foreach (Temas nItem in treeView.Items)
             {
                 main.pbBusqueda.Value += 1;
                 int cont = 0;
                 foreach (string bus in llave)
                 {
-                    if (StringUtilities.QuitaCarCad(nItem.Header.ToString().ToUpper()).Contains(StringUtilities.QuitaCarCad(bus.ToUpper())))
+                    if (StringUtilities.QuitaCarCad(nItem.Tema.ToString().ToUpper()).Contains(StringUtilities.QuitaCarCad(bus.ToUpper())))
                     {
                         cont++;
 
                         if (find == 0)
                         {
-                            try
-                            {
-                                nItem.IsSelected = true;
-                            }
-                            catch (NullReferenceException)
-                            {
-                            }
-
-                            nItem.BringIntoView();
+                            nItem.IsExpanded = expande;
+                            
+                            nItem.IsSelected = true;
+                            //nItem.BringIntoView();
                         }
                     }
 
                     if (cont == llave.Count)
                     {
-                        nItem.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B));
+                        nItem.Foreground = foregroundColor;
                         find++;
                     }
                 }
-                BuscaItem(nItem, llave, color);
+                BuscaItem(nItem, llave, foregroundColor); 
 
                 Dispatcher.CurrentDispatcher.Invoke(updatePbDelegate,
                     System.Windows.Threading.DispatcherPriority.Background,
                     new object[] { ProgressBar.ValueProperty, main.pbBusqueda.Value });
-
-                //Dispatcher.Invoke(updatePbDelegate,
-                //    System.Windows.Threading.DispatcherPriority.Background,
-                //    new object[] { ProgressBar.ValueProperty, main.pbBusqueda.Value });
             }
             main.pbBusqueda.Visibility = Visibility.Hidden;
         }
 
         // Busca recursivamente en todos los nodos hasta encontrar el patron
-        private void BuscaItem(TreeViewItem node, List<string> llave, Color color)
+        private void BuscaItem(Temas node, List<string> llave, int foregroundColor)
         {
-            foreach (object childx in node.Items)
+            foreach (Temas child in node.SubTemas)
             {
-                TreeViewItem child = childx as TreeViewItem;
-
+                //TreeViewItem child = childx as TreeViewItem;
                 int cont = 0;
                 foreach (string bus in llave)
                 {
-                    if (StringUtilities.QuitaCarCad(child.Header.ToString().ToUpper()).Contains(StringUtilities.QuitaCarCad(bus.ToUpper())))
+                    if (StringUtilities.QuitaCarCad(child.Tema.ToString().ToUpper()).Contains(StringUtilities.QuitaCarCad(bus.ToUpper())))
                     {
                         cont++;
                         if (find == 0)
                         {
-                            //child.IsSelected = true;
-                            child.BringIntoView();
+                            child.IsSelected = true;
+                            //child.BringIntoView();
                         }
                         // return; cuando se pone return solo tomo el primer nodo encontrado por cada hijo
                     }
 
                     if (cont == llave.Count)
                     {
-                        child.IsExpanded = true;
-                        child.Foreground = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B));
-                        child.Focus();
+                        child.IsExpanded = expande;
+                        child.Foreground = foregroundColor;
+                        //child.Focus();
                         //child.IsSelected = true;
-                        AbreRaiz(child);
+                        //AbreRaiz(child);
                         find++;
                     }
 
-                    BuscaItem(child, llave, color);
+                    BuscaItem(child, llave, foregroundColor);
                 }
             }
         }
 
         // Este metodo simplemente expande los nodos padre con un tipo de backtraking.
-        private void AbreRaiz(object root)
-        {
-            if (root.GetType() == typeof(TreeViewItem))
-            {
-                TreeViewItem node = root as TreeViewItem;
+        //private void AbreRaiz(object root)
+        //{
+        //    if (root.GetType() == typeof(TreeViewItem))
+        //    {
+        //        TreeViewItem node = root as TreeViewItem;
 
-                if (root.GetType() == typeof(TreeViewItem))
-                {
-                    if (((TreeViewItem)root).Parent.GetType() == typeof(TreeViewItem))
-                    {
-                        ((TreeViewItem)node.Parent).IsExpanded = expande;
+        //        if (root.GetType() == typeof(TreeViewItem))
+        //        {
+        //            if (((TreeViewItem)root).Parent.GetType() == typeof(TreeViewItem))
+        //            {
+        //                ((TreeViewItem)node.Parent).IsExpanded = expande;
 
-                        AbreRaiz((TreeViewItem)node.Parent);
-                    }
-                }
-            }
-        }
-
+        //                AbreRaiz((TreeViewItem)node.Parent);
+        //            }
+        //        }
+        //    }
+        //}
 
         #endregion
 
         #region Grid
 
-
         public void RegistroActivado(object sender)
         {
             tesisSeleccionada = ((RadGridView)sender).SelectedItem as TesisDTO;
-            
         }
-
 
         public void MoveGridToIus(long nIus)
         {
@@ -356,9 +326,7 @@ namespace ManttoProductosAlternos.Controller
                 MessageBox.Show("Número de registro no encontrado");
         }
 
-
         #endregion
-
 
         #region Metodos Temas
 
@@ -588,7 +556,7 @@ namespace ManttoProductosAlternos.Controller
             TesisModel tesisModel = new TesisModel(idProducto);
             tesisModel.SetConsecIndx();
         }
-
+        
         #endregion
     }
 }

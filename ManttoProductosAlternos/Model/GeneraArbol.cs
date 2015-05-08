@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Controls;
-using ManttoProductosAlternos.DTO;
+using ManttoProductosAlternos.Dto;
 using System.Collections.ObjectModel;
 
 namespace ManttoProductosAlternos.Model

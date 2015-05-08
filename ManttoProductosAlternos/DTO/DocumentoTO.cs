@@ -1,5 +1,5 @@
 ﻿
-namespace ManttoProductosAlternos.DTO
+namespace ManttoProductosAlternos.Dto
 {
     public class DocumentoTO
     {

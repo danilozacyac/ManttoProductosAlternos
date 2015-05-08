@@ -28,7 +28,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>\\ct9bd2\JAgraria\Mantenimiento\Updates\</InstallUrl>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>5</ApplicationRevision>
+    <ApplicationRevision>6</ApplicationRevision>
     <ApplicationVersion>2.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -57,7 +57,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Libros.ico</ApplicationIcon>
+    <ApplicationIcon>Books.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>148628507579370BD0E4CCA31270047407E6A88B</ManifestCertificateThumbprint>
@@ -154,6 +154,9 @@
     <Reference Include="UIAutomationTypes">
       <Private>False</Private>
     </Reference>
+    <Reference Include="uicontrols">
+      <HintPath>..\..\..\..\visual studio 2012\projects\mantesis2015\mantesis2015\bin\debug\uicontrols.dll</HintPath>
+    </Reference>
     <Reference Include="UtilsMantesis">
       <HintPath>..\..\MantesisWpf\UtilsMantesis\bin\Debug\UtilsMantesis.dll</HintPath>
     </Reference>
@@ -179,8 +182,9 @@
       <DependentUpon>AlertDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controller\AgrManttoController.cs" />
-    <Compile Include="DTO\DocumentoTO.cs" />
-    <Compile Include="DTO\Usuarios.cs" />
+    <Compile Include="Converter\ForegroundConverter.cs" />
+    <Compile Include="Dto\DocumentoTO.cs" />
+    <Compile Include="Dto\Usuarios.cs" />
     <Compile Include="EjeVotos.xaml.cs">
       <DependentUpon>EjeVotos.xaml</DependentUpon>
     </Compile>
@@ -197,6 +201,9 @@
       <DependentUpon>frmPermisos.xaml</DependentUpon>
     </Compile>
     <Compile Include="Interface\IDocumentos.cs" />
+    <Compile Include="LaunchWindow.xaml.cs">
+      <DependentUpon>LaunchWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Model\AccesoModel.cs" />
     <Compile Include="Model\AccesoUsuarioModel.cs" />
     <Compile Include="Model\EjecutoriaModel.cs" />
@@ -252,8 +259,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DBAccess\Conexion.cs" />
-    <Compile Include="DTO\Temas.cs" />
-    <Compile Include="DTO\TesisDTO.cs" />
+    <Compile Include="Dto\Temas.cs" />
+    <Compile Include="Dto\TesisDTO.cs" />
+    <Page Include="LaunchWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SelDocument.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -379,6 +390,24 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\1425495821_edit-notes.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\1425495838_add-notes.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\1425495925_delete-notes.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Books_128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Books_512.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Books.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

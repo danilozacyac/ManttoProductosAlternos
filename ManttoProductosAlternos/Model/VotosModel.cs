@@ -4,7 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 using ManttoProductosAlternos.DBAccess;
-using ManttoProductosAlternos.DTO;
+using ManttoProductosAlternos.Dto;
 using ManttoProductosAlternos.Interface;
 using ScjnUtilities;
 

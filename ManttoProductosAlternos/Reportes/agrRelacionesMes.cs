@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Controls;
-using ManttoProductosAlternos.DTO;
+using ManttoProductosAlternos.Dto;
 
 namespace ManttoProductosAlternos.Reportes
 {

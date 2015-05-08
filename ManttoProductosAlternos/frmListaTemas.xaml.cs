@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using ManttoProductosAlternos.Model;
-using ManttoProductosAlternos.DTO;
+using ManttoProductosAlternos.Dto;
 
 namespace ManttoProductosAlternos
 {

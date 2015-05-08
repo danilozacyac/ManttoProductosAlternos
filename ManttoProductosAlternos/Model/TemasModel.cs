@@ -4,10 +4,12 @@ using System.Collections.ObjectModel;
 using System.Data.SqlClient;
 using System.Linq;
 using ManttoProductosAlternos.DBAccess;
-using ManttoProductosAlternos.DTO;
+using ManttoProductosAlternos.Dto;
 using ManttoProductosAlternos.Utils;
 using System.Windows.Forms;
 using ScjnUtilities;
+using System.Configuration;
+using System.Data;
 
 namespace ManttoProductosAlternos.Model
 {
@@ -56,7 +58,7 @@ namespace ManttoProductosAlternos.Model
             ObservableCollection<Temas> temas = new ObservableCollection<Temas>();
 
             SqlConnection sqlConne = Conexion.GetConecctionManttoCE();
-            SqlDataReader dataReader;
+            SqlDataReader reader;
             SqlCommand cmd;
 
             cmd = sqlConne.CreateCommand();
@@ -70,23 +72,25 @@ namespace ManttoProductosAlternos.Model
                 cmd = new SqlCommand(miQry, sqlConne);
                 cmd.Parameters.AddWithValue("@idPadre", idPadre);
                 cmd.Parameters.AddWithValue("@idProducto", idProducto);
-                dataReader = cmd.ExecuteReader();
+                reader = cmd.ExecuteReader();
 
-                while (dataReader.Read())
+                while (reader.Read())
                 {
                     Temas tema = new Temas();
-                    tema.IsChecked = false;
-                    tema.IdTema = Convert.ToInt32(dataReader["Id"].ToString());
-                    tema.Nivel = Convert.ToInt32(dataReader["Nivel"].ToString());
-                    tema.Padre = Convert.ToInt32(dataReader["Padre"].ToString());
-                    tema.Tema = dataReader["Tema"].ToString();
-                    tema.Orden = Convert.ToInt32(dataReader["Orden"].ToString());
-                    tema.TemaStr = dataReader["TemaSTR"].ToString();
-                    tema.LInicial = Convert.ToChar(dataReader["LetraInicial"].ToString());
+                    //tema.IsChecked = false;
+                    tema.IdTema = Convert.ToInt32(reader["Id"]);
+                    tema.Nivel = Convert.ToInt32(reader["Nivel"]);
+                    tema.Padre = Convert.ToInt32(reader["Padre"]);
+                    tema.Tema = reader["Tema"].ToString();
+                    tema.Orden = Convert.ToInt32(reader["Orden"]);
+                    tema.TemaStr = reader["TemaSTR"].ToString();
+                    tema.LInicial = Convert.ToChar(reader["LetraInicial"].ToString());
+                    tema.SubTemas = GetTemas(tema.IdTema);
+                    tema.IdProducto = reader["IdProd"] as int? ?? 0;
 
                     temas.Add(tema);
                 }
-                dataReader.Close();
+                reader.Close();
                 //temas = temas.Distinct().ToList();
             }
             catch (SqlException ex)
@@ -103,7 +107,78 @@ namespace ManttoProductosAlternos.Model
             return temas;
         }
 
-        public void InsertaTemaNuevo(Temas tema)
+
+        public void InsertaTemaNuevo(Temas nuevoTema)
+        {
+            SqlConnection connection = Conexion.GetConecctionManttoCE();
+            SqlDataAdapter dataAdapter;
+
+            DataSet dataSet = new DataSet();
+            DataRow dr;
+
+            try
+            {
+                nuevoTema.IdTema = DataBaseUtilities.GetNextIdForUse("Temas", "Id", connection);
+
+                string sqlCadena = "SELECT * FROM Temas WHERE Id = 0";
+
+                dataAdapter = new SqlDataAdapter();
+                dataAdapter.SelectCommand = new SqlCommand(sqlCadena, connection);
+
+                dataAdapter.Fill(dataSet, "Temas");
+
+                dr = dataSet.Tables["Temas"].NewRow();
+                dr["Id"] = nuevoTema.IdTema;
+                dr["Nivel"] = nuevoTema.Nivel;
+                dr["Padre"] = nuevoTema.Padre;
+                dr["Tema"] = nuevoTema.Tema;
+                dr["Orden"] = nuevoTema.Orden;
+                dr["TemaStr"] = nuevoTema.TemaStr;
+                dr["LetraInicial"] = nuevoTema.LInicial;
+                dr["IdProd"] = nuevoTema.IdProducto;
+
+                dataSet.Tables["Temas"].Rows.Add(dr);
+
+                dataAdapter.InsertCommand = connection.CreateCommand();
+
+                dataAdapter.InsertCommand.CommandText = "INSERT INTO Temas (Id,Nivel,Padre,Tema,Orden,TemaStr,LetraInicial,IdProd) VALUES (@Id,@Nivel,@Padre,@Tema,@Orden,@TemaStr,@LetraInicial,@IdProd)";
+                dataAdapter.InsertCommand.Parameters.Add("@Id", SqlDbType.Int, 0, "Id");
+                dataAdapter.InsertCommand.Parameters.Add("@Nivel", SqlDbType.Int, 0, "Nivel");
+                dataAdapter.InsertCommand.Parameters.Add("@Padre", SqlDbType.Int, 0, "Padre");
+                dataAdapter.InsertCommand.Parameters.Add("@Tema", SqlDbType.VarChar, 0, "Tema");
+                dataAdapter.InsertCommand.Parameters.Add("@Orden", SqlDbType.Int, 0, "Orden");
+                dataAdapter.InsertCommand.Parameters.Add("@TemaStr", SqlDbType.VarChar, 0, "TemaStr");
+                dataAdapter.InsertCommand.Parameters.Add("@LetraInicial", SqlDbType.VarChar, 0, "LetraInicial");
+                dataAdapter.InsertCommand.Parameters.Add("@IdProd", SqlDbType.Int, 0, "IdProd");
+
+                dataAdapter.Update(dataSet, "Temas");
+                dataSet.Dispose();
+                dataAdapter.Dispose();
+
+
+            }
+            catch (SqlException ex)
+            {
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+            }
+            catch (Exception ex)
+            {
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+
+        public void InsertaTemaNuevo(Temas nuevoTema)
         {
             SqlConnection sqlConne = Conexion.GetConecctionManttoCE();
 
@@ -114,6 +189,8 @@ namespace ManttoProductosAlternos.Model
             cmd.Connection = sqlConne;
 
             int idSiguiente = 0;
+
+            nuevoTema.IdTema = DataBaseUtilities.GetNextIdForUse("Temas", "Id", sqlConne);
 
             try
             {
@@ -131,11 +208,11 @@ namespace ManttoProductosAlternos.Model
 
                     dataReader.Close();
 
-                    cmd.CommandText = "INSERT INTO TEMAS VALUES (" + idSiguiente + "," + tema.Nivel + "," + tema.Padre + ",'" + tema.Tema +
-                                      "'," + tema.Orden + ",'" + tema.TemaStr + "','" + tema.LInicial + "'," + tema.IdProducto + ")";
+                    cmd.CommandText = "INSERT INTO TEMAS VALUES (" + idSiguiente + "," + nuevoTema.Nivel + "," + nuevoTema.Padre + ",'" + nuevoTema.Tema +
+                                      "'," + nuevoTema.Orden + ",'" + nuevoTema.TemaStr + "','" + nuevoTema.LInicial + "'," + nuevoTema.IdProducto + ")";
                     cmd.ExecuteNonQuery();
                     cmd.CommandText = "insert into Bitacora(idTema,tipoModif,edoAnterior,usuario,idProd)" +
-                                      "values(" + idSiguiente + ",1,' ','" + Environment.MachineName + "'," + tema.IdProducto + ")";
+                                      "values(" + idSiguiente + ",1,' ','" + Environment.MachineName + "'," + nuevoTema.IdProducto + ")";
                     cmd.ExecuteNonQuery();
 
                     VarGlobales.idSiguiente = idSiguiente;

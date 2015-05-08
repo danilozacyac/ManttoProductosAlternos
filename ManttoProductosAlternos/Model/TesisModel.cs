@@ -5,7 +5,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 using ManttoProductosAlternos.DBAccess;
-using ManttoProductosAlternos.DTO;
+using ManttoProductosAlternos.Dto;
 using ScjnUtilities;
 
 namespace ManttoProductosAlternos.Model

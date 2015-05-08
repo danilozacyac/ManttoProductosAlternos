@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using ManttoProductosAlternos.Controller;
+using ManttoProductosAlternos.Dto;
 using ManttoProductosAlternos.Model;
 using ManttoProductosAlternos.Reportes;
 using ScjnUtilities;
@@ -26,16 +30,15 @@ namespace ManttoProductosAlternos
         //List<TesisDTO> tesisRelacionadas = null;
         //TreeViewItem nodoSelect = null;
 
-        
+        //List<TreeViewItem> arbolTemas;// = new List<TreeViewItem>();
 
         AgrManttoController controller;
 
-        public AgrMantto()
+        public AgrMantto(ObservableCollection<Temas> arbolTemas)
         {
             InitializeComponent();
             
-
-            controller = new AgrManttoController(this);
+            controller = new AgrManttoController(this,arbolTemas);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -43,10 +46,12 @@ namespace ManttoProductosAlternos
             AccesoModel model = new AccesoModel();
             model.ObtenerPermisos();
 
+            
             controller.SetEnableThemes();
+            controller.WindowLoad(1);
         }
 
-        private void TvAgrariaSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void TvAgrariaSelectedItemChanged(object sender, SelectionChangedEventArgs e)
         {
             controller.CambioTemaSeleccionado();
         }
@@ -73,18 +78,8 @@ namespace ManttoProductosAlternos
 
         private void BtnGeneraArbolClick(object sender, RoutedEventArgs e)
         {
-            AgrRelacionesMes mes = new AgrRelacionesMes(tvAgraria);
-            mes.GeneraWord();
-        }
-
-        private void BtnBuscarClick(object sender, RoutedEventArgs e)
-        {
-            controller.Buscar(txtBuscar.Text);
-        }
-
-        private void BtnRestableceerClick(object sender, RoutedEventArgs e)
-        {
-            controller.Restablecer();
+            //AgrRelacionesMes mes = new AgrRelacionesMes(tvAgraria);
+            //mes.GeneraWord();
         }
 
         private void BtnSalirClick(object sender, RoutedEventArgs e)
@@ -173,6 +168,11 @@ namespace ManttoProductosAlternos
         private void DgTesisSelectionChanged(object sender, SelectionChangeEventArgs e)
         {
             controller.RegistroActivado(sender);
+        }
+
+        private void SearchTextBox_Search(object sender, RoutedEventArgs e)
+        {
+            controller.Searcher(((TextBox)sender).Text);
         }
 
         

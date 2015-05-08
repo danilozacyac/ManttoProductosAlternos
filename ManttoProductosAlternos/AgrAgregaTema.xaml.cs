@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using ManttoProductosAlternos.DTO;
+using ManttoProductosAlternos.Dto;
 using ManttoProductosAlternos.Model;
 using ManttoProductosAlternos.Utils;
 using System.Windows.Media;
 using ScjnUtilities;
+using System.Collections.ObjectModel;
 
 namespace ManttoProductosAlternos
 {
@@ -14,57 +15,100 @@ namespace ManttoProductosAlternos
     /// </summary>
     public partial class AgrAgregaTema : Window
     {
-        private int nivelPadre = 0;
-        private int idPadre = 0;
+        private const int WinHeightAgregaTema = 180;
+        private const int WinHeightAgregaTemaLargo = 452;
 
+        //private int nivelPadre = 0;
+        //private int idPadre = 0;
 
-        private Temas temaActualizar = null;
+        /// <summary>
+        /// Es el tema que se va a agregar
+        /// </summary>
+        private Temas temaActual;
 
-        private int idActNuevoPadre = 0;
-        private int nivelActNuevoPadre = 0;
-        private int idProducto = 0;
+        /// <summary>
+        /// Cuando se agrega un tema nuevo el tema padre es aquel que se selecciono en la ventana previa
+        /// y tendrá como hijo al nuevo tema, a menos que este sea generado como cabeza de estructura
+        /// </summary>
+        private Temas temaPadre;
 
-        public AgrAgregaTema(int idPadre, int nivelPadre,int idProducto) 
+        /// <summary>
+        /// En caso de que el tema que se esta actualizando vaya a cambiar de nivel
+        /// el tema seleccionado será su nuevo tema padre
+        /// </summary>
+        private Temas temaSeleccionado;
+
+        private ObservableCollection<Temas> arbolTemas;
+
+        private bool isUpdating = false;
+
+        //private int idActNuevoPadre = 0;
+        //private int nivelActNuevoPadre = 0;
+        //private int idProducto = 0;
+
+        //public AgrAgregaTema(int idPadre, int nivelPadre,int idProducto) 
+        //{
+        //    InitializeComponent();
+
+        //    this.idPadre = idPadre;
+        //    this.nivelPadre = nivelPadre;
+        //    this.idProducto = idProducto;
+        //}
+
+        public AgrAgregaTema(Temas temaPadre, ObservableCollection<Temas> arbolTemas)
         {
             InitializeComponent();
+            this.temaPadre = temaPadre;
+            this.arbolTemas = arbolTemas;
 
-            this.idPadre = idPadre;
-            this.nivelPadre = nivelPadre;
-            this.idProducto = idProducto;
+            this.temaActual = new Temas();
+            temaActual.IdProducto = temaPadre.IdProducto;
         }
 
-        public AgrAgregaTema(int idPadre, int nivelPadre, Temas temaActualizar,int idProducto) 
+        public AgrAgregaTema(Temas temaPorActualizar, ObservableCollection<Temas> arbolTemas,bool isUpdating)
         {
             InitializeComponent();
+            this.temaActual = temaPorActualizar;
+            this.arbolTemas = arbolTemas;
+            this.isUpdating = isUpdating;
 
-            
-            this.idPadre = idPadre;
-            this.nivelPadre = nivelPadre;
-            this.temaActualizar = temaActualizar;
-            this.idProducto = idProducto;
-            
             txtTema.Text = temaActualizar.Tema;
             btnAgregar.Content = "Actualizar";
             this.Title = "Actualizar Tema";
         }
 
+        //public AgrAgregaTema(int idPadre, int nivelPadre, Temas temaActualizar,int idProducto) 
+        //{
+        //    InitializeComponent();
+
+            
+        //    this.idPadre = idPadre;
+        //    this.nivelPadre = nivelPadre;
+        //    this.temaActualizar = temaActualizar;
+        //    this.idProducto = idProducto;
+            
+        //    txtTema.Text = temaActualizar.Tema;
+        //    btnAgregar.Content = "Actualizar";
+        //    this.Title = "Actualizar Tema";
+        //}
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             tvAgraria.Items.Clear();
-            if (temaActualizar  == null)
+            if (!isUpdating)
             {
-                this.Height = VarGlobales.WinHeightAgregaTema;
+                this.Height = WinHeightAgregaTema;
                 chkNodoPadre.Visibility = Visibility.Visible;
             }
-            else if (temaActualizar != null)
+            else
             {
-                this.Height = VarGlobales.WinHeightAgregaTema;
+                this.Height = WinHeightAgregaTema;
                 chkCambiarPosicion.Visibility = Visibility.Visible;
                 chkNodoPadre.Visibility = Visibility.Hidden;
                 tvAgraria.Visibility = Visibility.Hidden;
             }
 
-            if (idProducto != 1)
+            if (temaActual.IdProducto != 1)
             {
                 chkNodoPadre.Visibility = Visibility.Hidden;
                 chkNodoPadre.IsChecked = true;
@@ -74,57 +118,56 @@ namespace ManttoProductosAlternos
 
         private void BtnAgregarClick(object sender, RoutedEventArgs e)
         {
-            Temas tema = new Temas();
-            tema.Tema = (idProducto == 1) ? txtTema.Text.ToUpper() : txtTema.Text;
-            tema.TemaStr = StringUtilities.PrepareToAlphabeticalOrder(txtTema.Text); 
-            tema.Orden = 0;
-            tema.LInicial = Convert.ToChar(txtTema.Text.Substring(0, 1).ToUpper());
-            tema.IdProducto = idProducto;
+            TemasModel temasModel = new TemasModel(temaActual.IdProducto);
 
-            TemasModel temasModel = new TemasModel(idProducto);
-
-            if (temaActualizar == null) //Tema Nuevo
+            if (isUpdating)  //Actualización de temas
             {
-                if (chkNodoPadre.IsChecked == true)
-                {
-                    tema.Nivel = 0;
-                    tema.Padre = 0;
-                }
-                else
-                {
-                    tema.Nivel = nivelPadre + 1;
-                    tema.Padre = idPadre;
-                }
-                temasModel.InsertaTemaNuevo(tema);
-            }
-            else 
-            {
-                tema.IdTema = temaActualizar.IdTema;
                 if (chkCambiarPosicion.IsChecked == true && chkNodoPadre.IsChecked == true)
                 {
-                    tema.Nivel = 0;
-                    tema.Padre = 0;
+                    temaActual.Nivel = 0;
+                    temaActual.Padre = 0;
                 }
                 else if (chkCambiarPosicion.IsChecked == true && chkNodoPadre.IsChecked == false)
                 {
                     if (tvAgraria.SelectedItem != null)
                     {
-                        tema.Nivel = nivelActNuevoPadre + 1;
-                        tema.Padre = idActNuevoPadre;
+                        temaActual.Nivel = temaSeleccionado.Nivel + 1;
+                        temaActual.Padre = temaSeleccionado.IdTema;
                     }
                     else
                     {
-                        MessageBox.Show("Si la casilla de cambio de posición se encuentra activa debe seleccionar un tema", "Atención : ", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show("Si la casilla de cambio de posición se encuentra activa debe seleccionar un tema",
+                            "Atención : ", MessageBoxButton.OK, MessageBoxImage.Information);
                         return;
                     }
                 }
-                else if (chkCambiarPosicion.IsChecked == false)
-                {
-                    tema.Nivel = temaActualizar.Nivel;
-                    tema.Padre = temaActualizar.Padre;
-                }
-                temasModel.ActualizaTema(tema);
+
+                temasModel.ActualizaTema(temaActual);
             }
+            else             //Tema nuevo
+            {
+                temaActual.Tema = (temaActual.IdProducto == 1) ? txtTema.Text.ToUpper() : txtTema.Text;
+                temaActual.TemaStr = StringUtilities.PrepareToAlphabeticalOrder(txtTema.Text);
+                temaActual.Orden = 0;
+                temaActual.LInicial = Convert.ToChar(txtTema.Text.Substring(0, 1).ToUpper());
+
+                if (chkNodoPadre.IsChecked == true)
+                {
+                    temaActual.Nivel = 0;
+                    temaActual.Padre = 0;
+                }
+                else
+                {
+                    temaActual.Nivel = temaPadre.Nivel + 1;
+                    temaActual.Padre = temaPadre.IdTema;
+                }
+                temasModel.InsertaTemaNuevo(tema);
+            }
+
+
+            
+
+            
             tema.IdTema = VarGlobales.idSiguiente;
             VarGlobales.temaNuevo = tema;
 
@@ -150,7 +193,7 @@ namespace ManttoProductosAlternos
 
         private void ChkNodoPadreChecked(object sender, RoutedEventArgs e)
         {
-            this.Height = VarGlobales.WinHeightAgregaTema;
+            this.Height = WinHeightAgregaTema;
         }
 
         private void ChkNodoPadreUnchecked(object sender, RoutedEventArgs e)
@@ -159,7 +202,7 @@ namespace ManttoProductosAlternos
             {
                 if (tvAgraria.Items.Count == 0)
                 {
-                    this.Height = VarGlobales.WinHeightAgregaTemaLargo;
+                    this.Height = WinHeightAgregaTemaLargo;
                     GeneraArbol gArbol = new GeneraArbol();
 
                     foreach (TreeViewItem tema in gArbol.GeneraAgraria(0,idProducto))
@@ -169,16 +212,14 @@ namespace ManttoProductosAlternos
                 }
                 else
                 {
-                    this.Height = VarGlobales.WinHeightAgregaTemaLargo;
+                    this.Height = WinHeightAgregaTemaLargo;
                 }
             }
         }
 
         private void TvAgrariaSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            TreeViewItem item = (TreeViewItem)tvAgraria.SelectedItem;
-            idActNuevoPadre = ((Temas)item.Tag).IdTema;
-            nivelActNuevoPadre = ((Temas)item.Tag).Nivel;
+            temaSeleccionado = tvAgraria.SelectedItem as Temas;
         }
 
         private void TxtTemaTextChanged(object sender, TextChangedEventArgs e)

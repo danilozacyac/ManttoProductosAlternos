@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using ManttoProductosAlternos.DTO;
+using ManttoProductosAlternos.Dto;
 using System.Data.SqlClient;
 using ManttoProductosAlternos.DBAccess;
 using System.Data;

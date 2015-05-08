@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using ManttoProductosAlternos.Model;
 
-namespace ManttoProductosAlternos.DTO
+namespace ManttoProductosAlternos.Dto
 {
     public class Temas : INotifyPropertyChanged
     {
@@ -12,23 +12,6 @@ namespace ManttoProductosAlternos.DTO
 
         bool isExpanded;
         bool isSelected;
-
-
-        private bool isChecked;
-
-        
-
-        public bool IsChecked
-        {
-            get
-            {
-                return isChecked;
-            }
-            set
-            {
-                isChecked = value;
-            }
-        }
 
         private int idTema;
 
@@ -148,6 +131,21 @@ namespace ManttoProductosAlternos.DTO
             }
         }
 
+        private int foreground = 0;
+        public int Foreground
+        {
+            get
+            {
+                return this.foreground;
+            }
+            set
+            {
+                this.foreground = value;
+                this.OnPropertyChanged("Foreground");
+            }
+        }
+
+
         /// <summary>
         /// Permite diferenciar a que "tematico" es al que quiero acceder
         /// </summary>
@@ -251,20 +249,13 @@ namespace ManttoProductosAlternos.DTO
             }
             set
             {
+
                 if (value != isExpanded)
                 {
                     isExpanded = value;
                     this.OnPropertyChanged("IsExpanded");
                 }
-                // Expand all the way up to the root.
-                if (isExpanded && parent != null)
-                    parent.IsExpanded = true;
-                // Lazy load the child items, if necessary.
-                if (this.HasDummyChild)
-                {
-                    this.SubTemas.Remove(dummyChild);
-                    this.LoadChildren();
-                }
+               
             }
         }
 

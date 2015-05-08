@@ -1,13 +1,18 @@
 ﻿<Window x:Class="ManttoProductosAlternos.AgrMantto"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:UIControls="clr-namespace:UIControls;assembly=UIControls"
         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        xmlns:converter="clr-namespace:ManttoProductosAlternos.Converter"
         Title="Mantenimiento"
         Width="1161"
         Height="602"
         Icon="Resources/Libros.ico"
         Loaded="Window_Loaded"
         WindowState="Maximized">
+    <Window.Resources>
+        <converter:ForegroundConverter x:Key="foreground"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="150" />
@@ -21,60 +26,55 @@
             </Grid.ColumnDefinitions>
 
             <Grid>
-                <Grid.RowDefinitions>
+               
+                <UIControls:SearchTextBox Width="240" x:Name="BuscadorTxt"
+                                          Margin="12,9,0,0"
+                                          HorizontalAlignment="Left"
+                                          VerticalAlignment="Top"
+                                          LabelText="Buscar"
+                                          Search="SearchTextBox_Search"
+                                          TextWrapping="Wrap" />
 
-                    <RowDefinition Height="65" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-
-                <TextBox x:Name="txtBuscar"
-                         Grid.Row="0"
-                         Width="238"
-                         Height="23"
-                         Margin="12,36,0,0"
-                         HorizontalAlignment="Left"
-                         VerticalAlignment="Top" />
-                <Button x:Name="btnBuscar"
-                        Grid.Row="0"
-                        Width="43"
-                        Height="37"
-                        Margin="256,25,0,0"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        Click="BtnBuscarClick">
-                    <Image Width="38"
-                           Height="32"
-                           Source="Resources/buscar.png"
-                           ToolTip="Buscar texto en el arbol" />
-                </Button>
-                <Button x:Name="btnRestableceer"
-                        Grid.Row="0"
-                        Width="43"
-                        Height="37"
-                        Margin="303,25,0,0"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        Click="BtnRestableceerClick">
-                    <Image Width="38"
-                           Height="32"
-                           Source="Resources/back.png"
-                           ToolTip="Buscar texto en el arbol" />
-                </Button>
                 <ProgressBar x:Name="pbBusqueda"
                              Grid.Row="0"
-                             Width="238"
+                             Width="240"
                              Height="12"
-                             Margin="12,21,0,0"
+                             Margin="12,30,0,0"
                              HorizontalAlignment="Left"
                              VerticalAlignment="Top"
                              Visibility="Hidden" />
 
-                <TreeView x:Name="tvAgraria"
-                          Grid.Row="1"
-                          Margin="10,0,10,15"
-                          HorizontalAlignment="Stretch"
-                          VerticalAlignment="Stretch"
-                          SelectedItemChanged="TvAgrariaSelectedItemChanged" />
+                
+                <telerik:RadTreeView x:Name="tvAgraria"
+                                     Grid.Row="1"
+                          Margin="10,50,10,15"
+                                     HorizontalAlignment="Stretch"
+                                     VerticalAlignment="Stretch"
+                                     ItemsSource="{Binding}"
+                                     SelectionChanged="TvAgrariaSelectedItemChanged" Grid.RowSpan="2">
+                    <telerik:RadTreeView.ItemContainerStyle>
+
+                        <Style TargetType="{x:Type telerik:RadTreeViewItem}">
+                            <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                            <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                            <Setter Property="FontWeight" Value="Normal" />
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </telerik:RadTreeView.ItemContainerStyle>
+                    <telerik:RadTreeView.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding SubTemas}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock VerticalAlignment="Center" Text="{Binding Tema}" Foreground="{Binding Foreground,Converter={StaticResource foreground}}"/>
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                    </telerik:RadTreeView.ItemTemplate>
+                </telerik:RadTreeView>
+
+
 
 
             </Grid>
@@ -173,7 +173,8 @@
                                      AutoGenerateColumns="False"
                                      IsFilteringAllowed="False"
                                      ItemsSource="{Binding}"
-                                     ShowGroupPanel="False" SelectionChanged="DgTesisSelectionChanged">
+                                     SelectionChanged="DgTesisSelectionChanged"
+                                     ShowGroupPanel="False">
                     <telerik:RadGridView.Columns>
                         <telerik:GridViewDataColumn Width="60"
                                                     DataMemberBinding="{Binding Ius}"
@@ -187,98 +188,43 @@
                     </telerik:RadGridView.Columns>
                 </telerik:RadGridView>
 
-                <!--
-                    <igDP:XamDataGrid x:Name="dgTesis"
-                    Grid.Row="1"
-                    Margin="15,15,15,15"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    DataSource="{Binding}"
-                    GroupByAreaLocation="None"
-                    RecordActivated="DgTesisRecordActivated1">
-                    <igDP:XamDataGrid.FieldLayouts>
-                    
-                    <igDP:FieldLayout>
-                    <igDP:Field Name="Ius"
-                    Width="60"
-                    Label=" IUS " />
-                    <igDP:Field Name="Rubro"
-                    Width="2*"
-                    Height="80"
-                    Label="Rubro" />
-                    <igDP:Field Name="Texto"
-                    Width="0"
-                    Height="80"
-                    Label="Texto"
-                    Visibility="Collapsed" />
-                    <igDP:Field Name="Precedente"
-                    Width="0"
-                    Height="80"
-                    Label="Precedente"
-                    Visibility="Collapsed" />
-                    <igDP:Field Name="LocAbr"
-                    Width="*"
-                    Height="80"
-                    Label="Local" />
-                    <igDP:Field Name="LocExpr"
-                    Width="0"
-                    Height="80"
-                    Label="LocalExpr"
-                    Visibility="Collapsed" />
-                    <igDP:Field Name="Volumen"
-                    Width="0"
-                    Height="80"
-                    Label="Volumen"
-                    Visibility="Collapsed" />
-                    <igDP:Field Name="Parte"
-                    Width="0"
-                    Height="80"
-                    Label="Parte"
-                    Visibility="Collapsed" />
-                    </igDP:FieldLayout>
-                    </igDP:XamDataGrid.FieldLayouts>
-                    
-                    </igDP:XamDataGrid>
-                -->
-
-
             </Grid>
 
         </Grid>
 
 
-        <telerik:RadRibbonView Name="Ribbon"
+        <telerik:RadRibbonView x:Name="Ribbon"
                                HorizontalAlignment="Stretch"
                                VerticalAlignment="Top">
             <telerik:RadRibbonView.ApplicationMenu>
                 <telerik:ApplicationMenu>
-                    <telerik:RadRibbonButton Name="RBtnAgraria"
+                    <telerik:RadRibbonButton x:Name="RBtnAgraria"
                                              Click="ButtonMaterias_Click"
                                              IsEnabled="False"
                                              LargeImage="Resources/campo.png"
                                              Text="J. en Materia Agraria" />
-                    <telerik:RadRibbonButton Name="RBtnSuspension"
+                    <telerik:RadRibbonButton x:Name="RBtnSuspension"
                                              Click="ButtonMaterias_Click"
                                              IsEnabled="False"
                                              LargeImage="Resources/suspension.png"
                                              Text="S. del Acto Reclamado" />
-                    <telerik:RadRibbonButton Name="RBtnImprocedencia"
+                    <telerik:RadRibbonButton x:Name="RBtnImprocedencia"
                                              Click="ButtonMaterias_Click"
                                              IsEnabled="False"
                                              LargeImage="Resources/impAmparo.jpeg"
                                              Text="I. del Juicio de Amparo" />
-                    <telerik:RadRibbonButton Name="RBtnScjn"
+                    <telerik:RadRibbonButton x:Name="RBtnScjn"
                                              Click="ButtonMaterias_Click"
                                              IsEnabled="False"
                                              LargeImage="Resources/scjn.png"
                                              Text="Facultades de la SCJN" />
-                    <telerik:RadRibbonButton Name="RBtnElectoral"
+                    <telerik:RadRibbonButton x:Name="RBtnElectoral"
                                              Click="ButtonMaterias_Click"
                                              IsEnabled="False"
                                              LargeImage="Resources/electoral.jpg"
                                              Text="Electoral" />
                     <telerik:Separator />
-                    <telerik:RadRibbonButton Name="RBtnPermisos"
+                    <telerik:RadRibbonButton x:Name="RBtnPermisos"
                                              IsEnabled="False"
                                              LargeImage="Resources/keys.png"
                                              Text="Permisos" />
@@ -288,39 +234,51 @@
             </telerik:RadRibbonView.ApplicationMenu>
             <telerik:RadRibbonTab Header="Tesis">
                 <telerik:RadRibbonGroup Header="Temas">
-                    <telerik:RadRibbonButton Name="BtnAddTema"
+                    <telerik:RadRibbonButton x:Name="BtnAddTema"
                                              Click="RadRibbonButton_Click"
-                                             Content="Agregar Tema"
-                                             LargeImage="Resources/add.png"
-                                             Size="Large" />
-                    <telerik:RadRibbonButton Name="BtnUpdTema"
+                                             LargeImage="Resources/1425495838_add-notes.png"
+                                             Size="Large" >
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Agregar" HorizontalAlignment="Center"/>
+                            <TextBlock Text="tema" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </telerik:RadRibbonButton>
+                    <telerik:RadRibbonButton x:Name="BtnUpdTema"
                                              Click="RadRibbonButton_Click"
-                                             Content="Actualizar Tema"
-                                             LargeImage="Resources/update_72.png"
-                                             Size="Large" />
-                    <telerik:RadRibbonButton Name="BtnDelTema"
+                                             LargeImage="Resources/1425495821_edit-notes.png"
+                                             Size="Large" >
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Actualizar" HorizontalAlignment="Center"/>
+                            <TextBlock Text="tema" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </telerik:RadRibbonButton>
+                    <telerik:RadRibbonButton x:Name="BtnDelTema"
                                              Click="RadRibbonButton_Click"
-                                             Content="Eliminar Tema"
-                                             LargeImage="Resources/del.png"
-                                             Size="Large" />
+                                             LargeImage="Resources/1425495925_delete-notes.png"
+                                             Size="Large" >
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Eliminar" HorizontalAlignment="Center"/>
+                            <TextBlock Text="tema" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </telerik:RadRibbonButton>
                 </telerik:RadRibbonGroup>
                 <telerik:RadRibbonGroup Header="Relaciones">
-                    <telerik:RadRibbonButton Name="BtnCopiar"
+                    <telerik:RadRibbonButton x:Name="BtnCopiar"
                                              Click="RadRibbonButton_Click"
                                              Content="Copiar"
                                              LargeImage="Resources/copy_64.png"
                                              Size="Large" />
-                    <telerik:RadRibbonButton Name="BtnCortar"
+                    <telerik:RadRibbonButton x:Name="BtnCortar"
                                              Click="RadRibbonButton_Click"
                                              Content="Cortar"
                                              LargeImage="Resources/cut_64.png"
                                              Size="Large" />
-                    <telerik:RadRibbonButton Name="BtnPegar"
+                    <telerik:RadRibbonButton x:Name="BtnPegar"
                                              Click="RadRibbonButton_Click"
                                              Content="Pegar"
                                              LargeImage="Resources/paste_64.png"
                                              Size="Large" />
-                    <telerik:RadRibbonButton Name="BtnDelOne"
+                    <telerik:RadRibbonButton x:Name="BtnDelOne"
                                              Click="RadRibbonButton_Click"
                                              LargeImage="Resources/delTesis_64.png"
                                              Size="Large">
@@ -329,7 +287,7 @@
                             <TextBlock Text="Seleccionada" />
                         </StackPanel>
                     </telerik:RadRibbonButton>
-                    <telerik:RadRibbonButton Name="BtnDelAll"
+                    <telerik:RadRibbonButton x:Name="BtnDelAll"
                                              Click="RadRibbonButton_Click"
                                              LargeImage="Resources/deleteAll.png"
                                              Size="Large">
@@ -338,7 +296,7 @@
                             <TextBlock Text="tesis relacionadas" />
                         </StackPanel>
                     </telerik:RadRibbonButton>
-                    <telerik:RadRibbonButton Name="BtnBuscar"
+                    <telerik:RadRibbonButton x:Name="BtnBuscar"
                                              Click="RadRibbonButton_Click"
                                              Content="Buscar Duplicadas"
                                              LargeImage="Resources/viewTesis_64.png"
@@ -346,12 +304,12 @@
 
                 </telerik:RadRibbonGroup>
                 <telerik:RadRibbonGroup>
-                    <telerik:RadRibbonButton Name="BtnListadoTesis"
+                    <telerik:RadRibbonButton x:Name="BtnListadoTesis"
                                              Click="RadRibbonButton_Click"
                                              Content="Listado de Tesis"
                                              LargeImage="Resources/listado.png"
                                              Size="Large" />
-                    <telerik:RadRibbonButton Name="BtnOrdenar"
+                    <telerik:RadRibbonButton x:Name="BtnOrdenar"
                                              Click="RadRibbonButton_Click"
                                              Content="Ordernar tesis"
                                              LargeImage="Resources/number_128.png"

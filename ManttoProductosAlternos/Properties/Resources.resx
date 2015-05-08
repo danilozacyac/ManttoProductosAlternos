@@ -184,4 +184,19 @@
   <data name="viewTesis_64" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\viewTesis_64.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Books_128" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Books_128.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Books_512" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Books_512.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_1425495821_edit_notes" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\1425495821_edit-notes.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_1425495838_add_notes" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\1425495838_add-notes.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_1425495925_delete_notes" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\1425495925_delete-notes.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
