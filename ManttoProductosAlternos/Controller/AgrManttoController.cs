@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
@@ -11,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using ManttoProductosAlternos.Dto;
 using ManttoProductosAlternos.Model;
+using ManttoProductosAlternos.Singletons;
 using ManttoProductosAlternos.Utils;
 using ScjnUtilities;
 using Telerik.Windows.Controls;
@@ -22,7 +24,7 @@ namespace ManttoProductosAlternos.Controller
         ObservableCollection<Temas> arbolTemas; //= new List<TreeViewItem>();
         private Temas temaSeleccionado = null;
         private TesisDTO tesisSeleccionada = null;
-        private int idProducto = 0;
+        private int idMateria = 0;
         private bool expande = true;
         private int find = 0;
         private List<string> busqueda = new List<string>();
@@ -40,26 +42,18 @@ namespace ManttoProductosAlternos.Controller
         {
             this.main = main;
             this.arbolTemas = arbolTemas;
+
+            worker.DoWork += this.WorkerDoWork;
+            worker.RunWorkerCompleted += WorkerRunWorkerCompleted;
         }
 
-        public void WindowLoad(int idProducto)
+        public void WindowLoad(int idMateria)
         {
-            this.idProducto = idProducto;
-            main.Ribbon.ApplicationName = VarGlobales.TituloVentanas(idProducto);
+            this.idMateria = idMateria;
 
-            main.tvAgraria.Items.Clear();
+            this.LaunchBusyIndicator();
 
-            GeneraArbol arbol = new GeneraArbol();
-            //arbolTemas = arbol.GeneraAgraria(0, idProducto);
-
-            //foreach (TreeViewItem tema in arbolTemas)
-            //{
-            //    main.tvAgraria.Items.Add(tema);
-            //}
-
-            main.tvAgraria.DataContext = arbolTemas;
-
-            bool enable = idProducto == 4 ? false : true;
+            bool enable = idMateria == 4 ? false : true;
 
             main.BuscadorTxt.IsEnabled = enable;
             main.BtnAddTema.IsEnabled = enable;
@@ -107,7 +101,7 @@ namespace ManttoProductosAlternos.Controller
                 //nodoSelect = (TreeViewItem)main.tvAgraria.SelectedItem;
                 temaSeleccionado = main.tvAgraria.SelectedItem as Temas;
 
-                tesisRelacionadas = new TesisModel(idProducto).GetTesisRelacionadas(temaSeleccionado.IdTema);
+                tesisRelacionadas = new TesisModel(idMateria).GetTesisRelacionadas(temaSeleccionado.IdTema);
                 tesisRelacionadas = tesisRelacionadas.Distinct().ToList();
                 main.dgTesis.DataContext = tesisRelacionadas;
 
@@ -138,7 +132,7 @@ namespace ManttoProductosAlternos.Controller
 
                 if (!existeRelacion)
                 {
-                    TesisModel tesisModel = new TesisModel(idProducto);
+                    TesisModel tesisModel = new TesisModel(idMateria);
                     tesisModel.InsertaTesis(Convert.ToInt32(registroIus), temaSeleccionado.IdTema);
                     CambioTemaSeleccionado();
                 }
@@ -152,7 +146,7 @@ namespace ManttoProductosAlternos.Controller
                 MessageBox.Show("Seleccione el tema con el cual relacionara la tesis");
             }
 
-            if (idProducto != 1)
+            if (idMateria != 1)
                 main.txtIUS.Text = "";
         }
 
@@ -332,7 +326,7 @@ namespace ManttoProductosAlternos.Controller
 
         public void AgregarTema()
         {
-            if (idProducto == 1)
+            if (idMateria == 1)
             {
                 if (temaSeleccionado != null)
                 {
@@ -364,7 +358,7 @@ namespace ManttoProductosAlternos.Controller
             else
             {
                 //VarGlobales.temaNuevo = null;
-                AgrAgregaTema agr = new AgrAgregaTema(0, 0, idProducto);
+                AgrAgregaTema agr = new AgrAgregaTema(temaSeleccionado,arbolTemas);
                 agr.ShowDialog();
 
                 //if (VarGlobales.temaNuevo != null)
@@ -406,7 +400,7 @@ namespace ManttoProductosAlternos.Controller
 
                 if (result == MessageBoxResult.Yes)
                 {
-                    TemasModel temasModel = new TemasModel(idProducto);
+                    TemasModel temasModel = new TemasModel(idMateria);
                     temasModel.EliminaTema(temaSeleccionado.IdTema);
                     main.tvAgraria.Items.Remove(nodoSelect);
                 }
@@ -442,7 +436,7 @@ namespace ManttoProductosAlternos.Controller
         public void PegarRelaciones()
         {
             MessageBoxResult result;
-            TesisModel model = new TesisModel(idProducto);
+            TesisModel model = new TesisModel(idMateria);
 
             if (temaCopia != null)
             {
@@ -477,7 +471,7 @@ namespace ManttoProductosAlternos.Controller
         {
             if (tesisSeleccionada != null && temaSeleccionado != null)
             {
-                TesisModel tesisModel = new TesisModel(idProducto);
+                TesisModel tesisModel = new TesisModel(idMateria);
                 tesisModel.EliminaRelacion(tesisSeleccionada.Ius, temaSeleccionado.IdTema);
                 CambioTemaSeleccionado();
             }
@@ -491,7 +485,7 @@ namespace ManttoProductosAlternos.Controller
         {
             MessageBoxResult result = MessageBox.Show("¿Estas segur@ que deseas eliminar todas las tesis relacionadas al tema \"" +
                                                       temaSeleccionado.Tema + "\" ?", "ATENCIÓN:", MessageBoxButton.YesNo, MessageBoxImage.Question);
-            TesisModel model = new TesisModel(idProducto);
+            TesisModel model = new TesisModel(idMateria);
 
             if (result == MessageBoxResult.Yes)
             {
@@ -504,13 +498,13 @@ namespace ManttoProductosAlternos.Controller
             TemasModel model = new TemasModel();
 
             string str = ConfigurationManager.AppSettings.Get("RutaTxtErrorFile");
-            List<Temas> temas = model.GetTemasForReview(idProducto);
+            List<Temas> temas = model.GetTemasForReview(idMateria);
 
             ObservableCollection<List<Temas>> repetidas = new ObservableCollection<List<Temas>>();
 
             foreach (Temas tema in temas)
             {
-                model.SearchForDuplicates(repetidas, tema.TemaStr, idProducto);
+                model.SearchForDuplicates(repetidas, tema.TemaStr, idMateria);
             }
 
             foreach (List<Temas> lista in repetidas)
@@ -547,16 +541,54 @@ namespace ManttoProductosAlternos.Controller
 
         public void ShowListaTesis()
         {
-            frmListaTesis tesis = new frmListaTesis(idProducto);
+            frmListaTesis tesis = new frmListaTesis(idMateria);
             tesis.ShowDialog();
         }
 
         public void OrdenaTesis()
         {
-            TesisModel tesisModel = new TesisModel(idProducto);
+            TesisModel tesisModel = new TesisModel(idMateria);
             tesisModel.SetConsecIndx();
         }
         
+        #endregion
+
+
+        #region Background Worker
+
+        private BackgroundWorker worker = new BackgroundWorker();
+        private void WorkerDoWork(object sender, DoWorkEventArgs e)
+        {
+
+            TemasSingletons.Temas(idMateria);
+            //String[] acceso = AccesoUsuarioModel.Programas.Split(',');
+
+
+            //if (AccesoUsuarioModel.Grupo == 0)
+            //    arbolTemas = TemasSingletons.Temas(1);
+            //else
+            //    arbolTemas = TemasSingletons.Temas(Convert.ToInt16(acceso[0]));
+        }
+
+        void WorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            main.BusyIndicator.IsBusy = false;
+
+            main.tvAgraria.DataContext = TemasSingletons.Temas(idMateria);
+            main.Ribbon.ApplicationName = VarGlobales.TituloVentanas(idMateria);
+            
+        }
+
+        private void LaunchBusyIndicator()
+        {
+            if (!worker.IsBusy)
+            {
+                main.BusyIndicator.IsBusy = true;
+                worker.RunWorkerAsync();
+
+            }
+        }
+
         #endregion
     }
 }

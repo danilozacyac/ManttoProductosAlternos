@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using ManttoProductosAlternos.Dto;
 using ManttoProductosAlternos.Model;
+using ManttoProductosAlternos.Singletons;
 using Telerik.Windows.Controls;
 
 namespace ManttoProductosAlternos
@@ -71,9 +72,9 @@ namespace ManttoProductosAlternos
 
 
             if (AccesoUsuarioModel.Grupo == 0)
-                arbolTemas = new TemasModel(1).GetTemas(0);
+                arbolTemas = TemasSingletons.Temas(1);
             else
-                arbolTemas = new TemasModel(Convert.ToInt16(acceso[0])).GetTemas(0);
+                arbolTemas = TemasSingletons.Temas(Convert.ToInt16(acceso[0]));
         }
 
         void WorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

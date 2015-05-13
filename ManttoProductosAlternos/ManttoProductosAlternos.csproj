@@ -206,6 +206,7 @@
     </Compile>
     <Compile Include="Migrador\DerechosF\Clasificacion.cs" />
     <Compile Include="Migrador\DerechosF\ClasificacionModel.cs" />
+    <Compile Include="Migrador\DerechosF\Relaciones.cs" />
     <Compile Include="Model\AccesoModel.cs" />
     <Compile Include="Model\AccesoUsuarioModel.cs" />
     <Compile Include="Model\BitacoraModel.cs" />
@@ -221,6 +222,7 @@
     <Compile Include="SelDocument.xaml.cs">
       <DependentUpon>SelDocument.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Singletons\TemasSingletons.cs" />
     <Compile Include="Utils\VarGlobales.cs" />
     <Page Include="AgrAgregaTema.xaml">
       <SubType>Designer</SubType>

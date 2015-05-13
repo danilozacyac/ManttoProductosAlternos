@@ -7,6 +7,7 @@ using ManttoProductosAlternos.Utils;
 using System.Windows.Media;
 using ScjnUtilities;
 using System.Collections.ObjectModel;
+using ManttoProductosAlternos.Singletons;
 
 namespace ManttoProductosAlternos
 {
@@ -215,26 +216,29 @@ namespace ManttoProductosAlternos
 
         private void ChkNodoPadreUnchecked(object sender, RoutedEventArgs e)
         {
-            if (temaActualizar != null)
+            if (isUpdating)
             {
-                if (tvAgraria.Items.Count == 0)
-                {
-                    this.Height = WinHeightAgregaTemaLargo;
-                    GeneraArbol gArbol = new GeneraArbol();
 
-                    foreach (TreeViewItem tema in gArbol.GeneraAgraria(0,idProducto))
-                    {
-                        tvAgraria.Items.Add(tema);
-                    }
-                }
-                else
-                {
-                    this.Height = WinHeightAgregaTemaLargo;
-                }
+                this.Height = WinHeightAgregaTemaLargo;
+                tvAgraria.DataContext = TemasSingletons.Temas(temaActual.IdProducto);
+                //if (tvAgraria.Items.Count == 0)
+                //{
+                //    this.Height = WinHeightAgregaTemaLargo;
+                //    GeneraArbol gArbol = new GeneraArbol();
+
+                //    foreach (TreeViewItem tema in gArbol.GeneraAgraria(0,idProducto))
+                //    {
+                //        tvAgraria.Items.Add(tema);
+                //    }
+                //}
+                //else
+                //{
+                //    this.Height = WinHeightAgregaTemaLargo;
+                //}
             }
         }
 
-        private void TvAgrariaSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void TvAgrariaSelectedItemChanged(object sender, SelectionChangedEventArgs e)
         {
             temaSeleccionado = tvAgraria.SelectedItem as Temas;
         }

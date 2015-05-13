@@ -9,6 +9,8 @@ using ManttoProductosAlternos.Controller;
 using ManttoProductosAlternos.Dto;
 using ManttoProductosAlternos.Model;
 using ManttoProductosAlternos.Reportes;
+using ManttoProductosAlternos.Singletons;
+using ManttoProductosAlternos.Utils;
 using ScjnUtilities;
 using Telerik.Windows.Controls;
 
@@ -30,15 +32,15 @@ namespace ManttoProductosAlternos
         //List<TesisDTO> tesisRelacionadas = null;
         //TreeViewItem nodoSelect = null;
 
-        //List<TreeViewItem> arbolTemas;// = new List<TreeViewItem>();
+        ObservableCollection<Temas> arbolTemas;// = new List<TreeViewItem>();
 
         AgrManttoController controller;
 
         public AgrMantto(ObservableCollection<Temas> arbolTemas)
         {
             InitializeComponent();
-            
-            controller = new AgrManttoController(this,arbolTemas);
+            this.arbolTemas = arbolTemas;
+            controller = new AgrManttoController(this,this.arbolTemas);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -50,7 +52,7 @@ namespace ManttoProductosAlternos
             controller.SetEnableThemes();
             controller.WindowLoad(1);
         }
-
+        
         private void TvAgrariaSelectedItemChanged(object sender, SelectionChangedEventArgs e)
         {
             controller.CambioTemaSeleccionado();
@@ -142,27 +144,28 @@ namespace ManttoProductosAlternos
         private void ButtonMaterias_Click(object sender, RoutedEventArgs e)
         {
             RadRibbonButton boton = sender as RadRibbonButton;
+            controller.WindowLoad(Convert.ToInt16(boton.Uid));
 
-            switch (boton.Name)
-            {
-                case "RBtnAgraria": 
-                    controller.WindowLoad(1);
-                    break;
-                case "RBtnSuspension":
-                    controller.WindowLoad(2);
-                    break;
-                case "RBtnImprocedencia": 
-                    controller.WindowLoad(3);
-                    break;
-                case "RBtnScjn": 
-                    controller.WindowLoad(4);
-                    break;
-                case "RBtnElectoral": 
-                    controller.WindowLoad(15);
-                    break;
-                case "RBtnPermisos":
-                    break;
-            }
+            //switch (boton.Name)
+            //{
+            //    case "RBtnAgraria":
+            //        controller.WindowLoad(1);
+            //        break;
+            //    case "RBtnSuspension":
+            //        controller.WindowLoad(2);
+            //        break;
+            //    case "RBtnImprocedencia":
+            //        controller.WindowLoad(3);
+            //        break;
+            //    case "RBtnScjn":
+            //        controller.WindowLoad(4);
+            //        break;
+            //    case "RBtnElectoral":
+            //        controller.WindowLoad(15);
+            //        break;
+            //    case "RBtnPermisos":
+            //        break;
+            //}
         }
 
         private void DgTesisSelectionChanged(object sender, SelectionChangeEventArgs e)

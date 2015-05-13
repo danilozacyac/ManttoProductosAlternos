@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data;
 using System.Data.OleDb;
+using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using ScjnUtilities;
 
@@ -68,7 +66,6 @@ namespace ManttoProductosAlternos.Migrador.DerechosF
                 connection.Close();
             }
 
-            return temas;
         }
 
 
@@ -78,7 +75,6 @@ namespace ManttoProductosAlternos.Migrador.DerechosF
         /// <returns></returns>
         public void GetRelacionesCongelado()
         {
-            List<Clasificacion> clasificacion = new List<Clasificacion>();
 
             if (relaciones == null)
                 relaciones = new List<Relaciones>();
@@ -131,9 +127,94 @@ namespace ManttoProductosAlternos.Migrador.DerechosF
         }
 
 
+        /// <summary>
+        /// Obtiene las relaciones que se establecieron para las tesis posteriores a la 
+        /// publicación del apéndice
+        /// </summary>
+        public void GetRelacionesPostApendice()
+        {
+            SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["BaseIUS"].ToString());
+            SqlCommand cmd;
+            SqlDataReader reader;
 
-        pu
+            try
+            {
+                foreach (Clasificacion tema in temas)
+                {
 
+                    string sqlCadena = "SELECT M.IUS,M.IdMatSGA FROM Tesis_MatSGA M INNER JOIN Tesis T " +
+                                       " ON T.IUS = M.IUS WHERE T.[ta/tj] = 1 and Parte <> 99 AND IdMatSGA = " +
+                                       tema.IdClasifScjn + " OR IdMatSGA = " + tema.IdClasifTcc + " OR IdMatSGA = " + tema.IdClasifPc;
+
+                    cmd = new SqlCommand(sqlCadena, connection);
+                    reader = cmd.ExecuteReader();
+
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            Relaciones relacion = new Relaciones()
+                            {
+                                IdClasifDisco = tema.IdClasifDisco,
+                                Ius = reader["Ius"] as int? ?? 0
+                            };
+
+
+                            relaciones.Add(relacion);
+                        }
+                    }
+
+                    reader.Close();
+                }
+            }
+            catch (SqlException ex)
+            {
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+            }
+            catch (Exception ex)
+            {
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+
+        public void SetRelaciones()
+        {
+            OleDbConnection oleConne = new OleDbConnection(ConfigurationManager.ConnectionStrings["BaseDH"].ToString());
+            OleDbCommand cmd;
+
+            cmd = oleConne.CreateCommand();
+            cmd.Connection = oleConne;
+
+            try
+            {
+                oleConne.Open();
+
+                foreach (Relaciones relacion in relaciones)
+                {
+                        cmd.CommandText = "INSERT INTO TemasIUS VALUES(" + relacion.IdClasifDisco + "," + relacion.Ius + ",0)";
+                        cmd.ExecuteNonQuery();
+                }
+            }
+            catch (OleDbException)
+            {
+            }
+            finally
+            {
+                oleConne.Close();
+            }
+
+        }
 
 
         /// <summary>
