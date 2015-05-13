@@ -55,6 +55,11 @@ namespace ManttoProductosAlternos
         //    this.idProducto = idProducto;
         //}
 
+        /// <summary>
+        /// Agregar un tema al catálogo de temas existentes
+        /// </summary>
+        /// <param name="temaPadre">Tema superior de aquel que se va a ingresar</param>
+        /// <param name="arbolTemas">Catálogo de temas</param>
         public AgrAgregaTema(Temas temaPadre, ObservableCollection<Temas> arbolTemas)
         {
             InitializeComponent();
@@ -65,6 +70,13 @@ namespace ManttoProductosAlternos
             temaActual.IdProducto = temaPadre.IdProducto;
         }
 
+        /// <summary>
+        /// Actualizar uno de los temas del catálogo, la modificación puede ser de la descripción o 
+        /// de la posición dentro del árbol
+        /// </summary>
+        /// <param name="temaPorActualizar">Tema que se va a modificar</param>
+        /// <param name="arbolTemas">Catálogo de temas</param>
+        /// <param name="isUpdating">Verificación de actualización</param>
         public AgrAgregaTema(Temas temaPorActualizar, ObservableCollection<Temas> arbolTemas,bool isUpdating)
         {
             InitializeComponent();
@@ -72,7 +84,7 @@ namespace ManttoProductosAlternos
             this.arbolTemas = arbolTemas;
             this.isUpdating = isUpdating;
 
-            txtTema.Text = temaActualizar.Tema;
+            txtTema.Text = temaActual.Tema;
             btnAgregar.Content = "Actualizar";
             this.Title = "Actualizar Tema";
         }
@@ -155,21 +167,26 @@ namespace ManttoProductosAlternos
                 {
                     temaActual.Nivel = 0;
                     temaActual.Padre = 0;
+                    arbolTemas.Add(temaActual);
                 }
                 else
                 {
                     temaActual.Nivel = temaPadre.Nivel + 1;
                     temaActual.Padre = temaPadre.IdTema;
+                    temaPadre.SubTemas.Add(temaActual);
+
                 }
-                temasModel.InsertaTemaNuevo(tema);
+                temasModel.InsertaTemaNuevo(temaActual);
+
+                
             }
 
 
             
 
             
-            tema.IdTema = VarGlobales.idSiguiente;
-            VarGlobales.temaNuevo = tema;
+            //tema.IdTema = VarGlobales.idSiguiente;
+            //VarGlobales.temaNuevo = tema;
 
             this.Close();
         }

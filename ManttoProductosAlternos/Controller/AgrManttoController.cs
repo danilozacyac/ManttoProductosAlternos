@@ -336,25 +336,25 @@ namespace ManttoProductosAlternos.Controller
             {
                 if (temaSeleccionado != null)
                 {
-                    VarGlobales.temaNuevo = null;
-                    AgrAgregaTema agr = new AgrAgregaTema(temaSeleccionado.IdTema, temaSeleccionado.Nivel, idProducto);
+                    //VarGlobales.temaNuevo = null;
+                    AgrAgregaTema agr = new AgrAgregaTema(temaSeleccionado, arbolTemas);
                     agr.ShowDialog();
 
-                    if (VarGlobales.temaNuevo != null)
-                    {
-                        TreeViewItem treeNode = new TreeViewItem();
-                        treeNode.Tag = VarGlobales.temaNuevo;
-                        treeNode.Header = VarGlobales.temaNuevo.Tema;
+                    //if (VarGlobales.temaNuevo != null)
+                    //{
+                    //    TreeViewItem treeNode = new TreeViewItem();
+                    //    treeNode.Tag = VarGlobales.temaNuevo;
+                    //    treeNode.Header = VarGlobales.temaNuevo.Tema;
 
-                        if (VarGlobales.temaNuevo.Nivel == 0)
-                        {
-                            main.tvAgraria.Items.Add(treeNode);
-                        }
-                        else
-                        {
-                            nodoSelect.Items.Add(treeNode);
-                        }
-                    }
+                    //    if (VarGlobales.temaNuevo.Nivel == 0)
+                    //    {
+                    //        main.tvAgraria.Items.Add(treeNode);
+                    //    }
+                    //    else
+                    //    {
+                    //        nodoSelect.Items.Add(treeNode);
+                    //    }
+                    //}
                 }
                 else
                 {
@@ -363,25 +363,25 @@ namespace ManttoProductosAlternos.Controller
             }
             else
             {
-                VarGlobales.temaNuevo = null;
+                //VarGlobales.temaNuevo = null;
                 AgrAgregaTema agr = new AgrAgregaTema(0, 0, idProducto);
                 agr.ShowDialog();
 
-                if (VarGlobales.temaNuevo != null)
-                {
-                    TreeViewItem treeNode = new TreeViewItem();
-                    treeNode.Tag = VarGlobales.temaNuevo;
-                    treeNode.Header = VarGlobales.temaNuevo.Tema;
+                //if (VarGlobales.temaNuevo != null)
+                //{
+                //    TreeViewItem treeNode = new TreeViewItem();
+                //    treeNode.Tag = VarGlobales.temaNuevo;
+                //    treeNode.Header = VarGlobales.temaNuevo.Tema;
 
-                    if (VarGlobales.temaNuevo.Nivel == 0)
-                    {
-                        main.tvAgraria.Items.Add(treeNode);
-                    }
-                    else
-                    {
-                        nodoSelect.Items.Add(treeNode);
-                    }
-                }
+                //    if (VarGlobales.temaNuevo.Nivel == 0)
+                //    {
+                //        main.tvAgraria.Items.Add(treeNode);
+                //    }
+                //    else
+                //    {
+                //        nodoSelect.Items.Add(treeNode);
+                //    }
+                //}
             }
         }
 
@@ -389,7 +389,7 @@ namespace ManttoProductosAlternos.Controller
         {
             if (temaSeleccionado != null)
             {
-                AgrAgregaTema agr = new AgrAgregaTema(0, 0, temaSeleccionado, idProducto);
+                AgrAgregaTema agr = new AgrAgregaTema(temaSeleccionado, arbolTemas,true);
                 agr.ShowDialog();
             }
             else

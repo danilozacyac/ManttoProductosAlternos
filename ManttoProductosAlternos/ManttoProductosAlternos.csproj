@@ -204,8 +204,11 @@
     <Compile Include="LaunchWindow.xaml.cs">
       <DependentUpon>LaunchWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Migrador\DerechosF\Clasificacion.cs" />
+    <Compile Include="Migrador\DerechosF\ClasificacionModel.cs" />
     <Compile Include="Model\AccesoModel.cs" />
     <Compile Include="Model\AccesoUsuarioModel.cs" />
+    <Compile Include="Model\BitacoraModel.cs" />
     <Compile Include="Model\EjecutoriaModel.cs" />
     <Compile Include="Model\UsuariosModel.cs" />
     <Compile Include="Model\VotosModel.cs" />

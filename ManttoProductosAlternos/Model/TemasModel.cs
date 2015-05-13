@@ -155,7 +155,7 @@ namespace ManttoProductosAlternos.Model
                 dataSet.Dispose();
                 dataAdapter.Dispose();
 
-
+                new BitacoraModel().SetBitacoraEntry(nuevoTema, 1, " ");
             }
             catch (SqlException ex)
             {
@@ -178,69 +178,6 @@ namespace ManttoProductosAlternos.Model
         }
 
 
-        public void InsertaTemaNuevo(Temas nuevoTema)
-        {
-            SqlConnection sqlConne = Conexion.GetConecctionManttoCE();
-
-            SqlCommand cmd;
-            SqlDataReader dataReader;
-
-            cmd = sqlConne.CreateCommand();
-            cmd.Connection = sqlConne;
-
-            int idSiguiente = 0;
-
-            nuevoTema.IdTema = DataBaseUtilities.GetNextIdForUse("Temas", "Id", sqlConne);
-
-            try
-            {
-                sqlConne.Open();
-
-                string miQry = "SELECT MAX(id) Id FROM Temas";
-                cmd = new SqlCommand(miQry, sqlConne);
-                dataReader = cmd.ExecuteReader();
-
-                if (dataReader.HasRows)
-                {
-                    dataReader.Read();
-
-                    idSiguiente = (Convert.ToInt32(dataReader["id"].ToString())) + 1;
-
-                    dataReader.Close();
-
-                    cmd.CommandText = "INSERT INTO TEMAS VALUES (" + idSiguiente + "," + nuevoTema.Nivel + "," + nuevoTema.Padre + ",'" + nuevoTema.Tema +
-                                      "'," + nuevoTema.Orden + ",'" + nuevoTema.TemaStr + "','" + nuevoTema.LInicial + "'," + nuevoTema.IdProducto + ")";
-                    cmd.ExecuteNonQuery();
-                    cmd.CommandText = "insert into Bitacora(idTema,tipoModif,edoAnterior,usuario,idProd)" +
-                                      "values(" + idSiguiente + ",1,' ','" + Environment.MachineName + "'," + nuevoTema.IdProducto + ")";
-                    cmd.ExecuteNonQuery();
-
-                    VarGlobales.idSiguiente = idSiguiente;
-                }
-                else
-                {
-                    throw new ArgumentException();
-                }
-            }
-            catch (SqlException ex)
-            {
-                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
-            }
-            catch (ArgumentException ex)
-            {
-                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
-            }
-            finally
-            {
-                sqlConne.Close();
-            }
-        }
 
         public void ActualizaTema(Temas tema)
         {
