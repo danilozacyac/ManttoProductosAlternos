@@ -1,21 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using ManttoProductosAlternos.Dto;
 using ManttoProductosAlternos.Model;
 using ManttoProductosAlternos.Singletons;
 using Telerik.Windows.Controls;
@@ -27,7 +15,6 @@ namespace ManttoProductosAlternos
     /// </summary>
     public partial class LaunchWindow : Window
     {
-        ObservableCollection<Temas> arbolTemas;
 
         public LaunchWindow()
         {
@@ -38,6 +25,12 @@ namespace ManttoProductosAlternos
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            string tipoApp = ConfigurationManager.AppSettings["TipoAplicacion"].ToString();
+
+            if (tipoApp.Equals("PRUEBA"))
+                MessageBox.Show("Estas viendo datos de prueba, comunicate con tu administrador");
+
+
             AccesoModel model = new AccesoModel();
             model.ObtenerPermisos();
 
@@ -72,16 +65,16 @@ namespace ManttoProductosAlternos
 
 
             if (AccesoUsuarioModel.Grupo == 0)
-                arbolTemas = TemasSingletons.Temas(1);
+                TemasSingletons.Temas(1);
             else
-                arbolTemas = TemasSingletons.Temas(Convert.ToInt16(acceso[0]));
+                TemasSingletons.Temas(Convert.ToInt16(acceso[0]));
         }
 
         void WorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             this.BusyIndicator.IsBusy = false;
 
-            AgrMantto mainW = new AgrMantto(arbolTemas);
+            AgrMantto mainW = new AgrMantto();
             mainW.Show();
 
             this.Close();

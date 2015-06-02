@@ -2,10 +2,12 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
-        Title="AgrMantto"
+        Title="Manteniemiento de ejecutorias y votos"
         Width="1161"
         Height="602"
-        Icon="Resources/Libros.ico">
+        WindowState="Maximized"
+        ResizeMode="NoResize"
+        Icon="Resources/Books_128.png">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25" />
@@ -89,7 +91,7 @@
                 VerticalAlignment="Top"
                 Click="BtnAgregarClick"
                 Content="Agregar" />
-        
+
         <TextBlock Name="textBlock2"
                    Grid.Row="1"
                    Grid.Column="1"

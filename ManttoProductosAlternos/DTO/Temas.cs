@@ -117,17 +117,17 @@ namespace ManttoProductosAlternos.Dto
             }
         }
 
-        private int padre;
+        private int idPadre;
 
         public int Padre
         {
             get
             {
-                return padre;
+                return idPadre;
             }
             set
             {
-                padre = value;
+                idPadre = value;
             }
         }
 
@@ -270,7 +270,7 @@ namespace ManttoProductosAlternos.Dto
         protected virtual void LoadChildren()
         {
             //SubTemas = this.GetTemas(this, this.Materia);
-            foreach (Temas item in new TemasModel(this.idProducto).GetTemas(this.Padre))
+            foreach (Temas item in new TemasModel(this.idProducto).GetTemas(this))
                 SubTemas.Add(item);
         }
 

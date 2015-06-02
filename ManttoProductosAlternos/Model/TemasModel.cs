@@ -1,22 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Windows.Forms;
 using ManttoProductosAlternos.DBAccess;
 using ManttoProductosAlternos.Dto;
-using ManttoProductosAlternos.Utils;
-using System.Windows.Forms;
 using ScjnUtilities;
-using System.Configuration;
-using System.Data;
 
 namespace ManttoProductosAlternos.Model
 {
     public class TemasModel
     {
-        private List<int> temasEnLista = new List<int>();
-
+        
         /*
         En la bitacora de la base de datos el tipo de Modificación tiene la siguiente nomenclatura
         * 1. Tema Nuevo
@@ -26,8 +23,6 @@ namespace ManttoProductosAlternos.Model
         * 12. Elimina Relación
         */
         private readonly int idProducto;
-
-        //private readonly String textoBuscado;
 
         #region Constructores
 
@@ -40,37 +35,30 @@ namespace ManttoProductosAlternos.Model
             this.idProducto = idProducto;
         }
 
-        /// <summary>
-        /// Busqueda de un término concreto dentro de la estructura del árbol
-        /// </summary>
-        /// <param name="idProducto">Identificador del producto con el que se trabaja</param>
-        /// <param name="textoBuscado">Criterio que se esta solicitando</param>
-        public TemasModel(int idProducto, String textoBuscado)
-        {
-            this.idProducto = idProducto;
-            //this.textoBuscado = textoBuscado;
-        }
 
         #endregion
 
-        public ObservableCollection<Temas> GetTemas(int idPadre)
+        public ObservableCollection<Temas> GetTemas(Temas temaPadre)
         {
             ObservableCollection<Temas> temas = new ObservableCollection<Temas>();
 
-            SqlConnection sqlConne = Conexion.GetConecctionManttoCE();
+            SqlConnection connection = Conexion.GetConecctionManttoCE();
+            
             SqlDataReader reader;
             SqlCommand cmd;
 
-            cmd = sqlConne.CreateCommand();
-            cmd.Connection = sqlConne;
+            cmd = connection.CreateCommand();
+            cmd.Connection = connection;
 
             try
             {
-                sqlConne.Open();
+                connection.Open();
 
-                string miQry = "select * from Temas Where Padre = @idPadre AND idProd = @idProducto  ORDER BY TemaStr";
-                cmd = new SqlCommand(miQry, sqlConne);
-                cmd.Parameters.AddWithValue("@idPadre", idPadre);
+                int idPadreBuscado = (temaPadre == null) ? 0 : temaPadre.IdTema;
+
+                string miQry = "SELECT * FROM Temas WHERE Padre = @idPadre AND idProd = @idProducto  ORDER BY TemaStr";
+                cmd = new SqlCommand(miQry, connection);
+                cmd.Parameters.AddWithValue("@idPadre", idPadreBuscado);
                 cmd.Parameters.AddWithValue("@idProducto", idProducto);
                 reader = cmd.ExecuteReader();
 
@@ -85,13 +73,14 @@ namespace ManttoProductosAlternos.Model
                     tema.Orden = Convert.ToInt32(reader["Orden"]);
                     tema.TemaStr = reader["TemaSTR"].ToString();
                     tema.LInicial = Convert.ToChar(reader["LetraInicial"].ToString());
-                    tema.SubTemas = GetTemas(tema.IdTema);
-                    tema.IdProducto = reader["IdProd"] as int? ?? 0;
+                    tema.IdProducto = idProducto;
+
+                    if (idProducto == 1)
+                        tema.SubTemas = GetTemas(tema);
 
                     temas.Add(tema);
                 }
                 reader.Close();
-                //temas = temas.Distinct().ToList();
             }
             catch (SqlException ex)
             {
@@ -100,9 +89,16 @@ namespace ManttoProductosAlternos.Model
                 MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
             }
+            catch (Exception ex)
+            {
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+            }
             finally
             {
-                sqlConne.Close();
+                connection.Close();
             }
             return temas;
         }
@@ -196,9 +192,9 @@ namespace ManttoProductosAlternos.Model
                                   "',TemaStr = '" + tema.TemaStr + "' WHERE id = " + tema.IdTema + " AND idProd = " + tema.IdProducto;
                 cmd.ExecuteNonQuery();
                 
-                cmd.CommandText = "insert into Bitacora(idTema,tipoModif,edoAnterior,usuario,idProd)" +
-                                  "values(" + tema.IdTema + ",2,' ','" + Environment.MachineName + "'," + tema.IdProducto + ")";
-                cmd.ExecuteNonQuery();
+                
+
+                new BitacoraModel().SetBitacoraEntry(tema, 2, " ");
             }
             catch (SqlException ex)
             {
@@ -217,7 +213,7 @@ namespace ManttoProductosAlternos.Model
         /// Elimina el tema seleccionado dentro del árbol 
         /// </summary>
         /// <param name="idTema"></param>
-        public void EliminaTema(int idTema)
+        public void EliminaTema(Temas temaEliminar)
         {
             SqlConnection sqlConne = Conexion.GetConecctionManttoCE();
 
@@ -231,7 +227,7 @@ namespace ManttoProductosAlternos.Model
             {
                 sqlConne.Open();
 
-                string miQry = "select COUNT(Id) Cant FROM Temas WHERE Padre = " + idTema + " AND idProd = " + idProducto;
+                string miQry = "select COUNT(Id) Cant FROM Temas WHERE Padre = " + temaEliminar.IdTema + " AND idProd = " + idProducto;
                 cmd = new SqlCommand(miQry, sqlConne);
                 dataReader = cmd.ExecuteReader();
 
@@ -247,16 +243,15 @@ namespace ManttoProductosAlternos.Model
 
                 dataReader.Close();
 
-                cmd.CommandText = "DELETE FROM Temas WHERE id = " + idTema + " AND idProd = " + idProducto;
+                cmd.CommandText = "DELETE FROM Temas WHERE id = " + temaEliminar.IdTema + " AND idProd = " + idProducto;
                 
                 cmd.ExecuteNonQuery();
 
-                cmd.CommandText = "DELETE FROM TemasIUS WHERE id = " + idTema + " AND idProd = " + idProducto;
+                cmd.CommandText = "DELETE FROM TemasIUS WHERE id = " + temaEliminar.IdTema + " AND idProd = " + idProducto;
                 cmd.ExecuteNonQuery();
 
-                cmd.CommandText = "insert into Bitacora(idTema,tipoModif,edoAnterior,usuario,idProd)" +
-                                  "values(" + idTema + ",3,' ','" + Environment.MachineName + "'," + idProducto + ")";
-                cmd.ExecuteNonQuery();
+
+                new BitacoraModel().SetBitacoraEntry(temaEliminar, 3, String.Empty);
             }
             catch (SqlException ex)
             {
@@ -275,9 +270,9 @@ namespace ManttoProductosAlternos.Model
             }
         }
 
-        public List<Temas> GetTemasRelacionados(long ius)
+        public ObservableCollection<Temas> GetTemasRelacionados(long ius)
         {
-            List<Temas> temas = new List<Temas>();
+            ObservableCollection<Temas> temas = new ObservableCollection<Temas>();
             SqlConnection connection = Conexion.GetConecctionManttoCE();
 
             SqlDataReader reader;
@@ -303,7 +298,7 @@ namespace ManttoProductosAlternos.Model
                 while (reader.Read())
                 {
                     Temas tema = new Temas();
-                    tema.IdTema = reader["Id"] as int? ?? -1;
+                    tema.IdTema = Convert.ToInt32(reader["Id"]) ;
                     tema.Tema = reader["Tema"].ToString();
 
                     temas.Add(tema);
@@ -327,15 +322,15 @@ namespace ManttoProductosAlternos.Model
 
         public void EliminaRelacion(long ius)
         {
-            SqlConnection b2Conne = Conexion.GetConecctionManttoCE();
+            SqlConnection connection = Conexion.GetConecctionManttoCE();
             SqlCommand cmd;
 
-            cmd = b2Conne.CreateCommand();
-            cmd.Connection = b2Conne;
+            cmd = connection.CreateCommand();
+            cmd.Connection = connection;
 
             try
             {
-                b2Conne.Open();
+                connection.Open();
 
                 cmd.CommandText = "DELETE FROM TemasIUS WHERE IUS = " + ius + " AND idProd = " + idProducto;
                 cmd.ExecuteNonQuery();
@@ -354,7 +349,7 @@ namespace ManttoProductosAlternos.Model
             }
             finally
             {
-                b2Conne.Close();
+                connection.Close();
             }
         }
 

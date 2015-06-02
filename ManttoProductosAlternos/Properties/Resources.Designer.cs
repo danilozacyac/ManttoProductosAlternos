@@ -113,6 +113,16 @@ namespace ManttoProductosAlternos.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap archivo_128 {
+            get {
+                object obj = ResourceManager.GetObject("archivo_128", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap back {
             get {
                 object obj = ResourceManager.GetObject("back", resourceCulture);
@@ -256,6 +266,46 @@ namespace ManttoProductosAlternos.Properties {
         internal static System.Drawing.Bitmap listado {
             get {
                 object obj = ResourceManager.GetObject("listado", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap MigraAgraria {
+            get {
+                object obj = ResourceManager.GetObject("MigraAgraria", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap MigraElectoral {
+            get {
+                object obj = ResourceManager.GetObject("MigraElectoral", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap MigraImproc {
+            get {
+                object obj = ResourceManager.GetObject("MigraImproc", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap MigraScjn {
+            get {
+                object obj = ResourceManager.GetObject("MigraScjn", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

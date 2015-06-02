@@ -1,12 +1,9 @@
 ﻿using System;
-using ManttoProductosAlternos.Dto;
 
 namespace ManttoProductosAlternos.Utils
 {
     public class VarGlobales
     {
-        //public static Temas temaNuevo = null;
-        //public static int idSiguiente = 0;
 
         /// <summary>
         /// Devuelve el título de la ventana principal de acuerdo al usuario que iongreso

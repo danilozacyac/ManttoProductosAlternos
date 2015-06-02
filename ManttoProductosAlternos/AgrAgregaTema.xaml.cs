@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using ManttoProductosAlternos.Dto;
 using ManttoProductosAlternos.Model;
-using ManttoProductosAlternos.Utils;
-using System.Windows.Media;
-using ScjnUtilities;
-using System.Collections.ObjectModel;
 using ManttoProductosAlternos.Singletons;
+using ScjnUtilities;
 
 namespace ManttoProductosAlternos
 {
@@ -39,33 +37,20 @@ namespace ManttoProductosAlternos
         /// </summary>
         private Temas temaSeleccionado;
 
-        private ObservableCollection<Temas> arbolTemas;
+        //private ObservableCollection<Temas> arbolTemas;
 
         private bool isUpdating = false;
-
-        //private int idActNuevoPadre = 0;
-        //private int nivelActNuevoPadre = 0;
-        //private int idProducto = 0;
-
-        //public AgrAgregaTema(int idPadre, int nivelPadre,int idProducto) 
-        //{
-        //    InitializeComponent();
-
-        //    this.idPadre = idPadre;
-        //    this.nivelPadre = nivelPadre;
-        //    this.idProducto = idProducto;
-        //}
 
         /// <summary>
         /// Agregar un tema al catálogo de temas existentes
         /// </summary>
         /// <param name="temaPadre">Tema superior de aquel que se va a ingresar</param>
         /// <param name="arbolTemas">Catálogo de temas</param>
-        public AgrAgregaTema(Temas temaPadre, ObservableCollection<Temas> arbolTemas)
+        public AgrAgregaTema(Temas temaPadre)
         {
             InitializeComponent();
             this.temaPadre = temaPadre;
-            this.arbolTemas = arbolTemas;
+            //this.arbolTemas = arbolTemas;
 
             this.temaActual = new Temas();
             temaActual.IdProducto = temaPadre.IdProducto;
@@ -78,11 +63,11 @@ namespace ManttoProductosAlternos
         /// <param name="temaPorActualizar">Tema que se va a modificar</param>
         /// <param name="arbolTemas">Catálogo de temas</param>
         /// <param name="isUpdating">Verificación de actualización</param>
-        public AgrAgregaTema(Temas temaPorActualizar, ObservableCollection<Temas> arbolTemas,bool isUpdating)
+        public AgrAgregaTema(Temas temaPorActualizar,bool isUpdating)
         {
             InitializeComponent();
             this.temaActual = temaPorActualizar;
-            this.arbolTemas = arbolTemas;
+            //this.arbolTemas = arbolTemas;
             this.isUpdating = isUpdating;
 
             txtTema.Text = temaActual.Tema;
@@ -90,21 +75,7 @@ namespace ManttoProductosAlternos
             this.Title = "Actualizar Tema";
         }
 
-        //public AgrAgregaTema(int idPadre, int nivelPadre, Temas temaActualizar,int idProducto) 
-        //{
-        //    InitializeComponent();
-
-            
-        //    this.idPadre = idPadre;
-        //    this.nivelPadre = nivelPadre;
-        //    this.temaActualizar = temaActualizar;
-        //    this.idProducto = idProducto;
-            
-        //    txtTema.Text = temaActualizar.Tema;
-        //    btnAgregar.Content = "Actualizar";
-        //    this.Title = "Actualizar Tema";
-        //}
-
+        
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             tvAgraria.Items.Clear();
@@ -116,7 +87,7 @@ namespace ManttoProductosAlternos
             else
             {
                 this.Height = WinHeightAgregaTema;
-                chkCambiarPosicion.Visibility = Visibility.Visible;
+                chkCambiarPosicion.Visibility = (temaActual.IdProducto != 1) ? Visibility.Collapsed : Visibility.Visible;
                 chkNodoPadre.Visibility = Visibility.Hidden;
                 tvAgraria.Visibility = Visibility.Hidden;
             }
@@ -139,6 +110,13 @@ namespace ManttoProductosAlternos
                 {
                     temaActual.Nivel = 0;
                     temaActual.Padre = 0;
+
+                    Temas tempTemaPadre = temaActual.Parent;
+                    tempTemaPadre.RemoveSubTema(temaActual);
+
+                    temaActual.Parent = null;
+                    TemasSingletons.Temas(temaActual.IdProducto).Add(temaActual);
+
                 }
                 else if (chkCambiarPosicion.IsChecked == true && chkNodoPadre.IsChecked == false)
                 {
@@ -146,6 +124,22 @@ namespace ManttoProductosAlternos
                     {
                         temaActual.Nivel = temaSeleccionado.Nivel + 1;
                         temaActual.Padre = temaSeleccionado.IdTema;
+
+                        if (temaActual.Parent == null) //Es tema padre y se va a convertir en tema hijo
+                        {
+                            TemasSingletons.Temas(temaActual.IdProducto).Remove(temaActual);
+                            temaActual.Parent = temaSeleccionado;
+                            temaSeleccionado.AddSubtema(temaActual);
+                        }
+                        else
+                        {
+                            Temas tempTemaPadre = temaActual.Parent;
+                            tempTemaPadre.RemoveSubTema(temaActual);
+
+                            temaSeleccionado.AddSubtema(temaActual);
+
+                        }
+
                     }
                     else
                     {
@@ -154,8 +148,9 @@ namespace ManttoProductosAlternos
                         return;
                     }
                 }
-
+                temaActual.Tema = txtTema.Text;
                 temasModel.ActualizaTema(temaActual);
+                
             }
             else             //Tema nuevo
             {
@@ -168,7 +163,7 @@ namespace ManttoProductosAlternos
                 {
                     temaActual.Nivel = 0;
                     temaActual.Padre = 0;
-                    arbolTemas.Add(temaActual);
+                    TemasSingletons.Temas(temaActual.IdProducto).Add(temaActual);
                 }
                 else
                 {
@@ -178,16 +173,9 @@ namespace ManttoProductosAlternos
 
                 }
                 temasModel.InsertaTemaNuevo(temaActual);
-
                 
             }
 
-
-            
-
-            
-            //tema.IdTema = VarGlobales.idSiguiente;
-            //VarGlobales.temaNuevo = tema;
 
             this.Close();
         }

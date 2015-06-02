@@ -75,7 +75,7 @@ namespace ManttoProductosAlternos
             radInactivo.IsChecked = false;
         }
 
-        private void btnCancelar_Click(object sender, RoutedEventArgs e)
+        private void BtnCancelarClick(object sender, RoutedEventArgs e)
         {
             lstUsuarios.IsEnabled = true;
 
@@ -87,7 +87,7 @@ namespace ManttoProductosAlternos
             txtUsuario.IsEnabled = false;
         }
 
-        private void btnActualizar_Click(object sender, RoutedEventArgs e)
+        private void BtnActualizarClick(object sender, RoutedEventArgs e)
         {
             if (usuario.Grupo == 0)
             {
@@ -118,7 +118,7 @@ namespace ManttoProductosAlternos
             lstUsuarios.SelectedItem = usuario;
         }
 
-        private void btnAceptar_Click(object sender, RoutedEventArgs e)
+        private void BtnAceptarClick(object sender, RoutedEventArgs e)
         {
             usuario.Nombre = txtNombre.Text;
             usuario.Usuario = txtUsuario.Text;

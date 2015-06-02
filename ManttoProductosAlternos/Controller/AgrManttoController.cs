@@ -8,7 +8,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Threading;
 using ManttoProductosAlternos.Dto;
 using ManttoProductosAlternos.Model;
@@ -21,7 +20,6 @@ namespace ManttoProductosAlternos.Controller
 {
     public class AgrManttoController
     {
-        ObservableCollection<Temas> arbolTemas; //= new List<TreeViewItem>();
         private Temas temaSeleccionado = null;
         private TesisDTO tesisSeleccionada = null;
         private int idMateria = 0;
@@ -29,7 +27,6 @@ namespace ManttoProductosAlternos.Controller
         private int find = 0;
         private List<string> busqueda = new List<string>();
         List<TesisDTO> tesisRelacionadas = null;
-        TreeViewItem nodoSelect = null;
 
         private UpdateProgressBarDelegate updatePbDelegate = null;
 
@@ -38,10 +35,9 @@ namespace ManttoProductosAlternos.Controller
 
         private readonly AgrMantto main;
 
-        public AgrManttoController(AgrMantto main, ObservableCollection<Temas> arbolTemas)
+        public AgrManttoController(AgrMantto main)
         {
             this.main = main;
-            this.arbolTemas = arbolTemas;
 
             worker.DoWork += this.WorkerDoWork;
             worker.RunWorkerCompleted += WorkerRunWorkerCompleted;
@@ -59,6 +55,8 @@ namespace ManttoProductosAlternos.Controller
             main.BtnAddTema.IsEnabled = enable;
             main.BtnUpdTema.IsEnabled = enable;
             main.BtnDelTema.IsEnabled = enable;
+            main.BtnEjeVotos.IsEnabled = !enable;
+
         }
 
         private String[] acceso;
@@ -98,7 +96,6 @@ namespace ManttoProductosAlternos.Controller
         {
             if (main.tvAgraria.SelectedItem != null)
             {
-                //nodoSelect = (TreeViewItem)main.tvAgraria.SelectedItem;
                 temaSeleccionado = main.tvAgraria.SelectedItem as Temas;
 
                 tesisRelacionadas = new TesisModel(idMateria).GetTesisRelacionadas(temaSeleccionado.IdTema);
@@ -212,9 +209,7 @@ namespace ManttoProductosAlternos.Controller
                         if (find == 0)
                         {
                             nItem.IsExpanded = expande;
-                            
                             nItem.IsSelected = true;
-                            //nItem.BringIntoView();
                         }
                     }
 
@@ -238,7 +233,6 @@ namespace ManttoProductosAlternos.Controller
         {
             foreach (Temas child in node.SubTemas)
             {
-                //TreeViewItem child = childx as TreeViewItem;
                 int cont = 0;
                 foreach (string bus in llave)
                 {
@@ -248,7 +242,6 @@ namespace ManttoProductosAlternos.Controller
                         if (find == 0)
                         {
                             child.IsSelected = true;
-                            //child.BringIntoView();
                         }
                         // return; cuando se pone return solo tomo el primer nodo encontrado por cada hijo
                     }
@@ -257,9 +250,6 @@ namespace ManttoProductosAlternos.Controller
                     {
                         child.IsExpanded = expande;
                         child.Foreground = foregroundColor;
-                        //child.Focus();
-                        //child.IsSelected = true;
-                        //AbreRaiz(child);
                         find++;
                     }
 
@@ -330,25 +320,8 @@ namespace ManttoProductosAlternos.Controller
             {
                 if (temaSeleccionado != null)
                 {
-                    //VarGlobales.temaNuevo = null;
-                    AgrAgregaTema agr = new AgrAgregaTema(temaSeleccionado, arbolTemas);
+                    AgrAgregaTema agr = new AgrAgregaTema(temaSeleccionado);
                     agr.ShowDialog();
-
-                    //if (VarGlobales.temaNuevo != null)
-                    //{
-                    //    TreeViewItem treeNode = new TreeViewItem();
-                    //    treeNode.Tag = VarGlobales.temaNuevo;
-                    //    treeNode.Header = VarGlobales.temaNuevo.Tema;
-
-                    //    if (VarGlobales.temaNuevo.Nivel == 0)
-                    //    {
-                    //        main.tvAgraria.Items.Add(treeNode);
-                    //    }
-                    //    else
-                    //    {
-                    //        nodoSelect.Items.Add(treeNode);
-                    //    }
-                    //}
                 }
                 else
                 {
@@ -357,25 +330,8 @@ namespace ManttoProductosAlternos.Controller
             }
             else
             {
-                //VarGlobales.temaNuevo = null;
-                AgrAgregaTema agr = new AgrAgregaTema(temaSeleccionado,arbolTemas);
+                AgrAgregaTema agr = new AgrAgregaTema(TemasSingletons.Temas(idMateria)[0]);
                 agr.ShowDialog();
-
-                //if (VarGlobales.temaNuevo != null)
-                //{
-                //    TreeViewItem treeNode = new TreeViewItem();
-                //    treeNode.Tag = VarGlobales.temaNuevo;
-                //    treeNode.Header = VarGlobales.temaNuevo.Tema;
-
-                //    if (VarGlobales.temaNuevo.Nivel == 0)
-                //    {
-                //        main.tvAgraria.Items.Add(treeNode);
-                //    }
-                //    else
-                //    {
-                //        nodoSelect.Items.Add(treeNode);
-                //    }
-                //}
             }
         }
 
@@ -383,7 +339,7 @@ namespace ManttoProductosAlternos.Controller
         {
             if (temaSeleccionado != null)
             {
-                AgrAgregaTema agr = new AgrAgregaTema(temaSeleccionado, arbolTemas,true);
+                AgrAgregaTema agr = new AgrAgregaTema(temaSeleccionado,true);
                 agr.ShowDialog();
             }
             else
@@ -396,13 +352,32 @@ namespace ManttoProductosAlternos.Controller
         {
             if (temaSeleccionado != null)
             {
-                MessageBoxResult result = MessageBox.Show("¿Estas seguro de eliminar el tema " + temaSeleccionado.Tema + " y todas sus tesis relacionadas?", "Error Interno", MessageBoxButton.YesNo, MessageBoxImage.Question);
-
-                if (result == MessageBoxResult.Yes)
+                if (temaSeleccionado.SubTemas.Count > 0)
                 {
-                    TemasModel temasModel = new TemasModel(idMateria);
-                    temasModel.EliminaTema(temaSeleccionado.IdTema);
-                    main.tvAgraria.Items.Remove(nodoSelect);
+                    MessageBox.Show("El tema que desea eliminar contiene subtemas, elimine primero los subtemas para completar la operación",
+                        "Error Interno", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                else
+                {
+
+                    MessageBoxResult result = MessageBox.Show("¿Estas seguro de eliminar el tema " + temaSeleccionado.Tema + " y todas sus tesis relacionadas?", "Error Interno", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        if (temaSeleccionado.Padre == 0)
+                        {
+                            TemasSingletons.Temas(temaSeleccionado.IdProducto).Remove(temaSeleccionado);
+                        }
+                        else
+                        {
+                            Temas temaPadre = temaSeleccionado.Parent;
+                            temaPadre.RemoveSubTema(temaSeleccionado);
+                        }
+
+                        TemasModel temasModel = new TemasModel(idMateria);
+                        temasModel.EliminaTema(temaSeleccionado);
+                    }
                 }
             }
             else
@@ -411,26 +386,32 @@ namespace ManttoProductosAlternos.Controller
             }
         }
 
+        public void VerEjecutoriasVotos()
+        {
+            EjeVotos ventana = new EjeVotos();
+            ventana.ShowDialog();
+        }
+
         #endregion
 
         #region Metodos Relaciones
 
-        public Temas temaCopia;
+        public Temas TemaCopia;
 
         public void CopiarRelaciones()
         {
             TreeViewItem item = main.tvAgraria.SelectedItem as TreeViewItem;
-            temaCopia = item.Tag as Temas;
-            temaCortar = null;
+            TemaCopia = item.Tag as Temas;
+            TemaCortar = null;
         }
 
-        public Temas temaCortar;
+        public Temas TemaCortar;
 
         public void CortarRelaciones()
         {
             TreeViewItem item = main.tvAgraria.SelectedItem as TreeViewItem;
-            temaCortar = item.Tag as Temas;
-            temaCopia = null;
+            TemaCortar = item.Tag as Temas;
+            TemaCopia = null;
         }
 
         public void PegarRelaciones()
@@ -438,24 +419,24 @@ namespace ManttoProductosAlternos.Controller
             MessageBoxResult result;
             TesisModel model = new TesisModel(idMateria);
 
-            if (temaCopia != null)
+            if (TemaCopia != null)
             {
-                result = MessageBox.Show("¿Estas segur@ que deseas copiar las tesis del tema \"" + temaCopia.Tema + "\" al tema \"" +
+                result = MessageBox.Show("¿Estas segur@ que deseas copiar las tesis del tema \"" + TemaCopia.Tema + "\" al tema \"" +
                                          temaSeleccionado.Tema + "\"?", "ATENCIÓN:", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                 if (result == MessageBoxResult.Yes)
                 {
-                    model.CopiaTesis(temaCopia.IdTema, temaSeleccionado.IdTema);
+                    model.CopiaTesis(TemaCopia.IdTema, temaSeleccionado.IdTema);
                 }
             }
-            else if (temaCortar != null)
+            else if (TemaCortar != null)
             {
-                result = MessageBox.Show("¿Estas segur@ que deseas eliminart todas las tesis del tema \"" + temaCortar.Tema + "\" y pegarlas al tema \"" +
+                result = MessageBox.Show("¿Estas segur@ que deseas eliminart todas las tesis del tema \"" + TemaCortar.Tema + "\" y pegarlas al tema \"" +
                                          temaSeleccionado.Tema + "\"?", "ATENCIÓN:", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
                 if (result == MessageBoxResult.Yes)
                 {
-                    model.CortarTesis(temaCortar.IdTema, temaSeleccionado.IdTema);
+                    model.CortarTesis(TemaCortar.IdTema, temaSeleccionado.IdTema);
                 }
             }
             else
@@ -463,8 +444,8 @@ namespace ManttoProductosAlternos.Controller
                 MessageBox.Show("Antes de pegar selecciona copiar/pegar mientras seleccionas el temas con las tesis de interes");
             }
 
-            temaCopia = null;
-            temaCortar = null;
+            TemaCopia = null;
+            TemaCortar = null;
         }
 
         public void DeleteOne()
@@ -541,7 +522,8 @@ namespace ManttoProductosAlternos.Controller
 
         public void ShowListaTesis()
         {
-            frmListaTesis tesis = new frmListaTesis(idMateria);
+            FrmListaTesis tesis = new FrmListaTesis(idMateria);
+            tesis.Owner = main;
             tesis.ShowDialog();
         }
 
@@ -559,24 +541,14 @@ namespace ManttoProductosAlternos.Controller
         private BackgroundWorker worker = new BackgroundWorker();
         private void WorkerDoWork(object sender, DoWorkEventArgs e)
         {
-
             TemasSingletons.Temas(idMateria);
-            //String[] acceso = AccesoUsuarioModel.Programas.Split(',');
-
-
-            //if (AccesoUsuarioModel.Grupo == 0)
-            //    arbolTemas = TemasSingletons.Temas(1);
-            //else
-            //    arbolTemas = TemasSingletons.Temas(Convert.ToInt16(acceso[0]));
         }
 
         void WorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            main.BusyIndicator.IsBusy = false;
-
             main.tvAgraria.DataContext = TemasSingletons.Temas(idMateria);
             main.Ribbon.ApplicationName = VarGlobales.TituloVentanas(idMateria);
-            
+            main.BusyIndicator.IsBusy = false;
         }
 
         private void LaunchBusyIndicator()

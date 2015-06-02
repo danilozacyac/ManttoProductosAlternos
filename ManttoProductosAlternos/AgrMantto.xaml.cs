@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using ManttoProductosAlternos.Controller;
-using ManttoProductosAlternos.Dto;
 using ManttoProductosAlternos.Model;
-using ManttoProductosAlternos.Reportes;
-using ManttoProductosAlternos.Singletons;
-using ManttoProductosAlternos.Utils;
 using ScjnUtilities;
 using Telerik.Windows.Controls;
 
@@ -21,26 +15,12 @@ namespace ManttoProductosAlternos
     /// </summary>
     public partial class AgrMantto : Window
     {
-        // private int idSeleccionado = 0;
-        //List<TreeViewItem> arbolAgraria = new List<TreeViewItem>();
-        //private Temas temaSeleccionado = null;
-        //private TesisDTO tesisSeleccionada = null;
-        //public int IdProducto = 0;
-        //private bool expande = true;
-        //private int find = 0;
-        //private List<string> busqueda = new List<string>();
-        //List<TesisDTO> tesisRelacionadas = null;
-        //TreeViewItem nodoSelect = null;
-
-        ObservableCollection<Temas> arbolTemas;// = new List<TreeViewItem>();
-
         AgrManttoController controller;
 
-        public AgrMantto(ObservableCollection<Temas> arbolTemas)
+        public AgrMantto()
         {
             InitializeComponent();
-            this.arbolTemas = arbolTemas;
-            controller = new AgrManttoController(this,this.arbolTemas);
+            controller = new AgrManttoController(this);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -48,9 +28,14 @@ namespace ManttoProductosAlternos
             AccesoModel model = new AccesoModel();
             model.ObtenerPermisos();
 
+            String[] acceso = AccesoUsuarioModel.Programas.Split(',');
             
             controller.SetEnableThemes();
-            controller.WindowLoad(1);
+
+            if (AccesoUsuarioModel.Grupo == 0)
+                controller.WindowLoad(1);
+            else
+                controller.WindowLoad(Convert.ToInt16(acceso[0]));
         }
         
         private void TvAgrariaSelectedItemChanged(object sender, SelectionChangedEventArgs e)
@@ -139,33 +124,12 @@ namespace ManttoProductosAlternos
             }
         }
 
-       
 
         private void ButtonMaterias_Click(object sender, RoutedEventArgs e)
         {
             RadRibbonButton boton = sender as RadRibbonButton;
             controller.WindowLoad(Convert.ToInt16(boton.Uid));
 
-            //switch (boton.Name)
-            //{
-            //    case "RBtnAgraria":
-            //        controller.WindowLoad(1);
-            //        break;
-            //    case "RBtnSuspension":
-            //        controller.WindowLoad(2);
-            //        break;
-            //    case "RBtnImprocedencia":
-            //        controller.WindowLoad(3);
-            //        break;
-            //    case "RBtnScjn":
-            //        controller.WindowLoad(4);
-            //        break;
-            //    case "RBtnElectoral":
-            //        controller.WindowLoad(15);
-            //        break;
-            //    case "RBtnPermisos":
-            //        break;
-            //}
         }
 
         private void DgTesisSelectionChanged(object sender, SelectionChangeEventArgs e)
@@ -176,6 +140,11 @@ namespace ManttoProductosAlternos
         private void SearchTextBox_Search(object sender, RoutedEventArgs e)
         {
             controller.Searcher(((TextBox)sender).Text);
+        }
+
+        private void BtnEjeVotos_Click(object sender, RoutedEventArgs e)
+        {
+            controller.VerEjecutoriasVotos();
         }
 
         

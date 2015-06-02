@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="frmPermisos"
         Width="895"
-        Icon="Resources/Libros.ico"
+        Icon="Resources/Books_128.png"
         Height="402"
         Loaded="Window_Loaded">
     <Grid>
@@ -132,7 +132,7 @@
                 Margin="0,328,225,0"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
-                Click="btnAceptar_Click"
+                Click="BtnAceptarClick"
                 Content="Aceptar"
                 Visibility="Hidden" />
         <Button Name="btnCancelar"
@@ -141,7 +141,7 @@
                 Margin="656,328,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Click="btnCancelar_Click"
+                Click="BtnCancelarClick"
                 Content="Cancelar"
                 Visibility="Hidden" />
         <Button Name="btnActualizar"
@@ -150,7 +150,7 @@
                 Margin="0,328,25,0"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
-                Click="btnActualizar_Click"
+                Click="BtnActualizarClick"
                 Content="Actualizar" />
     </Grid>
 </Window>

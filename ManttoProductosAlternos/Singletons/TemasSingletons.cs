@@ -25,31 +25,31 @@ namespace ManttoProductosAlternos.Singletons
             {
                 case 1:
                     if (agraria == null)
-                        agraria = new TemasModel(idMateria).GetTemas(0);
+                        agraria = new TemasModel(idMateria).GetTemas(null);
 
                     return agraria;
 
                 case 2:
                     if (suspension == null)
-                        suspension = new TemasModel(idMateria).GetTemas(0);
+                        suspension = new TemasModel(idMateria).GetTemas(null);
 
                     return suspension;
 
                 case 3:
                     if (improcedencia == null)
-                        improcedencia = new TemasModel(idMateria).GetTemas(0);
+                        improcedencia = new TemasModel(idMateria).GetTemas(null);
 
                     return improcedencia;
 
                 case 4:
                     if (facultades == null)
-                        facultades = new TemasModel(idMateria).GetTemas(0);
+                        facultades = new TemasModel(idMateria).GetTemas(null);
 
                     return facultades;
 
                 case 15:
                     if (electoral == null)
-                        electoral = new TemasModel(idMateria).GetTemas(0);
+                        electoral = new TemasModel(idMateria).GetTemas(null);
 
                     return electoral;
 

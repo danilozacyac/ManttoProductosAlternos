@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -10,20 +11,21 @@ using ScjnUtilities;
 namespace ManttoProductosAlternos
 {
     /// <summary>
-    /// Interaction logic for frmListaTesis.xaml
+    /// Interaction logic for FrmListaTesis.xaml
     /// </summary>
-    public partial class frmListaTesis : Window
+    public partial class FrmListaTesis 
     {
 
-        private List<TesisDTO> tesisRelacionadas = null;
+        private List<TesisDTO> listaDeTesisDelProducto = null;
+        private ObservableCollection<Temas> temasRelacionados = null;
+
+        private Temas selectedTema;
+        private TesisDTO selectedTesis;
+
         private int idProducto;
 
-        private long pIus = 0;
-        private long pId;
-        private string pTesis;
-        //private Int32 pRecordPos;
 
-        public frmListaTesis(int idProducto)
+        public FrmListaTesis(int idProducto)
         {
             InitializeComponent();
             this.idProducto = idProducto;
@@ -31,19 +33,10 @@ namespace ManttoProductosAlternos
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            tesisRelacionadas = new TesisModel(idProducto).GetTesisPorTema();
-            tesisRelacionadas = tesisRelacionadas.Distinct().ToList();
-            dgTesis.DataContext = tesisRelacionadas;
-            // xamDataGrid1.DataSource = tesisRelacionadas;
-
-            /**
-             * Buscar como realizar las acciones de las siguientes líneas desde el editor
-             * */
-            //dgTesis.FieldSettings.AllowEdit = false;
-            //dgTesis.FieldSettings.AllowResize = false;
-            //Style wrapstyle = new Style(typeof(XamTextEditor));
-            //wrapstyle.Setters.Add(new Setter(XamTextEditor.TextWrappingProperty, TextWrapping.Wrap));
-            //dgTesis.FieldSettings.EditorStyle = wrapstyle;
+            listaDeTesisDelProducto = new TesisModel(idProducto).GetTesisPorTema();
+            listaDeTesisDelProducto = listaDeTesisDelProducto.Distinct().ToList();
+            dgTesis.DataContext = listaDeTesisDelProducto;
+            
         }
 
         private void BtnIusClick(object sender, RoutedEventArgs e)
@@ -60,58 +53,40 @@ namespace ManttoProductosAlternos
 
         private void BtnEliminar_Click(object sender, RoutedEventArgs e)
         {
-            if (pIus != 0)
+            if (selectedTesis != null)
             {
-                AlertDialog dialog = new AlertDialog(pIus, idProducto);
-                dialog.ShowDialog();
+                MessageBoxResult result = MessageBox.Show("La tesis seleccionada, que deseas eliminar, esta relacionada con " + temasRelacionados.Count + " temas. ¿Deseas continuar?",
+                    "ATENCIÓN:", MessageBoxButton.YesNo, MessageBoxImage.Warning);
 
-                if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)
+                if (result == MessageBoxResult.Yes)
                 {
-                    new TesisModel(idProducto).EliminaTesisLista(pIus);
-                    tesisRelacionadas.Remove(tesisSelected);
-                    //dgTesis.Records[this.pRecordPos].Visibility = System.Windows.Visibility.Collapsed;
+                    new TesisModel(idProducto).EliminaTesisLista(selectedTesis.Ius);
+                    listaDeTesisDelProducto.Remove(selectedTesis);
                 }
             }
         }
 
-        private void BtnCerrar_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
-        private TesisDTO tesisSelected;
         private void DgTesisSelectionChanged(object sender, Telerik.Windows.Controls.SelectionChangeEventArgs e)
         {
-            tesisSelected = dgTesis.SelectedItem as TesisDTO;
-            this.pIus = tesisSelected.Ius;
+            selectedTesis = dgTesis.SelectedItem as TesisDTO;
+
+            temasRelacionados = new TemasModel(idProducto).GetTemasRelacionados(selectedTesis.Ius);
+            LstTemas.DataContext = temasRelacionados;
+
+            
+            BtnEliminar.IsEnabled = true;
+            BtnSustituir.IsEnabled = true;
         }
-
-        //private void dgTesis_RecordActivated(object sender, Infragistics.Windows.DataPresenter.Events.RecordActivatedEventArgs e)
-        //{
-        //    if (e.Record is DataRecord)
-        //    {
-        //        DataRecord myRecord = (DataRecord)e.Record;
-        //        this.pIus = Convert.ToInt32(myRecord.Cells[0].Value);
-        //        //this.pIus = Convert.ToInt32(myRecord.Cells[1].Value);
-        //        //this.pTesis = myRecord.Cells[2].Value.ToString();
-        //        this.pRecordPos = myRecord.Index;
-
-        //    }
-        //}
 
         public void MoveGridToIus(long nIus)
         {
-            //int nRow = 0;
             bool find = false;
 
             foreach (TesisDTO item in dgTesis.Items)
             {
                 if (nIus == item.Ius)
                 {
-                    //item.IsSelected = true;
-                    //nRow = item.Index;
                     find = true;
-                    //main.dgTesis.ActiveRecord = item;
                     dgTesis.CurrentItem = item;
                     dgTesis.SelectedItem = item;
                     dgTesis.ScrollIntoView(item);
@@ -146,7 +121,7 @@ namespace ManttoProductosAlternos
             }
 
             TesisModel model = new TesisModel(idProducto);
-            model.SustituyeTesis(this.pIus, Convert.ToInt64(TxtNumeroIus.Text));
+            model.SustituyeTesis(this.selectedTesis.Ius, Convert.ToInt64(TxtNumeroIus.Text));
 
             TextoS.Visibility = Visibility.Hidden;
             TxtNumeroIus.Visibility = Visibility.Hidden;
@@ -155,24 +130,22 @@ namespace ManttoProductosAlternos
             Window_Loaded(null, null);
         }
 
-        private void DgTesisMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void BtnEliminaRelacion_Click(object sender, RoutedEventArgs e)
         {
-            //DependencyObject source = e.OriginalSource as DependencyObject;
-            //if (source == null)
-            //    return;
+            if (selectedTema != null)
+            {
+                new TesisModel(idProducto).EliminaRelacion(selectedTesis.Ius, selectedTema.IdTema);
 
-            //DataRecordPresenter drp = Infragistics.Windows.Utilities.GetAncestorFromType(source,
-            //        typeof(DataRecordPresenter), true) as DataRecordPresenter;
-            //if (drp == null)
-            //    return;
+                temasRelacionados.Remove(selectedTema);
+            }
+            BtnEliminaRelacion.IsEnabled = false;
+        }
 
-            //if (drp.Record != null)
-            //{
-                frmListaTemas temas = new frmListaTemas(idProducto, pIus, true);
-                temas.ShowDialog();
-                //Lanzar ventana con el listado de temas a los que esta asociada la tesis
-                //   btnVisualizar_Click(sender, null);
-            //}
+        private void LstTemas_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            selectedTema = LstTemas.SelectedItem as Temas;
+            BtnEliminaRelacion.IsEnabled = true;
+
         }
 
         

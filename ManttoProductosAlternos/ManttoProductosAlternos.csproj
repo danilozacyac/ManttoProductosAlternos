@@ -27,9 +27,12 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>\\ct9bd2\JAgraria\Mantenimiento\Updates\</InstallUrl>
+    <ProductName>Manteniemiento de Productos Alternos</ProductName>
+    <PublisherName>Coordinación de Compilación de Tesis</PublisherName>
+    <SuiteName>Productos Alternos</SuiteName>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>6</ApplicationRevision>
-    <ApplicationVersion>2.1.0.%2a</ApplicationVersion>
+    <ApplicationRevision>11</ApplicationRevision>
+    <ApplicationVersion>2.3.20150602.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -178,9 +181,6 @@
     <Compile Include="AgrAgregaTema.xaml.cs">
       <DependentUpon>AgrAgregaTema.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AlertDialog.xaml.cs">
-      <DependentUpon>AlertDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controller\AgrManttoController.cs" />
     <Compile Include="Converter\ForegroundConverter.cs" />
     <Compile Include="Dto\DocumentoTO.cs" />
@@ -188,14 +188,8 @@
     <Compile Include="EjeVotos.xaml.cs">
       <DependentUpon>EjeVotos.xaml</DependentUpon>
     </Compile>
-    <Compile Include="frmAcceso.xaml.cs">
-      <DependentUpon>frmAcceso.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="frmListaTemas.xaml.cs">
-      <DependentUpon>frmListaTemas.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="frmListaTesis.xaml.cs">
-      <DependentUpon>frmListaTesis.xaml</DependentUpon>
+    <Compile Include="FrmListaTesis.xaml.cs">
+      <DependentUpon>FrmListaTesis.xaml</DependentUpon>
     </Compile>
     <Compile Include="frmPermisos.xaml.cs">
       <DependentUpon>frmPermisos.xaml</DependentUpon>
@@ -207,6 +201,7 @@
     <Compile Include="Migrador\DerechosF\Clasificacion.cs" />
     <Compile Include="Migrador\DerechosF\ClasificacionModel.cs" />
     <Compile Include="Migrador\DerechosF\Relaciones.cs" />
+    <Compile Include="Migrador\MigradorModel.cs" />
     <Compile Include="Model\AccesoModel.cs" />
     <Compile Include="Model\AccesoUsuarioModel.cs" />
     <Compile Include="Model\BitacoraModel.cs" />
@@ -219,9 +214,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Reportes\AgrRelacionesMes.cs" />
-    <Compile Include="SelDocument.xaml.cs">
-      <DependentUpon>SelDocument.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Singletons\TemasSingletons.cs" />
     <Compile Include="Utils\VarGlobales.cs" />
     <Page Include="AgrAgregaTema.xaml">
@@ -232,23 +224,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="AlertDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="EjeVotos.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="frmAcceso.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="frmListaTemas.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="frmListaTesis.xaml">
+    <Page Include="FrmListaTesis.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -270,10 +250,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SelDocument.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Themes\Botones.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -284,7 +260,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\GeneraArbol.cs" />
     <Compile Include="Model\TemasModel.cs" />
     <Compile Include="Model\TesisModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -313,7 +288,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Libros.ico" />
     <Resource Include="Resources\buscar.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -322,9 +296,6 @@
     <Resource Include="Resources\suspension.png" />
     <Resource Include="Resources\minus.png" />
     <Resource Include="Resources\keys.png" />
-    <Resource Include="Resources\Libros.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\impAmparo.jpeg" />
@@ -375,9 +346,9 @@
     <Resource Include="Resources\listado.png" />
   </ItemGroup>
   <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
       <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4 %28x86 y x64%29</ProductName>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 y x64%29</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -413,6 +384,21 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Books.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\archivo_128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\MigraAgraria.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\MigraElectoral.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\MigraImproc.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\MigraScjn.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

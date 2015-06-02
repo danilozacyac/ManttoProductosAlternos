@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using ManttoProductosAlternos.Dto;
-using System.Data.SqlClient;
-using ManttoProductosAlternos.DBAccess;
 using System.Data;
-using System.Data.Common;
+using System.Data.SqlClient;
+using System.Windows.Forms;
+using ManttoProductosAlternos.DBAccess;
+using ManttoProductosAlternos.Dto;
 using ManttoProductosAlternos.Interface;
 using ScjnUtilities;
-using System.Windows.Forms;
 
 namespace ManttoProductosAlternos.Model
 {
@@ -39,23 +38,23 @@ namespace ManttoProductosAlternos.Model
                 while (dataReader.Read())
                 {
                     ejecutoria = new DocumentoTO();
-                    ejecutoria.Id = Convert.ToInt32(dataReader["Id"].ToString());
+                    ejecutoria.Id = Convert.ToInt32(dataReader["Id"]);
                     ejecutoria.Rubro = dataReader["Rubro"].ToString();
-                    ejecutoria.ConsecIndx = Convert.ToInt32(dataReader["ConsecIndx"].ToString());
+                    ejecutoria.ConsecIndx = Convert.ToInt32(dataReader["ConsecIndx"]);
                     ejecutoria.LocExp = dataReader["LocExp"].ToString();
                     ejecutoria.LocAbr = dataReader["LocAbr"].ToString();
-                    ejecutoria.Parte = Convert.ToInt32(dataReader["Parte"].ToString());
+                    ejecutoria.Parte = Convert.ToInt32(dataReader["Parte"]);
                     ejecutoria.Asunto = dataReader["Asunto"].ToString();
                     ejecutoria.Promovente = dataReader["Promovente"].ToString();
                     ejecutoria.AsuntoIndx = dataReader["API"].ToString();
                     ejecutoria.DatosAsuntoIndx = dataReader["MI"].ToString();
                     ejecutoria.LocIndx = dataReader["LI"].ToString();
-                    ejecutoria.Volumen = Convert.ToInt32(dataReader["Volumen"].ToString());
-                    ejecutoria.Consec = Convert.ToInt32(dataReader["Consec"].ToString());
+                    ejecutoria.Volumen = Convert.ToInt32(dataReader["Volumen"]);
+                    ejecutoria.Consec = Convert.ToInt32(dataReader["Consec"]);
                     ejecutoria.Tesis = dataReader["Tesis"].ToString();
-                    ejecutoria.Sala = Convert.ToInt32(dataReader["Sala"].ToString());
-                    ejecutoria.Epoca = Convert.ToInt32(dataReader["Epoca"].ToString());
-                    ejecutoria.Fuente = Convert.ToInt32(dataReader["Fuente"].ToString());
+                    ejecutoria.Sala = Convert.ToInt32(dataReader["Sala"]);
+                    ejecutoria.Epoca = Convert.ToInt32(dataReader["Epoca"]);
+                    ejecutoria.Fuente = Convert.ToInt32(dataReader["Fuente"]);
                     ejecutoria.Pagina = dataReader["Pagina"].ToString();
                 }
             }

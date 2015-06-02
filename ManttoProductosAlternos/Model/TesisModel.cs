@@ -491,72 +491,72 @@ namespace ManttoProductosAlternos.Model
             }
         }
 
-        public static void SetNumTesis()
-        {
-            SqlConnection db2Conne = Conexion.GetConecctionManttoCE();
-            SqlConnection sqlConne = Conexion.GetConnectionCt9bd3();
-            SqlConnection db2InsertConne = Conexion.GetConecctionManttoCE();
+        //public static void SetNumTesis()
+        //{
+        //    SqlConnection db2Conne = Conexion.GetConecctionManttoCE();
+        //    SqlConnection sqlConne = Conexion.GetConnectionCt9bd3();
+        //    SqlConnection db2InsertConne = Conexion.GetConecctionManttoCE();
 
-            SqlCommand db2Cmd;
-            SqlCommand sqlCmd;
+        //    SqlCommand db2Cmd;
+        //    SqlCommand sqlCmd;
 
-            SqlDataReader db2DataReader;
-            SqlDataReader sqlDataReader;
+        //    SqlDataReader db2DataReader;
+        //    SqlDataReader sqlDataReader;
 
-            db2Cmd = db2Conne.CreateCommand();
-            db2Cmd.Connection = db2Conne;
+        //    db2Cmd = db2Conne.CreateCommand();
+        //    db2Cmd.Connection = db2Conne;
 
-            sqlCmd = sqlConne.CreateCommand();
-            sqlCmd.Connection = sqlConne;
+        //    sqlCmd = sqlConne.CreateCommand();
+        //    sqlCmd.Connection = sqlConne;
 
-            try
-            {
-                db2Conne.Open();
-                db2InsertConne.Open();
+        //    try
+        //    {
+        //        db2Conne.Open();
+        //        db2InsertConne.Open();
 
-                string miQry = "SELECT IUS FROM Tesis ";
-                db2Cmd = new SqlCommand(miQry, db2Conne);
-                db2DataReader = db2Cmd.ExecuteReader();
+        //        string miQry = "SELECT IUS FROM Tesis ";
+        //        db2Cmd = new SqlCommand(miQry, db2Conne);
+        //        db2DataReader = db2Cmd.ExecuteReader();
 
-                int cuenta = 0;
-                sqlConne.Open();
-                while (db2DataReader.Read())
-                {
-                    miQry = "SELECT Tesis FROM Tesis WHERE IUS = " + db2DataReader["IUS"].ToString();
-                    sqlCmd = new SqlCommand(miQry, sqlConne);
-                    sqlDataReader = sqlCmd.ExecuteReader();
+        //        int cuenta = 0;
+        //        sqlConne.Open();
+        //        while (db2DataReader.Read())
+        //        {
+        //            miQry = "SELECT Tesis FROM Tesis WHERE IUS = " + db2DataReader["IUS"].ToString();
+        //            sqlCmd = new SqlCommand(miQry, sqlConne);
+        //            sqlDataReader = sqlCmd.ExecuteReader();
 
-                    if (sqlDataReader.HasRows)
-                    {
-                        sqlDataReader.Read();
+        //            if (sqlDataReader.HasRows)
+        //            {
+        //                sqlDataReader.Read();
 
-                        SqlCommand bd2InsertCmd;
-                        bd2InsertCmd = db2InsertConne.CreateCommand();
-                        bd2InsertCmd.Connection = db2InsertConne;
+        //                SqlCommand bd2InsertCmd;
+        //                bd2InsertCmd = db2InsertConne.CreateCommand();
+        //                bd2InsertCmd.Connection = db2InsertConne;
 
-                        bd2InsertCmd.CommandText = "UPDATE Tesis SET Tesis = '" + sqlDataReader["Tesis"].ToString() +
-                                                   "' WHERE IUS = " + db2DataReader["IUS"].ToString();
-                        bd2InsertCmd.ExecuteNonQuery();
-                    }
-                    sqlDataReader.Close();
+        //                bd2InsertCmd.CommandText = "UPDATE Tesis SET Tesis = '" + sqlDataReader["Tesis"].ToString() +
+        //                                           "' WHERE IUS = " + db2DataReader["IUS"].ToString();
+        //                bd2InsertCmd.ExecuteNonQuery();
+        //            }
+        //            sqlDataReader.Close();
 
-                    cuenta++;
-                }
-            }
-            catch (SqlException ex)
-            {
-                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+        //            cuenta++;
+        //        }
+        //    }
+        //    catch (SqlException ex)
+        //    {
+        //        string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
 
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
-            }
-            finally
-            {
-                db2Conne.Close();
-                sqlConne.Close();
-                db2InsertConne.Close();
-            }
-        }
+        //        MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        //        ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+        //    }
+        //    finally
+        //    {
+        //        db2Conne.Close();
+        //        sqlConne.Close();
+        //        db2InsertConne.Close();
+        //    }
+        //}
 
         public bool SustituyeTesis(long iusViejo, long iusNuevo)
         {

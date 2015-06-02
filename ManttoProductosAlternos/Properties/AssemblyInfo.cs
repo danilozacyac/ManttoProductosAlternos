@@ -5,11 +5,11 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ManttoProductosAlternos")]
+[assembly: AssemblyTitle("Mantenimiento de Productos Alternos")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Suprema Corte de Justicia de la Nación")]
-[assembly: AssemblyProduct("ManttoProductosAlternos")]
+[assembly: AssemblyProduct("Mantenimiento de Productos Alternos")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -49,5 +49,5 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.2014.1126.0")]
-[assembly: AssemblyFileVersion("2.2014.1126.0")]
+[assembly: AssemblyVersion("2.2015.0515.0")]
+[assembly: AssemblyFileVersion("2.2015.0515.0")]

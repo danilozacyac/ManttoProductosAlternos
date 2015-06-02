@@ -5,7 +5,7 @@
         Title="Agregar Tema"
         Width="512"
         Height="529"
-        Icon="Resources/Libros.ico"
+        Icon="Resources/Books_128.png"
         Loaded="Window_Loaded">
     <Grid>
         <Grid.RowDefinitions>
