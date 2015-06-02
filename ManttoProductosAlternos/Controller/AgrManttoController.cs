@@ -532,6 +532,13 @@ namespace ManttoProductosAlternos.Controller
             TesisModel tesisModel = new TesisModel(idMateria);
             tesisModel.SetConsecIndx();
         }
+
+        public void LaunchPermisos()
+        {
+            FrmPermisos permisos = new FrmPermisos();
+            permisos.Owner = main;
+            permisos.ShowDialog();
+        }
         
         #endregion
 

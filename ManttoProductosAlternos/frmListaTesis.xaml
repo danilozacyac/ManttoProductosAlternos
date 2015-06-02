@@ -7,6 +7,12 @@
         Height="600"
         WindowState="Maximized"
         Loaded="Window_Loaded">
+    <telerik:RadWindow.Resources>
+        <Style x:Key="AlternateRowColor" TargetType="{x:Type telerik:GridViewRow}">
+            <Setter Property="Background" Value="LightBlue" />
+        </Style>
+    </telerik:RadWindow.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="45" />
@@ -50,6 +56,8 @@
                                  IsFilteringAllowed="False"
                                  ItemsSource="{Binding}"
                                  SelectionChanged="DgTesisSelectionChanged"
+                                 AlternationCount="2"
+                                 AlternateRowStyle="{DynamicResource AlternateRowColor}"
                                  ShowGroupPanel="False">
                 <telerik:RadGridView.Columns>
                     <telerik:GridViewDataColumn Width="60"
@@ -58,8 +66,10 @@
                                                 IsReadOnly="True" />
                     <telerik:GridViewDataColumn Width="*"
                                                 DataMemberBinding="{Binding Rubro}"
-                                                Header="Rubro"
-                                                IsReadOnly="True" />
+                                                Header="Rubro" TextWrapping="Wrap"
+                                                IsReadOnly="True" >
+                        
+                    </telerik:GridViewDataColumn>
 
                 </telerik:RadGridView.Columns>
             </telerik:RadGridView>

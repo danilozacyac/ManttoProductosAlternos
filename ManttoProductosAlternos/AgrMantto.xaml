@@ -1,18 +1,21 @@
-﻿<Window x:Class="ManttoProductosAlternos.AgrMantto"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:UIControls="clr-namespace:UIControls;assembly=UIControls"
-        xmlns:converter="clr-namespace:ManttoProductosAlternos.Converter"
-        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
-        Title="Mantenimiento"
-        Width="1161"
-        Height="602"
-        Icon="Resources/Books_128.png"
-        Loaded="Window_Loaded"
-        WindowState="Maximized">
-    <Window.Resources>
+﻿<telerik:RadWindow x:Class="ManttoProductosAlternos.AgrMantto"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:UIControls="clr-namespace:UIControls;assembly=UIControls"
+                   xmlns:converter="clr-namespace:ManttoProductosAlternos.Converter"
+                   xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+                   Width="1161"
+                   Height="602"
+                   Header="Mantenimiento"
+                   Loaded="Window_Loaded"
+                   WindowState="Maximized">
+    <telerik:RadWindow.Resources>
         <converter:ForegroundConverter x:Key="foreground" />
-    </Window.Resources>
+        <Style x:Key="AlternateRowColor" TargetType="{x:Type telerik:GridViewRow}">
+            <Setter Property="Background" Value="LightBlue" />
+        </Style>
+
+    </telerik:RadWindow.Resources>
     <telerik:RadBusyIndicator x:Name="BusyIndicator"
                               Grid.Row="1"
                               IsIndeterminate="True"
@@ -102,8 +105,8 @@
                                VerticalAlignment="Top"
                                FontSize="13"
                                FontWeight="Bold"
-                               TextWrapping="Wrap"
-                               Text="" />
+                               Text=""
+                               TextWrapping="Wrap" />
 
                     <TextBlock x:Name="textBlock1"
                                Grid.Row="0"
@@ -184,6 +187,8 @@
                                          IsFilteringAllowed="False"
                                          ItemsSource="{Binding}"
                                          SelectionChanged="DgTesisSelectionChanged"
+                                         AlternationCount="2"
+                                         AlternateRowStyle="{DynamicResource AlternateRowColor}"
                                          ShowGroupPanel="False">
                         <telerik:RadGridView.Columns>
                             <telerik:GridViewDataColumn Width="60"
@@ -193,7 +198,8 @@
                             <telerik:GridViewDataColumn Width="*"
                                                         DataMemberBinding="{Binding Rubro}"
                                                         Header="Rubro"
-                                                        IsReadOnly="True" />
+                                                        IsReadOnly="True"
+                                                        TextWrapping="Wrap" />
 
                         </telerik:RadGridView.Columns>
                     </telerik:RadGridView>
@@ -240,9 +246,11 @@
                                                  Uid="15" />
                         <telerik:Separator />
                         <telerik:RadRibbonButton x:Name="RBtnPermisos"
+                                                 Click="ButtonMaterias_Click"
                                                  IsEnabled="False"
                                                  LargeImage="Resources/keys.png"
-                                                 Text="Permisos" />
+                                                 Text="Permisos"
+                                                 Uid="1000" />
                         <telerik:Separator />
                         <telerik:RadRibbonButton LargeImage="Resources/exit_128.png" Text="Salir" />
                     </telerik:ApplicationMenu>
@@ -277,8 +285,9 @@
                             </StackPanel>
                         </telerik:RadRibbonButton>
                         <telerik:RadRibbonButton x:Name="BtnEjeVotos"
+                                                 Click="BtnEjeVotos_Click"
                                                  LargeImage="Resources/archivo_128.png"
-                                                 Size="Large" Click="BtnEjeVotos_Click">
+                                                 Size="Large">
                             <StackPanel Orientation="Vertical">
                                 <TextBlock HorizontalAlignment="Center" Text="Ejecutorias" />
                                 <TextBlock HorizontalAlignment="Center" Text="y Votos" />
@@ -343,36 +352,36 @@
                     <telerik:RadRibbonGroup Header="Migradores">
                         <telerik:RadRibbonButton x:Name="BtnMigraSuspension"
                                                  Click="RadRibbonButton_Click"
-                                                 Uid="102"
                                                  LargeImage="Resources/1425495838_add-notes.png"
-                                                 Size="Large">
+                                                 Size="Large"
+                                                 Uid="102">
                             <StackPanel Orientation="Vertical">
                                 <TextBlock HorizontalAlignment="Center" Text="Procesar" />
                                 <TextBlock HorizontalAlignment="Center" Text="Suspensión" />
                             </StackPanel>
                         </telerik:RadRibbonButton>
                         <telerik:RadRibbonButton x:Name="BtnMigraImprocesencia"
-                                                 Uid="103"
                                                  LargeImage="Resources/MigraImproc.png"
-                                                 Size="Large">
+                                                 Size="Large"
+                                                 Uid="103">
                             <StackPanel Orientation="Vertical">
                                 <TextBlock HorizontalAlignment="Center" Text="Procesar" />
                                 <TextBlock HorizontalAlignment="Center" Text="Improcedencia" />
                             </StackPanel>
                         </telerik:RadRibbonButton>
                         <telerik:RadRibbonButton x:Name="BtnMigraFacultades"
-                                                 Uid="104"
                                                  LargeImage="Resources/MigraScjn.png"
-                                                 Size="Large">
+                                                 Size="Large"
+                                                 Uid="104">
                             <StackPanel Orientation="Vertical">
                                 <TextBlock HorizontalAlignment="Center" Text="Procesar" />
                                 <TextBlock HorizontalAlignment="Center" Text="Facultades" />
                             </StackPanel>
                         </telerik:RadRibbonButton>
                         <telerik:RadRibbonButton x:Name="BtnMigraElectoral"
-                                                 Uid="104"
                                                  LargeImage="Resources/MigraElectoral.png"
-                                                 Size="Large">
+                                                 Size="Large"
+                                                 Uid="104">
                             <StackPanel Orientation="Vertical">
                                 <TextBlock HorizontalAlignment="Center" Text="Procesar" />
                                 <TextBlock HorizontalAlignment="Center" Text="Electoral" />
@@ -384,4 +393,4 @@
 
         </Grid>
     </telerik:RadBusyIndicator>
-</Window>
+</telerik:RadWindow>

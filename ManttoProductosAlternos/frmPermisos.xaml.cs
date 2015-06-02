@@ -8,13 +8,13 @@ using ManttoProductosAlternos.Dto;
 namespace ManttoProductosAlternos
 {
     /// <summary>
-    /// Interaction logic for frmPermisos.xaml
+    /// Interaction logic for FrmPermisos.xaml
     /// </summary>
-    public partial class frmPermisos : Window
+    public partial class FrmPermisos 
     {
         Usuarios usuario = new Usuarios();
 
-        public frmPermisos()
+        public FrmPermisos()
         {
             InitializeComponent();
         }
@@ -43,9 +43,9 @@ namespace ManttoProductosAlternos
             txtPass.Password = usuario.Contrasena;
 
             if (usuario.Grupo < 3)
-                radActivo.IsChecked = true;
+                RadActivo.IsChecked = true;
             else
-                radInactivo.IsChecked = true;
+                RadInactivo.IsChecked = true;
 
             groupBox1.IsEnabled = (usuario.Grupo == 0) ? false : true;
         }
@@ -71,8 +71,8 @@ namespace ManttoProductosAlternos
             txtUsuario.Text = "";
             txtPass.Password = "";
 
-            radActivo.IsChecked = false;
-            radInactivo.IsChecked = false;
+            RadActivo.IsChecked = false;
+            RadInactivo.IsChecked = false;
         }
 
         private void BtnCancelarClick(object sender, RoutedEventArgs e)
@@ -96,7 +96,7 @@ namespace ManttoProductosAlternos
             else
             {
                 usuario.Contrasena = txtPass.Password;
-                usuario.Grupo = (radActivo.IsChecked == true) ? 1 : 9;
+                usuario.Grupo = (RadActivo.IsChecked == true) ? 1 : 9;
 
                 usuario.Autorizados = "";
 
@@ -123,7 +123,7 @@ namespace ManttoProductosAlternos
             usuario.Nombre = txtNombre.Text;
             usuario.Usuario = txtUsuario.Text;
             usuario.Contrasena = txtPass.Password;
-            usuario.Grupo = (radActivo.IsChecked == true) ? 1 : 9;
+            usuario.Grupo = (RadActivo.IsChecked == true) ? 1 : 9;
 
             usuario.Autorizados = "";
 

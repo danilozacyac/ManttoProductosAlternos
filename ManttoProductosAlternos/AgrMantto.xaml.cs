@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using ManttoProductosAlternos.Controller;
 using ManttoProductosAlternos.Model;
 using ScjnUtilities;
@@ -13,7 +14,7 @@ namespace ManttoProductosAlternos
     /// <summary>
     /// Interaction logic for AgrMantto.xaml
     /// </summary>
-    public partial class AgrMantto : Window
+    public partial class AgrMantto
     {
         AgrManttoController controller;
 
@@ -36,6 +37,18 @@ namespace ManttoProductosAlternos
                 controller.WindowLoad(1);
             else
                 controller.WindowLoad(Convert.ToInt16(acceso[0]));
+
+            this.ShowInTaskbar(this, "Mantenimiento de Productos Alternos");
+        }
+
+        public void ShowInTaskbar(RadWindow control, string title)
+        {
+            control.Show();
+            var window = control.ParentOfType<Window>();
+            window.ShowInTaskbar = true;
+            window.Title = title;
+            var uri = new Uri("pack://application:,,,/ManttoProductosAlternos;component/Resources/Books_128.png");
+            window.Icon = BitmapFrame.Create(uri);
         }
         
         private void TvAgrariaSelectedItemChanged(object sender, SelectionChangedEventArgs e)
@@ -128,7 +141,13 @@ namespace ManttoProductosAlternos
         private void ButtonMaterias_Click(object sender, RoutedEventArgs e)
         {
             RadRibbonButton boton = sender as RadRibbonButton;
-            controller.WindowLoad(Convert.ToInt16(boton.Uid));
+
+            int idElement = Convert.ToInt16(boton.Uid);
+
+            if (idElement == 1000)
+                controller.LaunchPermisos();
+            else
+                controller.WindowLoad(idElement);
 
         }
 

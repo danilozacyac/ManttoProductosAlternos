@@ -28,11 +28,11 @@
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>\\ct9bd2\JAgraria\Mantenimiento\Updates\</InstallUrl>
     <ProductName>Manteniemiento de Productos Alternos</ProductName>
-    <PublisherName>Coordinación de Compilación de Tesis</PublisherName>
+    <PublisherName>Suprema Corte de Justicia de la Nación</PublisherName>
     <SuiteName>Productos Alternos</SuiteName>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>11</ApplicationRevision>
-    <ApplicationVersion>2.3.20150602.%2a</ApplicationVersion>
+    <ApplicationRevision>13</ApplicationRevision>
+    <ApplicationVersion>2.3.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -191,8 +191,8 @@
     <Compile Include="FrmListaTesis.xaml.cs">
       <DependentUpon>FrmListaTesis.xaml</DependentUpon>
     </Compile>
-    <Compile Include="frmPermisos.xaml.cs">
-      <DependentUpon>frmPermisos.xaml</DependentUpon>
+    <Compile Include="FrmPermisos.xaml.cs">
+      <DependentUpon>FrmPermisos.xaml</DependentUpon>
     </Compile>
     <Compile Include="Interface\IDocumentos.cs" />
     <Compile Include="LaunchWindow.xaml.cs">
@@ -232,7 +232,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="frmPermisos.xaml">
+    <Page Include="FrmPermisos.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
