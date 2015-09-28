@@ -27,24 +27,24 @@ namespace ManttoProductosAlternos.Model
         public List<TesisDTO> GetTesisRelacionadas(int idTema)
         {
             List<TesisDTO> listaTesis = new List<TesisDTO>();
-            SqlConnection sqlNueva = Conexion.GetConecctionManttoCE();
+            SqlConnection connection = Conexion.GetConecctionManttoCE();
 
             SqlDataReader dataReader;
             SqlCommand cmdAntes;
 
-            cmdAntes = sqlNueva.CreateCommand();
-            cmdAntes.Connection = sqlNueva;
+            cmdAntes = connection.CreateCommand();
+            cmdAntes.Connection = connection;
 
             try
             {
-                sqlNueva.Open();
+                connection.Open();
 
                 string miQry = "SELECT T.IUS,T.Rubro,T.Texto,T.Prec,T.LocAbr,T.LocExp,T.Volumen,T.Parte " +
                                " FROM Tesis T INNER JOIN TemasIUS I ON I.IUS = T.IUS  " +
                                " WHERE (I.Id = @idTema AND T.IdProd = @idProducto ) AND I.idProd = @idProducto " +
                                " ORDER BY T.ConsecIndx";
 
-                cmdAntes = new SqlCommand(miQry, sqlNueva);
+                cmdAntes = new SqlCommand(miQry, connection);
                 cmdAntes.Parameters.AddWithValue("@idTema", idTema);
                 cmdAntes.Parameters.AddWithValue("@idProducto", idProducto);
                 dataReader = cmdAntes.ExecuteReader();
@@ -68,13 +68,16 @@ namespace ManttoProductosAlternos.Model
             catch (SqlException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,TesisModel", "ManttoProductosAlternos");
+            }
+            catch (Exception ex)
+            {
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,TesisModel", "ManttoProductosAlternos");
             }
             finally
             {
-                sqlNueva.Close();
+                connection.Close();
             }
 
             return listaTesis;
@@ -83,21 +86,21 @@ namespace ManttoProductosAlternos.Model
         public List<int> GetRegistrosRelacionados(int idTema)
         {
             List<int> listaTesis = new List<int>();
-            SqlConnection sqlNueva = Conexion.GetConecctionManttoCE();
+            SqlConnection connection = Conexion.GetConecctionManttoCE();
 
             SqlDataReader dataReader;
             SqlCommand cmdAntes;
 
-            cmdAntes = sqlNueva.CreateCommand();
-            cmdAntes.Connection = sqlNueva;
+            cmdAntes = connection.CreateCommand();
+            cmdAntes.Connection = connection;
 
             try
             {
-                sqlNueva.Open();
+                connection.Open();
 
                 string miQry = "SELECT IUS FROM TemasIUS WHERE Id = @idTema AND IdProd = @idProducto ORDER BY ConsecIndx";
 
-                cmdAntes = new SqlCommand(miQry, sqlNueva);
+                cmdAntes = new SqlCommand(miQry, connection);
                 cmdAntes.Parameters.AddWithValue("@idTema", idTema);
                 cmdAntes.Parameters.AddWithValue("@idProducto", idProducto);
                 dataReader = cmdAntes.ExecuteReader();
@@ -111,13 +114,16 @@ namespace ManttoProductosAlternos.Model
             catch (SqlException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,TesisModel", "ManttoProductosAlternos");
+            }
+            catch (Exception ex)
+            {
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,TesisModel", "ManttoProductosAlternos");
             }
             finally
             {
-                sqlNueva.Close();
+                connection.Close();
             }
 
             return listaTesis;
@@ -130,24 +136,24 @@ namespace ManttoProductosAlternos.Model
         public List<TesisDTO> GetTesisPorTema()
         {
             List<TesisDTO> listaTesis = new List<TesisDTO>();
-            SqlConnection sqlNueva = Conexion.GetConecctionManttoCE();
+            SqlConnection connection = Conexion.GetConecctionManttoCE();
 
             SqlDataReader dataReader;
             SqlCommand cmdAntes;
 
-            cmdAntes = sqlNueva.CreateCommand();
-            cmdAntes.Connection = sqlNueva;
+            cmdAntes = connection.CreateCommand();
+            cmdAntes.Connection = connection;
 
             try
             {
-                sqlNueva.Open();
+                connection.Open();
 
                 string miQry = "SELECT T.IUS,T.Rubro,T.Texto,T.Prec,T.LocAbr,T.LocExp,T.Volumen,T.Parte " +
                                " FROM Tesis T " +
                                " WHERE T.idProd = @idProducto " +
                                " ORDER BY T.ConsecIndx";
 
-                cmdAntes = new SqlCommand(miQry, sqlNueva);
+                cmdAntes = new SqlCommand(miQry, connection);
                 cmdAntes.Parameters.AddWithValue("@idProducto", idProducto);
                 dataReader = cmdAntes.ExecuteReader();
 
@@ -170,27 +176,30 @@ namespace ManttoProductosAlternos.Model
             catch (SqlException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,TesisModel", "ManttoProductosAlternos");
+            }
+            catch (Exception ex)
+            {
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,TesisModel", "ManttoProductosAlternos");
             }
             finally
             {
-                sqlNueva.Close();
+                connection.Close();
             }
             return listaTesis;
         }
 
         public void InsertaTesis(long ius, int idTema)
         {
-            SqlConnection sqlConne = Conexion.GetConnectionCt9bd3();
+            SqlConnection connection = Conexion.GetConnectionCt9bd3();
             SqlConnection b2Conne = null;
 
             SqlCommand sqlCmd;
             SqlDataReader dataReader;
 
-            sqlCmd = sqlConne.CreateCommand();
-            sqlCmd.Connection = sqlConne;
+            sqlCmd = connection.CreateCommand();
+            sqlCmd.Connection = connection;
 
             try
             {
@@ -210,12 +219,12 @@ namespace ManttoProductosAlternos.Model
                     nota = oleDR["Nota"].ToString();
                 }
 
-                sqlConne.Open();
+                connection.Open();
 
                 miQry = "SELECT T.IUS,T.Consec,T.Rubro,T.Texto,T.Prec,T.IdGenealogia,T.LocAbr,T.LocExp,T.ConsecIndx,T.Volumen,T.Parte, " +
                         "T.RIndx,T.TIndx,T.PIndx,T.LIndx,T.Tesis " +
                         "FROM Tesis T WHERE T.IUS = " + ius;
-                sqlCmd = new SqlCommand(miQry, sqlConne);
+                sqlCmd = new SqlCommand(miQry, connection);
                 dataReader = sqlCmd.ExecuteReader();
 
                 if (dataReader.HasRows)
@@ -266,7 +275,7 @@ namespace ManttoProductosAlternos.Model
             }
             finally
             {
-                sqlConne.Close();
+                connection.Close();
                 if (b2Conne != null)
                 {
                     b2Conne.Close();
@@ -357,15 +366,15 @@ namespace ManttoProductosAlternos.Model
 
         public void EliminaRelacion(long ius, int idTema)
         {
-            SqlConnection b2Conne = Conexion.GetConecctionManttoCE();
+            SqlConnection connection = Conexion.GetConecctionManttoCE();
             SqlCommand cmd;
 
-            cmd = b2Conne.CreateCommand();
-            cmd.Connection = b2Conne;
+            cmd = connection.CreateCommand();
+            cmd.Connection = connection;
 
             try
             {
-                b2Conne.Open();
+                connection.Open();
 
                 cmd.CommandText = "DELETE FROM TemasIUS WHERE id = " + idTema + " AND IUS = " + ius + "AND idProd = " + idProducto;
                 cmd.ExecuteNonQuery();
@@ -376,34 +385,37 @@ namespace ManttoProductosAlternos.Model
             catch (SqlException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,TesisModel", "ManttoProductosAlternos");
+            }
+            catch (Exception ex)
+            {
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,TesisModel", "ManttoProductosAlternos");
             }
             finally
             {
-                b2Conne.Close();
+                connection.Close();
             }
         }
 
         public void EliminaTesisLista(long ius)
         {
-            SqlConnection b2Conne = Conexion.GetConecctionManttoCE();
+            SqlConnection connection = Conexion.GetConecctionManttoCE();
 
             SqlDataReader dataReader;
-            SqlCommand cmdAntes;
+            SqlCommand cmd;
 
-            cmdAntes = b2Conne.CreateCommand();
-            cmdAntes.Connection = b2Conne;
+            cmd = connection.CreateCommand();
+            cmd.Connection = connection;
 
             try
             {
-                b2Conne.Open();
+                connection.Open();
 
                 string miQry = "SELECT * FROM TemasIUS WHERE IUS = " + ius + " AND idProd = " + idProducto;
 
-                cmdAntes = new SqlCommand(miQry, b2Conne);
-                dataReader = cmdAntes.ExecuteReader();
+                cmd = new SqlCommand(miQry, connection);
+                dataReader = cmd.ExecuteReader();
 
                 while (dataReader.Read())
                 {
@@ -411,19 +423,22 @@ namespace ManttoProductosAlternos.Model
                 }
                 dataReader.Close();
 
-                cmdAntes.CommandText = "DELETE FROM Tesis Where ius = " + ius + " AND idProd = " + idProducto;
-                cmdAntes.ExecuteNonQuery();
+                cmd.CommandText = "DELETE FROM Tesis Where ius = " + ius + " AND idProd = " + idProducto;
+                cmd.ExecuteNonQuery();
             }
             catch (SqlException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,TesisModel", "ManttoProductosAlternos");
+            }
+            catch (Exception ex)
+            {
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,TesisModel", "ManttoProductosAlternos");
             }
             finally
             {
-                b2Conne.Close();
+                connection.Close();
             }
         }
 
@@ -560,14 +575,14 @@ namespace ManttoProductosAlternos.Model
 
         public bool SustituyeTesis(long iusViejo, long iusNuevo)
         {
-            SqlConnection sqlConne = Conexion.GetConnectionCt9bd3();
+            SqlConnection connection = Conexion.GetConnectionCt9bd3();
             SqlConnection b2Conne = null;
 
             SqlCommand sqlCmd;
             SqlDataReader dataReader;
 
-            sqlCmd = sqlConne.CreateCommand();
-            sqlCmd.Connection = sqlConne;
+            sqlCmd = connection.CreateCommand();
+            sqlCmd.Connection = connection;
 
             bool result = true;
 
@@ -589,12 +604,12 @@ namespace ManttoProductosAlternos.Model
                     nota = oleDR["Nota"].ToString();
                 }
 
-                sqlConne.Open();
+                connection.Open();
 
                 miQry = "SELECT T.IUS,T.Consec,T.Rubro,T.Texto,T.Prec,T.IdGenealogia,T.LocAbr,T.LocExp,T.ConsecIndx,T.Volumen,T.Parte, " +
                         "T.RIndx,T.TIndx,T.PIndx,T.LIndx,T.Tesis " +
                         "FROM Tesis T WHERE T.IUS = " + iusNuevo;
-                sqlCmd = new SqlCommand(miQry, sqlConne);
+                sqlCmd = new SqlCommand(miQry, connection);
                 dataReader = sqlCmd.ExecuteReader();
 
                 if (dataReader.HasRows)
@@ -677,7 +692,7 @@ namespace ManttoProductosAlternos.Model
             }
             finally
             {
-                sqlConne.Close();
+                connection.Close();
                 if (b2Conne != null)
                 {
                     b2Conne.Close();

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Data.OleDb;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Windows.Forms;
 using ScjnUtilities;
 
 namespace ManttoProductosAlternos.Migrador.DerechosF
@@ -15,7 +15,7 @@ namespace ManttoProductosAlternos.Migrador.DerechosF
         private List<Relaciones> relaciones;
         private List<Clasificacion> temas;
 
-        public void GetTemas()
+        public List<Clasificacion> GetTemas()
         {
             temas = new List<Clasificacion>();
 
@@ -27,7 +27,7 @@ namespace ManttoProductosAlternos.Migrador.DerechosF
 
             try
             {
-
+                connection.Open();
                 cmd = new OleDbCommand(sqlCadena, connection);
                 reader = cmd.ExecuteReader();
 
@@ -36,10 +36,10 @@ namespace ManttoProductosAlternos.Migrador.DerechosF
                 {
                     Clasificacion tema = new Clasificacion();
 
-                    tema.IdClasifDisco = reader["Id"] as int? ?? 0;
-                    tema.IdClasifScjn = reader["IdScjn"] as int? ?? 0;
-                    tema.IdClasifPc = reader["IdPC"] as int? ?? 0;
-                    tema.IdClasifTcc = reader["IdTCC"] as int? ?? 0;
+                    tema.IdClasifDisco = Convert.ToInt32(reader["Id"]);
+                    tema.IdClasifScjn = Convert.ToInt32(reader["IdScjn"]);
+                    tema.IdClasifPc = Convert.ToInt32(reader["IdPC"]);
+                    tema.IdClasifTcc = Convert.ToInt32(reader["IdTCC"]);
                     tema.Descripcion = reader["descrip"].ToString();
 
                     temas.Add(tema);
@@ -50,22 +50,18 @@ namespace ManttoProductosAlternos.Migrador.DerechosF
             catch (OleDbException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,ClasificacionModel", "ChecaPrecedentes");
             }
             catch (Exception ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,ClasificacionModel", "ChecaPrecedentes");
             }
             finally
             {
                 connection.Close();
             }
-
+            return temas;
         }
 
 
@@ -87,7 +83,7 @@ namespace ManttoProductosAlternos.Migrador.DerechosF
 
             try
             {
-
+                connection.Open();
                 cmd = new OleDbCommand(sqlCadena, connection);
                 reader = cmd.ExecuteReader();
 
@@ -108,16 +104,12 @@ namespace ManttoProductosAlternos.Migrador.DerechosF
             catch (OleDbException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,ClasificacionModel", "ChecaPrecedentes");
             }
             catch (Exception ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,ClasificacionModel", "ChecaPrecedentes");
             }
             finally
             {
@@ -131,7 +123,7 @@ namespace ManttoProductosAlternos.Migrador.DerechosF
         /// Obtiene las relaciones que se establecieron para las tesis posteriores a la 
         /// publicación del apéndice
         /// </summary>
-        public void GetRelacionesPostApendice()
+        public List<Relaciones> GetRelacionesPostApendice()
         {
             SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["BaseIUS"].ToString());
             SqlCommand cmd;
@@ -139,11 +131,12 @@ namespace ManttoProductosAlternos.Migrador.DerechosF
 
             try
             {
+                connection.Open();
                 foreach (Clasificacion tema in temas)
                 {
 
                     string sqlCadena = "SELECT M.IUS,M.IdMatSGA FROM Tesis_MatSGA M INNER JOIN Tesis T " +
-                                       " ON T.IUS = M.IUS WHERE T.[ta/tj] = 1 and Parte <> 99 AND IdMatSGA = " +
+                                       " ON T.IUS = M.IUS WHERE T.[ta_tj] = 1 and Parte <> 99 AND IdMatSGA = " +
                                        tema.IdClasifScjn + " OR IdMatSGA = " + tema.IdClasifTcc + " OR IdMatSGA = " + tema.IdClasifPc;
 
                     cmd = new SqlCommand(sqlCadena, connection);
@@ -170,48 +163,58 @@ namespace ManttoProductosAlternos.Migrador.DerechosF
             catch (SqlException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,ClasificacionModel", "ChecaPrecedentes");
             }
             catch (Exception ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,ClasificacionModel", "ChecaPrecedentes");
             }
             finally
             {
                 connection.Close();
             }
+
+            return relaciones;
         }
 
 
-        public void SetRelaciones()
+        public void SetRelaciones(BackgroundWorker worker)
         {
-            OleDbConnection oleConne = new OleDbConnection(ConfigurationManager.ConnectionStrings["BaseDH"].ToString());
+            OleDbConnection connection = new OleDbConnection(ConfigurationManager.ConnectionStrings["BaseDH"].ToString());
             OleDbCommand cmd;
 
-            cmd = oleConne.CreateCommand();
-            cmd.Connection = oleConne;
+            cmd = connection.CreateCommand();
+            cmd.Connection = connection;
+
+            int currentProgress = 1;
 
             try
             {
-                oleConne.Open();
+                connection.Open();
 
                 foreach (Relaciones relacion in relaciones)
                 {
-                        cmd.CommandText = "INSERT INTO TemasIUS VALUES(" + relacion.IdClasifDisco + "," + relacion.Ius + ",0)";
-                        cmd.ExecuteNonQuery();
+                    cmd.CommandText = "INSERT INTO TemasIUS VALUES(" + relacion.IdClasifDisco + "," + relacion.Ius + ",0)";
+                    cmd.ExecuteNonQuery();
+
+                    worker.ReportProgress(currentProgress);
+                    currentProgress++;
                 }
             }
-            catch (OleDbException)
+            catch (OleDbException ex)
             {
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,ClasificacionModel", "ChecaPrecedentes");
+            }
+            catch (Exception ex)
+            {
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,ClasificacionModel", "ChecaPrecedentes");
             }
             finally
             {
-                oleConne.Close();
+                connection.Close();
             }
 
         }
@@ -237,16 +240,12 @@ namespace ManttoProductosAlternos.Migrador.DerechosF
             catch (OleDbException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,ClasificacionModel", "ChecaPrecedentes");
             }
             catch (Exception ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,ClasificacionModel", "ChecaPrecedentes");
             }
             finally
             {
@@ -318,6 +317,50 @@ namespace ManttoProductosAlternos.Migrador.DerechosF
         }
 
 
+
+        public void GetTotalTesis()
+        {
+            temas = new List<Clasificacion>();
+
+            OleDbConnection connection = new OleDbConnection(ConfigurationManager.ConnectionStrings["BaseDH"].ToString());
+            OleDbCommand cmd;
+            OleDbDataReader reader;
+            connection.Open();
+            foreach (Clasificacion tema in temas)
+            {
+
+                string sqlCadena = "SELECT COUNT(IUS) AS total FROM TemasBusqueda_luis WHERE id= @id ";
+
+                try
+                {
+
+                    cmd = new OleDbCommand(sqlCadena, connection);
+                    cmd.Parameters.AddWithValue("@id", tema.IdClasifDisco);
+                    reader = cmd.ExecuteReader();
+
+
+                    while (reader.Read())
+                    {
+                        tema.TotalTesisRelacionadas = Convert.ToInt32(reader["total"]);
+                    }
+                }
+                catch (OleDbException ex)
+                {
+                    string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+                    ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,ClasificacionModel", "ChecaPrecedentes");
+                }
+                catch (Exception ex)
+                {
+                    string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+                    ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,ClasificacionModel", "ChecaPrecedentes");
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+
+        }
 
 
         #endregion

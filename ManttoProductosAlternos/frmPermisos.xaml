@@ -4,9 +4,9 @@
                    xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
                    Width="895"
                    Height="402"
-                   WindowStartupLocation="CenterScreen"
                    Header="Permisos de la Aplicación"
-                   Loaded="Window_Loaded">
+                   Loaded="Window_Loaded"
+                   WindowStartupLocation="CenterScreen">
     <Grid>
         <!--  <DataGrid AutoGenerateColumns="False" Height="200" HorizontalAlignment="Left" Margin="283,12,0,0" Name="gPermisos" VerticalAlignment="Top" Width="401" />  -->
         <ListBox x:Name="lstUsuarios"

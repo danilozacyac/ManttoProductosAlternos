@@ -183,12 +183,12 @@
                                          Margin="15,0,15,15"
                                          HorizontalAlignment="Stretch"
                                          VerticalAlignment="Stretch"
+                                         AlternateRowStyle="{DynamicResource AlternateRowColor}"
+                                         AlternationCount="2"
                                          AutoGenerateColumns="False"
                                          IsFilteringAllowed="False"
                                          ItemsSource="{Binding}"
                                          SelectionChanged="DgTesisSelectionChanged"
-                                         AlternationCount="2"
-                                         AlternateRowStyle="{DynamicResource AlternateRowColor}"
                                          ShowGroupPanel="False">
                         <telerik:RadGridView.Columns>
                             <telerik:GridViewDataColumn Width="60"
@@ -350,43 +350,16 @@
                 </telerik:RadRibbonTab>
                 <telerik:RadRibbonTab Header="H. Administrativas">
                     <telerik:RadRibbonGroup Header="Migradores">
-                        <telerik:RadRibbonButton x:Name="BtnMigraSuspension"
-                                                 Click="RadRibbonButton_Click"
-                                                 LargeImage="Resources/1425495838_add-notes.png"
+                        <telerik:RadRibbonButton x:Name="BtnMigrador"
+                                                 LargeImage="Resources/db_128.png"
                                                  Size="Large"
-                                                 Uid="102">
+                                                 Uid="102" Click="BtnMigrador_Click" >
                             <StackPanel Orientation="Vertical">
                                 <TextBlock HorizontalAlignment="Center" Text="Procesar" />
                                 <TextBlock HorizontalAlignment="Center" Text="Suspensión" />
                             </StackPanel>
                         </telerik:RadRibbonButton>
-                        <telerik:RadRibbonButton x:Name="BtnMigraImprocesencia"
-                                                 LargeImage="Resources/MigraImproc.png"
-                                                 Size="Large"
-                                                 Uid="103">
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock HorizontalAlignment="Center" Text="Procesar" />
-                                <TextBlock HorizontalAlignment="Center" Text="Improcedencia" />
-                            </StackPanel>
-                        </telerik:RadRibbonButton>
-                        <telerik:RadRibbonButton x:Name="BtnMigraFacultades"
-                                                 LargeImage="Resources/MigraScjn.png"
-                                                 Size="Large"
-                                                 Uid="104">
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock HorizontalAlignment="Center" Text="Procesar" />
-                                <TextBlock HorizontalAlignment="Center" Text="Facultades" />
-                            </StackPanel>
-                        </telerik:RadRibbonButton>
-                        <telerik:RadRibbonButton x:Name="BtnMigraElectoral"
-                                                 LargeImage="Resources/MigraElectoral.png"
-                                                 Size="Large"
-                                                 Uid="104">
-                            <StackPanel Orientation="Vertical">
-                                <TextBlock HorizontalAlignment="Center" Text="Procesar" />
-                                <TextBlock HorizontalAlignment="Center" Text="Electoral" />
-                            </StackPanel>
-                        </telerik:RadRibbonButton>
+
                     </telerik:RadRibbonGroup>
                 </telerik:RadRibbonTab>
             </telerik:RadRibbonView>

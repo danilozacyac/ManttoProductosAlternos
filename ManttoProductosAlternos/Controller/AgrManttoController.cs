@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using ManttoProductosAlternos.Dto;
+using ManttoProductosAlternos.Migrador;
 using ManttoProductosAlternos.Model;
 using ManttoProductosAlternos.Singletons;
 using ManttoProductosAlternos.Utils;
@@ -538,6 +539,13 @@ namespace ManttoProductosAlternos.Controller
             FrmPermisos permisos = new FrmPermisos();
             permisos.Owner = main;
             permisos.ShowDialog();
+        }
+
+        public void LaunchMigrador()
+        {
+            MigrationWin win = new MigrationWin();
+            win.Owner = main;
+            win.ShowDialog();
         }
         
         #endregion

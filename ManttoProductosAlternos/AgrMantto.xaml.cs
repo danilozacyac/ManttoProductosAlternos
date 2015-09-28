@@ -5,6 +5,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using ManttoProductosAlternos.Controller;
+using ManttoProductosAlternos.Migrador;
+using ManttoProductosAlternos.Migrador.DerechosF;
 using ManttoProductosAlternos.Model;
 using ScjnUtilities;
 using Telerik.Windows.Controls;
@@ -164,6 +166,11 @@ namespace ManttoProductosAlternos
         private void BtnEjeVotos_Click(object sender, RoutedEventArgs e)
         {
             controller.VerEjecutoriasVotos();
+        }
+
+        private void BtnMigrador_Click(object sender, RoutedEventArgs e)
+        {
+            controller.LaunchMigrador();
         }
 
         

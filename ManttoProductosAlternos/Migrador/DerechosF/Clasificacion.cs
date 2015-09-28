@@ -10,6 +10,7 @@ namespace ManttoProductosAlternos.Migrador.DerechosF
         private int idClasifScjn;
         private int idClasifTcc;
         private int idClasifPc;
+        private int totalTesisRelacionadas;
 
         public int IdClasifDisco
         {
@@ -70,5 +71,19 @@ namespace ManttoProductosAlternos.Migrador.DerechosF
                 this.idClasifPc = value;
             }
         }
+
+        public int TotalTesisRelacionadas
+        {
+            get
+            {
+                return this.totalTesisRelacionadas;
+            }
+            set
+            {
+                this.totalTesisRelacionadas = value;
+            }
+        }
+
+        
     }
 }

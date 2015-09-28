@@ -13,21 +13,21 @@ namespace ManttoProductosAlternos.Model
         public List<Usuarios> GetUsuarios()
         {
             List<Usuarios> usuarios = new List<Usuarios>();
-            SqlConnection sqlNueva = Conexion.GetConecctionManttoCE();
+            SqlConnection connection = Conexion.GetConecctionManttoCE();
 
             SqlDataReader dataReader;
             SqlCommand cmdAntes;
 
-            cmdAntes = sqlNueva.CreateCommand();
-            cmdAntes.Connection = sqlNueva;
+            cmdAntes = connection.CreateCommand();
+            cmdAntes.Connection = connection;
 
             try
             {
-                sqlNueva.Open();
+                connection.Open();
 
                 string miQry = "SELECT * FROM cUsuarios";
 
-                cmdAntes = new SqlCommand(miQry, sqlNueva);
+                cmdAntes = new SqlCommand(miQry, connection);
                 dataReader = cmdAntes.ExecuteReader();
 
                 while (dataReader.Read())
@@ -46,13 +46,16 @@ namespace ManttoProductosAlternos.Model
             catch (SqlException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,UsuariosModel", "ManttoProductosAlternos");
+            }
+            catch (Exception ex)
+            {
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,UsuariosModel", "ManttoProductosAlternos");
             }
             finally
             {
-                sqlNueva.Close();
+                connection.Close();
             }
 
             return usuarios;
@@ -60,15 +63,15 @@ namespace ManttoProductosAlternos.Model
 
         public void UpdateUsuario(Usuarios usuario)
         {
-            SqlConnection sqlConne = Conexion.GetConecctionManttoCE();
+            SqlConnection connection = Conexion.GetConecctionManttoCE();
             SqlCommand cmd;
 
-            cmd = sqlConne.CreateCommand();
-            cmd.Connection = sqlConne;
+            cmd = connection.CreateCommand();
+            cmd.Connection = connection;
 
             try
             {
-                sqlConne.Open();
+                connection.Open();
 
                 String query = "UPDATE cUsuarios SET Contrasena = '" + usuario.Contrasena + "'";
 
@@ -85,27 +88,30 @@ namespace ManttoProductosAlternos.Model
             catch (SqlException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,UsuariosModel", "ManttoProductosAlternos");
+            }
+            catch (Exception ex)
+            {
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,UsuariosModel", "ManttoProductosAlternos");
             }
             finally
             {
-                sqlConne.Close();
+                connection.Close();
             }
         }
 
         public void SetNewUsuario(Usuarios usuario)
         {
-            SqlConnection sqlConne = Conexion.GetConecctionManttoCE();
+            SqlConnection connection = Conexion.GetConecctionManttoCE();
             SqlCommand cmd;
 
-            cmd = sqlConne.CreateCommand();
-            cmd.Connection = sqlConne;
+            cmd = connection.CreateCommand();
+            cmd.Connection = connection;
 
             try
             {
-                sqlConne.Open();
+                connection.Open();
 
                 String query = "INSERT INTO cUsuarios VALUES((SELECT (MAX(Llave) + 1) FROM cUsuarios),'" + usuario.Nombre + "','" + usuario.Usuario + "','" + usuario.Contrasena + "','" + usuario.Autorizados + "'," + usuario.Grupo + ")";
 
@@ -117,13 +123,16 @@ namespace ManttoProductosAlternos.Model
             catch (SqlException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,UsuariosModel", "ManttoProductosAlternos");
+            }
+            catch (Exception ex)
+            {
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,UsuariosModel", "ManttoProductosAlternos");
             }
             finally
             {
-                sqlConne.Close();
+                connection.Close();
             }
         }
     }

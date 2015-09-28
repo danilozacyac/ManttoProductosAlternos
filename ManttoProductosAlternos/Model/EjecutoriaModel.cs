@@ -20,7 +20,7 @@ namespace ManttoProductosAlternos.Model
         /// <returns></returns>
         public DocumentoTO GetDocumentoPorIus(long ius)
         {
-            SqlConnection conneDsql = Conexion.GetConnectionCt9bd3();
+            SqlConnection connection = Conexion.GetConnectionCt9bd3();
             SqlCommand cmd;
             SqlDataReader dataReader;
 
@@ -28,10 +28,10 @@ namespace ManttoProductosAlternos.Model
 
             try
             {
-                conneDsql.Open();
+                connection.Open();
                 string sqlCadena = "SELECT E.* FROM Ejecutoria E  WHERE E.Id = @ius";
 
-                cmd = new SqlCommand(sqlCadena, conneDsql);
+                cmd = new SqlCommand(sqlCadena, connection);
                 cmd.Parameters.AddWithValue("@ius", ius);
                 dataReader = cmd.ExecuteReader();
 
@@ -61,20 +61,16 @@ namespace ManttoProductosAlternos.Model
             catch (SqlException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,EjecutoriasModel", "ManttoProductosAlternos");
             }
             catch (Exception ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,EjecutoriasModel", "ManttoProductosAlternos");
             }
             finally
             {
-                conneDsql.Close();
+                connection.Close();
             }
             return ejecutoria;
         }
@@ -168,9 +164,12 @@ namespace ManttoProductosAlternos.Model
             catch (SqlException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,EjecutoriasModel", "ManttoProductosAlternos");
+            }
+            catch (Exception ex)
+            {
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,EjecutoriasModel", "ManttoProductosAlternos");
             }
             finally
             {
@@ -215,16 +214,12 @@ namespace ManttoProductosAlternos.Model
             catch (SqlException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,EjecutoriasModel", "ManttoProductosAlternos");
             }
             catch (Exception ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,EjecutoriasModel", "ManttoProductosAlternos");
             }
             finally
             {
@@ -253,16 +248,12 @@ namespace ManttoProductosAlternos.Model
             catch (SqlException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,EjecutoriasModel", "ManttoProductosAlternos");
             }
             catch (Exception ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,EjecutoriasModel", "ManttoProductosAlternos");
             }
             finally
             {

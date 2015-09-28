@@ -85,16 +85,12 @@ namespace ManttoProductosAlternos.Model
             catch (SqlException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,TemasModel", "ManttoProductosAlternos");
             }
             catch (Exception ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,TemasModel", "ManttoProductosAlternos");
             }
             finally
             {
@@ -156,16 +152,12 @@ namespace ManttoProductosAlternos.Model
             catch (SqlException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,TemasModel", "ManttoProductosAlternos");
             }
             catch (Exception ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,TemasModel", "ManttoProductosAlternos");
             }
             finally
             {
@@ -177,16 +169,16 @@ namespace ManttoProductosAlternos.Model
 
         public void ActualizaTema(Temas tema)
         {
-            SqlConnection sqlConne = Conexion.GetConecctionManttoCE();
+            SqlConnection connection = Conexion.GetConecctionManttoCE();
 
             SqlCommand cmd;
 
-            cmd = sqlConne.CreateCommand();
-            cmd.Connection = sqlConne;
+            cmd = connection.CreateCommand();
+            cmd.Connection = connection;
 
             try
             {
-                sqlConne.Open();
+                connection.Open();
 
                 cmd.CommandText = "UPDATE TEMAS  SET Nivel = " + tema.Nivel + ", Padre = " + tema.Padre + ",Tema = '" + tema.Tema +
                                   "',TemaStr = '" + tema.TemaStr + "' WHERE id = " + tema.IdTema + " AND idProd = " + tema.IdProducto;
@@ -194,18 +186,21 @@ namespace ManttoProductosAlternos.Model
                 
                 
 
-                new BitacoraModel().SetBitacoraEntry(tema, 2, " ");
+                new BitacoraModel().SetBitacoraEntry(tema, 2, tema.Tema);
             }
             catch (SqlException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,TemasModel", "ManttoProductosAlternos");
+            }
+            catch (Exception ex)
+            {
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,TemasModel", "ManttoProductosAlternos");
             }
             finally
             {
-                sqlConne.Close();
+                connection.Close();
             }
         }
 
@@ -215,20 +210,20 @@ namespace ManttoProductosAlternos.Model
         /// <param name="idTema"></param>
         public void EliminaTema(Temas temaEliminar)
         {
-            SqlConnection sqlConne = Conexion.GetConecctionManttoCE();
+            SqlConnection connection = Conexion.GetConecctionManttoCE();
 
             SqlCommand cmd;
             SqlDataReader dataReader;
 
-            cmd = sqlConne.CreateCommand();
-            cmd.Connection = sqlConne;
+            cmd = connection.CreateCommand();
+            cmd.Connection = connection;
 
             try
             {
-                sqlConne.Open();
+                connection.Open();
 
                 string miQry = "select COUNT(Id) Cant FROM Temas WHERE Padre = " + temaEliminar.IdTema + " AND idProd = " + idProducto;
-                cmd = new SqlCommand(miQry, sqlConne);
+                cmd = new SqlCommand(miQry, connection);
                 dataReader = cmd.ExecuteReader();
 
                 if (dataReader.HasRows)
@@ -251,22 +246,21 @@ namespace ManttoProductosAlternos.Model
                 cmd.ExecuteNonQuery();
 
 
-                new BitacoraModel().SetBitacoraEntry(temaEliminar, 3, String.Empty);
+                new BitacoraModel().SetBitacoraEntry(temaEliminar, 3, temaEliminar.Tema);
             }
             catch (SqlException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,TemasModel", "ManttoProductosAlternos");
             }
-            catch (OperationCanceledException)
+            catch (Exception ex)
             {
-                MessageBox.Show("El tema que desea eliminar contiene subtemas, elimine primero los subtemas para completar la operación", "Error Interno", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,TemasModel", "ManttoProductosAlternos");
             }
             finally
             {
-                sqlConne.Close();
+                connection.Close();
             }
         }
 
@@ -308,9 +302,12 @@ namespace ManttoProductosAlternos.Model
             catch (SqlException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,TemasModel", "ManttoProductosAlternos");
+            }
+            catch (Exception ex)
+            {
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,TemasModel", "ManttoProductosAlternos");
             }
             finally
             {
@@ -343,9 +340,12 @@ namespace ManttoProductosAlternos.Model
             catch (SqlException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,TemasModel", "ManttoProductosAlternos");
+            }
+            catch (Exception ex)
+            {
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,TemasModel", "ManttoProductosAlternos");
             }
             finally
             {
@@ -362,21 +362,21 @@ namespace ManttoProductosAlternos.Model
         public List<Temas> GetTemasForReview(int idProducto)
         {
             List<Temas> temas = new List<Temas>();
-            SqlConnection sqlNueva = Conexion.GetConecctionManttoCE();
+            SqlConnection connection = Conexion.GetConecctionManttoCE();
 
             SqlDataReader dataReader;
             SqlCommand cmdAntes;
 
-            cmdAntes = sqlNueva.CreateCommand();
-            cmdAntes.Connection = sqlNueva;
+            cmdAntes = connection.CreateCommand();
+            cmdAntes.Connection = connection;
 
             try
             {
-                sqlNueva.Open();
+                connection.Open();
 
                 string miQry = "SELECT TemaStr  FROM Temas WHERE idProd = @IdProducto ORDER BY TemaStr";
 
-                cmdAntes = new SqlCommand(miQry, sqlNueva);
+                cmdAntes = new SqlCommand(miQry, connection);
                 cmdAntes.Parameters.AddWithValue("@IdProducto", idProducto);
                 dataReader = cmdAntes.ExecuteReader();
 
@@ -392,13 +392,16 @@ namespace ManttoProductosAlternos.Model
             catch (SqlException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,TemasModel", "ManttoProductosAlternos");
+            }
+            catch (Exception ex)
+            {
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,TemasModel", "ManttoProductosAlternos");
             }
             finally
             {
-                sqlNueva.Close();
+                connection.Close();
             }
 
             return temas;
@@ -442,9 +445,12 @@ namespace ManttoProductosAlternos.Model
             catch (SqlException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,TemasModel", "ManttoProductosAlternos");
+            }
+            catch (Exception ex)
+            {
+                string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,TemasModel", "ManttoProductosAlternos");
             }
             finally
             {

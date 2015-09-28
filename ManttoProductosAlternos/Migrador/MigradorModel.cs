@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Data.OleDb;
 using System.Data.SqlClient;
@@ -57,16 +58,12 @@ namespace ManttoProductosAlternos.Migrador
             catch (OleDbException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,MigradorModel", "ChecaPrecedentes");
             }
             catch (Exception ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,MigradorModel", "ChecaPrecedentes");
             }
             finally
             {
@@ -81,7 +78,7 @@ namespace ManttoProductosAlternos.Migrador
         /// el producto en específico y los envía al Método insertaTemasIus
         /// </summary>
         /// <returns>Devuelve el número de tesis relacionadas</returns>
-        public int GetTesisRelacionadasByProducto()
+        public List<int> GetTesisRelacionadasByProducto()
         {
             List<int> numerosDeIus = new List<int>();
 
@@ -104,22 +101,18 @@ namespace ManttoProductosAlternos.Migrador
                     numerosDeIus.Add(Convert.ToInt32(dataReader["IUS"]));
                 }
                 dataReader.Close();
-                this.InsertaIuses(numerosDeIus);
+                //this.InsertaIuses(numerosDeIus);
 
             }
             catch (SqlException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,MigradorModel", "ChecaPrecedentes");
             }
             catch (Exception ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,MigradorModel", "ChecaPrecedentes");
             }
             finally
             {
@@ -127,7 +120,7 @@ namespace ManttoProductosAlternos.Migrador
             }
 
 
-            return numerosDeIus.Count;
+            return numerosDeIus;
         }
 
         /// <summary>
@@ -135,7 +128,7 @@ namespace ManttoProductosAlternos.Migrador
         /// de nombre IUS
         /// </summary>
         /// <param name="numerosDeIus"></param>
-        private void InsertaIuses(List<int> numerosDeIus)
+        public void InsertaIuses(List<int> numerosDeIus,BackgroundWorker worker)
         {
             OleDbConnection connection = Conexion.GetAccessDataBaseConnection(idProducto);
             OleDbDataAdapter dataAdapter;
@@ -144,6 +137,7 @@ namespace ManttoProductosAlternos.Migrador
             DataRow dr;
 
             string sqlCadena = "SELECT * FROM IUS WHERE IUS = 0";
+            int currentProgress = 1;
 
             try
             {
@@ -169,21 +163,20 @@ namespace ManttoProductosAlternos.Migrador
 
                     dataSet.Dispose();
                     dataAdapter.Dispose();
+
+                    worker.ReportProgress(currentProgress);
+                    currentProgress++;
                 }
             }
             catch (OleDbException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,MigradorModel", "ChecaPrecedentes");
             }
             catch (Exception ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,MigradorModel", "ChecaPrecedentes");
             }
             finally
             {
@@ -195,7 +188,7 @@ namespace ManttoProductosAlternos.Migrador
 
         #region Facultades de la Suprema Corte
 
-        public int GetTesisRelacionadasScjn()
+        public List<TesisDTO> GetTesisRelacionadasScjn()
         {
             List<TesisDTO> listaTesis = new List<TesisDTO>();
             SqlConnection connection = Conexion.GetConecctionManttoCE();
@@ -225,22 +218,17 @@ namespace ManttoProductosAlternos.Migrador
                     listaTesis.Add(tesis);
                 }
                 reader.Close();
-                this.InsertaTemasIusScjn(listaTesis);
 
             }
             catch (SqlException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,MigradorModel", "ChecaPrecedentes");
             }
             catch (Exception ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,MigradorModel", "ChecaPrecedentes");
             }
             finally
             {
@@ -248,10 +236,10 @@ namespace ManttoProductosAlternos.Migrador
             }
 
 
-            return listaTesis.Count;
+            return listaTesis;
         }
 
-        private void InsertaTemasIusScjn(List<TesisDTO> listaTesis)
+        public void InsertaTemasIusScjn(List<TesisDTO> listaTesis,BackgroundWorker worker)
         {
             OleDbConnection connection = Conexion.GetAccessDataBaseConnection(idProducto);
             OleDbDataAdapter dataAdapter;
@@ -259,6 +247,7 @@ namespace ManttoProductosAlternos.Migrador
             DataSet dataSet = new DataSet();
             DataRow dr;
 
+            int currentProgress = 1;
             string sqlCadena = "SELECT * FROM Tesis WHERE IUS4 = 0";
 
             try
@@ -294,21 +283,20 @@ namespace ManttoProductosAlternos.Migrador
                     dataSet.Dispose();
                     dataAdapter.Dispose();
                     consec++;
+
+                    worker.ReportProgress(currentProgress);
+                    currentProgress++;
                 }
             }
             catch (OleDbException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,MigradorModel", "ChecaPrecedentes");
             }
             catch (Exception ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,MigradorModel", "ChecaPrecedentes");
             }
             finally
             {
@@ -325,12 +313,12 @@ namespace ManttoProductosAlternos.Migrador
         /// Obtiene los temas de el producto que se esta migrando y los envia al método de insertar temas
         /// </summary>
         /// <returns></returns>
-        public int GetTemas()
+        public List<Temas> GetTemas()
         {
             List<Temas> temas = new List<Temas>();
 
             SqlConnection connection = Conexion.GetConecctionManttoCE();
-            SqlDataReader dataReader;
+            SqlDataReader reader;
             SqlCommand cmd;
 
             cmd = connection.CreateCommand();
@@ -343,49 +331,47 @@ namespace ManttoProductosAlternos.Migrador
                 string miQry = "SELECT Id, Tema,Orden,TemaStr FROM Temas WHERE idProd = @idProd ORDER BY TemaStr";
                 cmd = new SqlCommand(miQry, connection);
                 cmd.Parameters.AddWithValue("@IdProd", idProducto);
-                dataReader = cmd.ExecuteReader();
+                reader = cmd.ExecuteReader();
 
-                while (dataReader.Read())
+                
+                while (reader.Read())
                 {
+                    
                     Temas tema = new Temas();
-                    tema.IdTema = Convert.ToInt32(dataReader["Id"]);
-                    tema.Tema = dataReader["Tema"].ToString();
-                    tema.Orden = Convert.ToInt32(dataReader["Orden"]);
-                    tema.TemaStr = dataReader["TemaSTR"].ToString();
+                    tema.IdTema = Convert.ToInt32(reader["Id"]);
+                    tema.Tema = reader["Tema"].ToString();
+                    tema.Orden = Convert.ToInt32(reader["Orden"]);
+                    tema.TemaStr = reader["TemaSTR"].ToString();
 
+                    
                     temas.Add(tema);
                 }
-                dataReader.Close();
+                reader.Close();
 
-                this.InsertaTemas(temas);
             }
             catch (SqlException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,MigradorModel", "ChecaPrecedentes");
             }
             catch (Exception ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,MigradorModel", "ChecaPrecedentes");
             }
             finally
             {
                 connection.Close();
             }
 
-            return temas.Count;
+            return temas;
         }
 
         /// <summary>
         /// Inserta los temas del producto que se esta migrando a su respectiva base de datos de access
         /// </summary>
         /// <param name="temas"></param>
-        private void InsertaTemas(List<Temas> temas)
+        public void InsertaTemas(List<Temas> temas, BackgroundWorker worker)
         {
             OleDbConnection connection = Conexion.GetAccessDataBaseConnection(idProducto);
             OleDbDataAdapter dataAdapter;
@@ -394,6 +380,8 @@ namespace ManttoProductosAlternos.Migrador
             DataRow dr;
 
             string sqlCadena = "SELECT * FROM Temas WHERE id = 0";
+
+            int currentProgrss = 1;
 
             try
             {
@@ -429,6 +417,9 @@ namespace ManttoProductosAlternos.Migrador
 
                     dataSet.Dispose();
                     dataAdapter.Dispose();
+
+                    worker.ReportProgress(currentProgrss);
+                    currentProgrss++;
                 }
 
 
@@ -436,16 +427,12 @@ namespace ManttoProductosAlternos.Migrador
             catch (OleDbException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,MigradorModel", "ChecaPrecedentes");
             }
             catch (Exception ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,MigradorModel", "ChecaPrecedentes");
             }
             finally
             {
@@ -462,7 +449,7 @@ namespace ManttoProductosAlternos.Migrador
         /// al método Insertar
         /// </summary>
         /// <returns></returns>
-        public int GetRelaciones()
+        public List<Temas> GetRelaciones()
         {
             List<Temas> temas = new List<Temas>();
 
@@ -494,35 +481,30 @@ namespace ManttoProductosAlternos.Migrador
                 }
                 dataReader.Close();
 
-                this.InsertaTemasIus(temas);
             }
             catch (SqlException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,MigradorModel", "ChecaPrecedentes");
             }
             catch (Exception ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,MigradorModel", "ChecaPrecedentes");
             }
             finally
             {
                 connection.Close();
             }
 
-            return temas.Count;
+            return temas;
         }
 
         /// <summary>
         /// Inserta las relaciones Temas-IUS dentro de su respectiva base de datos de access
         /// </summary>
         /// <param name="temas"></param>
-        private void InsertaTemasIus(List<Temas> temas)
+        public void InsertaTemasIus(List<Temas> temas,BackgroundWorker worker)
         {
             OleDbConnection connection = Conexion.GetAccessDataBaseConnection(idProducto);
             OleDbDataAdapter dataAdapter;
@@ -530,6 +512,7 @@ namespace ManttoProductosAlternos.Migrador
             DataSet dataSet = new DataSet();
             DataRow dr;
 
+            int currentProgress = 1;
             string sqlCadena = "SELECT * FROM TemasIUS WHERE id = 0";
 
             try
@@ -562,21 +545,20 @@ namespace ManttoProductosAlternos.Migrador
 
                     dataSet.Dispose();
                     dataAdapter.Dispose();
+
+                    worker.ReportProgress(currentProgress);
+                    currentProgress++;
                 }
             }
             catch (OleDbException ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,MigradorModel", "ChecaPrecedentes");
             }
             catch (Exception ex)
             {
                 string methodName = System.Reflection.MethodBase.GetCurrentMethod().Name;
-
-                MessageBox.Show("Error ({0}) : {1}" + ex.Source + ex.Message, methodName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                ErrorUtilities.SetNewErrorMessage(ex, methodName, 0);
+                ErrorUtilities.SetNewErrorMessage(ex, methodName + " Exception,MigradorModel", "ChecaPrecedentes");
             }
             finally
             {
@@ -587,5 +569,7 @@ namespace ManttoProductosAlternos.Migrador
 
         #endregion
 
+
+        
     }
 }
